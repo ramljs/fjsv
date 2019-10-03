@@ -9,6 +9,14 @@ describe('ArrayType', function() {
     library = new TypeLibrary();
   });
 
+  it('should create array type if there is [] after type name', function() {
+    const t = library.get({
+      type: 'string[]',
+    });
+    assert.deepStrictEqual(t.baseName, 'array');
+    assert.deepStrictEqual(t.items.baseName, 'string');
+  });
+
   it('should set "items" attribute', function() {
     const t = library.get({
       type: 'array',

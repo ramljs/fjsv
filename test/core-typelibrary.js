@@ -87,7 +87,7 @@ describe('TypeLibrary', function() {
   it('should set default type', function() {
     const typeLib = new TypeLibrary({defaults: {type: 'boolean'}});
     let t = typeLib.get({name: 'abc'});
-    assert.strictEqual(t.baseType, 'boolean');
+    assert.strictEqual(t.baseName, 'boolean');
   });
 
   it('should set default required', function() {
@@ -101,7 +101,7 @@ describe('TypeLibrary', function() {
     };
     typeLib.register('custom', CustomType);
     let t = typeLib.get({type: 'custom'});
-    assert.strictEqual(t.baseType, 'custom');
+    assert.strictEqual(t.baseName, 'custom');
   });
 
   it('should throw error if type class is not extended from DataType', function() {

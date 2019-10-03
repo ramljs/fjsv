@@ -1,7 +1,6 @@
-import {TypeLibrary} from "./TypeLibrary";
+import TypeLibrary from "./TypeLibrary";
 
 export declare type IAttributes = { [index: string]: any };
-export declare type AssignOperation = 'OVERWRITE' | 'MERGE' | 'KEEP';
 
 export interface IValidationError {
     message: string;
@@ -49,7 +48,7 @@ export default class DataType {
     library: TypeLibrary;
     type: DataType[];
     attributes: IAttributes;
-    readonly baseType: string;
+    readonly baseName: string;
     name: string;
     required?: boolean;
     default?: any;
@@ -58,7 +57,9 @@ export default class DataType {
 
     constructor(library?: TypeLibrary);
 
-    assign(values: IAttributes, op?: AssignOperation);
+    assign(values: IAttributes, overwrite?: boolean);
+
+    createNew(library: TypeLibrary, def?: IAttributes);
 
     clone(): DataType;
 
@@ -70,8 +71,8 @@ export default class DataType {
 
     protected _getDefault(): any;
 
-    protected _assignAttributes(values: IAttributes, op: AssignOperation,
-                                attr: string[] | { [index: string]: any });
+    protected _assignAttributes(keys: string[], values: { [index: string]: any },
+                                overwrite?: boolean);
 
     protected _generateValidateFunction(options: IValidatorOptions): InternalValidateFunction;
 

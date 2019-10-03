@@ -95,6 +95,13 @@ describe('DataType', function() {
     assert.deepStrictEqual(t, t2);
   });
 
+  it('should flatten() return cloned DataType', function() {
+    const library = new TypeLibrary({typeSet: 'RAML_1_0'});
+    const t = library.get('string');
+    const t2 = t.flatten();
+    assert.notStrictEqual(t, t2);
+  });
+
   it('should generate validator', function() {
     const library = new TypeLibrary({typeSet: 'RAML_1_0'});
     const typ1 = library.get({
@@ -128,6 +135,21 @@ describe('DataType', function() {
     assert.strictEqual(validate('0').value, '0');
     assert.throws(() => validate(), /Value required/);
     assert.throws(() => validate(null), /Value required/);
+  });
+
+  it('should ignore required validation if ignoreRequire=true', function() {
+    const library = new TypeLibrary({typeSet: 'RAML_1_0'});
+    const typ1 = library.get({
+      name: 'typ1',
+      type: 'any',
+      required: true
+    });
+    const validate = typ1.validator({throwOnError: true, ignoreRequire: true});
+    assert.strictEqual(validate(0).value, 0);
+    assert.strictEqual(validate('0').value, '0');
+    assert.strictEqual(
+        validate().value, undefined);
+    assert.strictEqual(validate(null).value, null);
   });
 
   it('should return "errors" property on error', function() {
