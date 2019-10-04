@@ -127,10 +127,6 @@ describe('StringType', function() {
     assert.deepStrictEqual(validate(''), {valid: true, value: ''});
     assert.deepStrictEqual(validate(0), {valid: true, value: 0});
     assert.deepStrictEqual(validate(1.1), {valid: true, value: 1.1});
-    assert.deepStrictEqual(validate(BigInt(112)), {
-      valid: true,
-      value: BigInt(112)
-    });
     assert.throws(() => validate(false), /Value must be a string/);
     assert.throws(() => validate([]), /Value must be a string/);
     assert.throws(() => validate({}), /Value must be a string/);
@@ -147,7 +143,6 @@ describe('StringType', function() {
     assert.throws(() => validate(0), /Value must be a string/);
     assert.throws(() => validate(1.1), /Value must be a string/);
     assert.throws(() => validate(true), /Value must be a string/);
-    assert.throws(() => validate(BigInt(112)), /Value must be a string/);
   });
 
   it('should validator accept enum values if set', function() {
@@ -224,7 +219,6 @@ describe('StringType', function() {
     assert.deepStrictEqual(validate('0'), {valid: true, value: '0'});
     assert.deepStrictEqual(validate(0), {valid: true, value: '0'});
     assert.deepStrictEqual(validate(1.1), {valid: true, value: '1.1'});
-    assert.deepStrictEqual(validate(BigInt(123)), {valid: true, value: '123'});
   });
 
   it('should coerce value to default if null', function() {

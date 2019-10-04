@@ -163,24 +163,26 @@ describe('IntegerType', function() {
     assert.strictEqual(typeof validate, 'function');
   });
 
-  it('should validator accept strings and numbers in non-strict mode', function() {
-    const t = library.get({
-      name: 'typ1',
-      type: 'integer'
+  if (global.BigInt) {
+    it('should validator accept strings and numbers in non-strict mode', function() {
+      const t = library.get({
+        name: 'typ1',
+        type: 'integer'
+      });
+      const validate = t.validator({throwOnError: true});
+      assert.deepStrictEqual(validate(0), {valid: true, value: 0});
+      assert.deepStrictEqual(validate(BigInt(123)), {
+        valid: true,
+        value: BigInt(123)
+      });
+      assert.deepStrictEqual(validate('0'), {valid: true, value: '0'});
+      assert.throws(() => validate(''), / Value must be an integer or integer formatted string/);
+      assert.throws(() => validate(0.5), / Value must be an integer or integer formatted string/);
+      assert.throws(() => validate(false), /Value must be an integer or integer formatted string/);
+      assert.throws(() => validate([]), /Value must be an integer or integer formatted string/);
+      assert.throws(() => validate({}), /Value must be an integer or integer formatted string/);
     });
-    const validate = t.validator({throwOnError: true});
-    assert.deepStrictEqual(validate(0), {valid: true, value: 0});
-    assert.deepStrictEqual(validate(BigInt(123)), {
-      valid: true,
-      value: BigInt(123)
-    });
-    assert.deepStrictEqual(validate('0'), {valid: true, value: '0'});
-    assert.throws(() => validate(''), / Value must be an integer or integer formatted string/);
-    assert.throws(() => validate(0.5), / Value must be an integer or integer formatted string/);
-    assert.throws(() => validate(false), /Value must be an integer or integer formatted string/);
-    assert.throws(() => validate([]), /Value must be an integer or integer formatted string/);
-    assert.throws(() => validate({}), /Value must be an integer or integer formatted string/);
-  });
+  }
 
   it('should validator accept only number value in strict mode', function() {
     const typ1 = library.get({
@@ -271,7 +273,8 @@ describe('IntegerType', function() {
     const validate = typ1.validator({coerceTypes: true});
     assert.deepStrictEqual(validate('0'), {valid: true, value: 0});
     assert.deepStrictEqual(validate(0), {valid: true, value: 0});
-    assert.deepStrictEqual(validate(BigInt(123)), {valid: true, value: 123});
+    if (global.BigInt)
+      assert.deepStrictEqual(validate(BigInt(123)), {valid: true, value: 123});
   });
 
   it('should coerce value to default if null', function() {

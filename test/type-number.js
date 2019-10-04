@@ -170,10 +170,11 @@ describe('NumberType', function() {
     const validate = t.validator({throwOnError: true});
     assert.deepStrictEqual(validate(0), {valid: true, value: 0});
     assert.deepStrictEqual(validate(1.1), {valid: true, value: 1.1});
-    assert.deepStrictEqual(validate(BigInt(123)), {
-      valid: true,
-      value: BigInt(123)
-    });
+    if (global.BigInt)
+      assert.deepStrictEqual(validate(BigInt(123)), {
+        valid: true,
+        value: BigInt(123)
+      });
     assert.deepStrictEqual(validate('0'), {valid: true, value: '0'});
     assert.throws(() => validate(''), /Value must be a number or number formatted string/);
     assert.throws(() => validate(false), /Value must be a number or number formatted string/);
@@ -279,23 +280,6 @@ describe('NumberType', function() {
     assert(0, 'Failed');
   });
 
-  it('should validate long formats', function() {
-    const typ1 = library.get({
-      name: 'typ1',
-      type: 'number',
-      format: 'int64'
-    });
-    const validate = typ1.validator({throwOnError: true});
-    validate(1123);
-    try {
-      validate(1.1);
-    } catch (e) {
-      assert.strictEqual(e.message, 'Value must be an integer or integer formatted string');
-      return;
-    }
-    assert(0, 'Failed');
-  });
-
   it('should coerce value to number', function() {
     const typ1 = library.get({
       name: 'typ1',
@@ -305,7 +289,8 @@ describe('NumberType', function() {
     assert.deepStrictEqual(validate('0'), {valid: true, value: 0});
     assert.deepStrictEqual(validate(0), {valid: true, value: 0});
     assert.deepStrictEqual(validate(1.1), {valid: true, value: 1.1});
-    assert.deepStrictEqual(validate(BigInt(123)), {valid: true, value: 123});
+    if (global.BigInt)
+      assert.deepStrictEqual(validate(BigInt(123)), {valid: true, value: 123});
   });
 
   it('should coerce value to default if null', function() {
@@ -443,6 +428,11 @@ describe('NumberType', function() {
       type: 'number',
       format: 'uint64'
     });
+    if (!global.BigInt) {
+      assert.throws(() => typ1.validator(),
+          /Your JavaScript version does not support BigInt values/);
+      return;
+    }
     const validate = typ1.validator({throwOnError: true});
     validate(0);
     assert.throws(() => validate(123.4),
