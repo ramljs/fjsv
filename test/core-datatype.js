@@ -15,7 +15,7 @@ describe('DataType', function() {
       writeonly: true
     });
     assert.strictEqual(t.name, 'typ1');
-    assert.strictEqual(t.type[0].name, 'any');
+    assert.strictEqual(t.type[0], 'any');
     assert.strictEqual(t.required, true);
     assert.strictEqual(t.default, 0);
     assert.strictEqual(t.readonly, true);

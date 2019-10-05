@@ -13,6 +13,6 @@ export default class ObjectType extends DataType {
 
     addProperty(name: string, prop: object | DataType): DataType;
 
-    addProperties(properties: { [index: string]: object | DataType });
+    addProperties(properties: { [index: string]: object | DataType }): this;
 
 }

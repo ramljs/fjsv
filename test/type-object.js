@@ -21,10 +21,10 @@ describe('ObjectType', function() {
 
   it('should create object type if there is {} after type name', function() {
     const t = library.get({
-      type: 'string{}',
-    });
+      type: 'string{}'
+    }).solidify();
     assert.deepStrictEqual(t.baseName, 'object');
-    assert.deepStrictEqual(t.properties['/.+/'].baseName, 'string');
+    assert.deepStrictEqual(t.properties['/.+/'].name, 'string');
   });
 
   it('should set "discriminator" attribute', function() {
@@ -158,11 +158,9 @@ describe('ObjectType', function() {
           type: 'number'
         }
       }
-    });
-    assert.deepStrictEqual(t.properties.p1.name, 'p1');
-    assert.deepStrictEqual(t.properties.p1.type[0].name, 'string');
-    assert.deepStrictEqual(t.properties.p2.name, 'p2');
-    assert.deepStrictEqual(t.properties.p2.type[0].name, 'number');
+    }).solidify();
+    assert.strictEqual(t.properties.p1.name, 'string');
+    assert.strictEqual(t.properties.p2.type[0].name, 'number');
   });
 
   it('should use DataType instance as property.type', function() {
@@ -175,27 +173,22 @@ describe('ObjectType', function() {
         },
         p2: library.get('number')
       }
-    });
-    assert.deepStrictEqual(t.properties.p1.name, 'p1');
-    assert.deepStrictEqual(t.properties.p1.type[0].name, 'string');
-    assert.deepStrictEqual(t.properties.p2.name, 'p2');
-    assert.deepStrictEqual(t.properties.p2.type[0].name, 'number');
+    }).solidify();
+    assert.strictEqual(t.properties.p1.type[0].name, 'string');
+    assert.strictEqual(t.properties.p2.name, 'number');
   });
 
   it('should bulk add properties using addProperties(object) method', function() {
     const t = library.get({
       type: 'object',
       name: 'typ1'
-    });
-    t.addProperties({
+    }).addProperties({
       p1: 'string',
       p2: {
         type: 'number'
       }
-    });
-    assert.deepStrictEqual(t.properties.p1.name, 'p1');
-    assert.deepStrictEqual(t.properties.p1.type[0].name, 'string');
-    assert.deepStrictEqual(t.properties.p2.name, 'p2');
+    }).solidify();
+    assert.strictEqual(t.properties.p1.name, 'string');
     assert.deepStrictEqual(t.properties.p2.type[0].name, 'number');
   });
 
@@ -203,11 +196,10 @@ describe('ObjectType', function() {
     const t = library.get({
       type: 'object',
       name: 'typ1'
-    });
-    t.addProperties([
+    }).addProperties([
       {name: 'p1', type: 'string'},
       {name: 'p2', type: 'number'}
-    ]);
+    ]).solidify();
     assert.deepStrictEqual(t.properties.p1.name, 'p1');
     assert.deepStrictEqual(t.properties.p1.type[0].name, 'string');
     assert.deepStrictEqual(t.properties.p2.name, 'p2');
@@ -221,7 +213,7 @@ describe('ObjectType', function() {
       properties: {
         'p1?': 'string'
       }
-    });
+    }).solidify();
     assert.deepStrictEqual(t.properties.p1.required, false);
   });
 
@@ -232,7 +224,7 @@ describe('ObjectType', function() {
       properties: {
         'p1!': 'string'
       }
-    });
+    }).solidify();
     assert.deepStrictEqual(t.properties.p1.required, true);
   });
 
@@ -246,7 +238,7 @@ describe('ObjectType', function() {
           type: 'number'
         }
       }
-    });
+    }).solidify();
     const t2 = t.clone();
     assert.deepStrictEqual(t, t2);
   });
@@ -255,7 +247,7 @@ describe('ObjectType', function() {
     const typ1 = library.get({
       name: 'typ1',
       type: 'object'
-    });
+    }).solidify();
     const validate = typ1.validator();
     assert.strictEqual(typeof validate, 'function');
   });
@@ -264,7 +256,7 @@ describe('ObjectType', function() {
     const typ1 = library.get({
       name: 'typ1',
       type: 'object'
-    });
+    }).solidify();
     const validate = typ1.validator({throwOnError: true});
     assert.deepStrictEqual(validate(obj1), {valid: true, value: obj1});
     assert.strictEqual(validate(obj1).value, obj1);
@@ -561,6 +553,22 @@ describe('ObjectType', function() {
     validate = typ2.validator({maxObjectErrors: 2});
     x = validate({a: 'a', b: 'b', c: 'c'});
     assert.strictEqual(x.errors.length, 2);
+  });
+
+  it('should allow recursive properties', function() {
+    const typeLib = new TypeLibrary();
+    typeLib.add({
+      name: 'Node',
+      properties: {
+        parent: 'Node',
+        items: 'Node[]'
+      }
+    });
+    const t = typeLib.get('Node')
+        .solidify();
+    assert.strictEqual(t.properties.parent, t);
+    assert.strictEqual(t.properties.items.baseName, 'array');
+    assert.strictEqual(t.properties.items.items, t);
   });
 
 });

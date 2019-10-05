@@ -13,9 +13,9 @@ describe('TypeLibrary', function() {
   it('should create type with object definition', function() {
     const typeLib = new TypeLibrary();
     let t = typeLib.get({type: 'string'});
-    assert.deepStrictEqual(t.type[0].name, 'string');
+    assert.strictEqual(t.type[0], 'string');
     t = typeLib.get({type: ['string']});
-    assert.deepStrictEqual(t.type[0].name, 'string');
+    assert.strictEqual(t.type[0], 'string');
   });
 
   it('should create type from nasted type', function() {
@@ -35,6 +35,19 @@ describe('TypeLibrary', function() {
         typeLib.get(), /Invalid argument/);
   });
 
+  it('should add type schema to library', function() {
+    const typeLib = new TypeLibrary();
+    typeLib.add({
+      name: 'Person',
+      type: 'string'
+    });
+    const t = typeLib.get({
+      type: 'Person'
+    }).solidify();
+    assert.strictEqual(t.type[0].name, 'Person');
+    assert.strictEqual(t.baseName, 'string');
+  });
+
   it('should call lookup callback for custom types', function() {
     const typeLib = new TypeLibrary({
       onTypeLookup: (n) => {
@@ -51,22 +64,18 @@ describe('TypeLibrary', function() {
     const t2 = typeLib.get({type: 'CustomType2', required: true});
     const t3 = typeLib.get({type: 'CustomType3', minItems: 3});
     const t4 = typeLib.get({type: 'CustomType2'});
-    assert.strictEqual(t1.type[0].name, 'CustomType1');
-    assert.strictEqual(t1.type[0].type[0].name, 'string');
-    assert.strictEqual(t2.type[0].name, 'CustomType2');
-    assert.strictEqual(t3.type[0].name, 'CustomType3');
-    assert.strictEqual(t4.type[0].name, 'CustomType2');
+    assert.strictEqual(t1.type[0], 'CustomType1');
+    assert.strictEqual(t2.type[0], 'CustomType2');
+    assert.strictEqual(t3.type[0], 'CustomType3');
+    assert.strictEqual(t4.type[0], 'CustomType2');
     assert.strictEqual(t2.required, true);
-    assert.strictEqual(typeLib.types.CustomType1.type[0].name, 'string');
-    assert.strictEqual(typeLib.types.CustomType2.type[0].name, 'number');
-    assert.strictEqual(typeLib.types.CustomType3.type[0].name, 'array');
-    assert.strictEqual(t1.type[0], typeLib.types.CustomType1);
-    assert.strictEqual(t2.type[0], typeLib.types.CustomType2);
+    assert.strictEqual(typeLib.types.CustomType1.type[0], 'string');
+    assert.strictEqual(typeLib.types.CustomType2.type[0], 'number');
+    assert.strictEqual(typeLib.types.CustomType3.type[0], 'array');
     assert.deepStrictEqual(t2.type, t4.type);
     assert.strictEqual(t3.items, undefined);
     assert.strictEqual(t3.minItems, 3);
-    assert.strictEqual(t3.type[0].name, 'CustomType3');
-    assert.strictEqual(t3.type[0].items.name, 'string');
+    assert.strictEqual(t3.type[0], 'CustomType3');
   });
 
   it('should throw Unknown type error if type not found', function() {
