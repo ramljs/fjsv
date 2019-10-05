@@ -569,6 +569,7 @@ describe('ObjectType', function() {
     assert.strictEqual(t.properties.parent, t);
     assert.strictEqual(t.properties.items.baseName, 'array');
     assert.strictEqual(t.properties.items.items, t);
+    t.validator();
   });
 
 });
