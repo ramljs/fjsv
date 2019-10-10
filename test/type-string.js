@@ -127,9 +127,9 @@ describe('StringType', function() {
     assert.deepStrictEqual(validate(''), {valid: true, value: ''});
     assert.deepStrictEqual(validate(0), {valid: true, value: 0});
     assert.deepStrictEqual(validate(1.1), {valid: true, value: 1.1});
-    assert.throws(() => validate(false), /Value must be a string/);
-    assert.throws(() => validate([]), /Value must be a string/);
-    assert.throws(() => validate({}), /Value must be a string/);
+    assert.throws(() => validate(false), /Value for typ1 must be a string/);
+    assert.throws(() => validate([]), /Value for typ1 must be a string/);
+    assert.throws(() => validate({}), /Value for typ1 must be a string/);
   });
 
   it('should validator accept only strings in strict mode', function() {
@@ -140,9 +140,9 @@ describe('StringType', function() {
     const validate = typ1.validator({strictTypes: true, throwOnError: true});
     validate('');
     validate(null);
-    assert.throws(() => validate(0), /Value must be a string/);
-    assert.throws(() => validate(1.1), /Value must be a string/);
-    assert.throws(() => validate(true), /Value must be a string/);
+    assert.throws(() => validate(0), /Value for typ1 must be a string/);
+    assert.throws(() => validate(1.1), /Value for typ1 must be a string/);
+    assert.throws(() => validate(true), /Value for typ1 must be a string/);
   });
 
   it('should validator accept enum values if set', function() {
@@ -154,8 +154,8 @@ describe('StringType', function() {
     const validate = typ1.validator({throwOnError: true});
     assert.deepStrictEqual(validate('a'), {valid: true, value: 'a'});
     assert.deepStrictEqual(validate('b'), {valid: true, value: 'b'});
-    assert.throws(() => validate(''), /Value for "typ1" must be a one of enumerated value/);
-    assert.throws(() => validate('c'), /Value for "typ1" must be a one of enumerated value/);
+    assert.throws(() => validate(''), /Value for typ1 must be a one of enumerated value/);
+    assert.throws(() => validate('c'), /Value for typ1 must be a one of enumerated value/);
   });
 
   it('should validate min length', function() {
@@ -169,7 +169,7 @@ describe('StringType', function() {
     try {
       validate('1234');
     } catch (e) {
-      assert.strictEqual(e.message, 'Minimum accepted length is 5, actual 4');
+      assert.strictEqual(e.message, 'Minimum accepted length for typ1 is 5, actual 4');
       assert.strictEqual(e.min, 5);
       assert.strictEqual(e.actual, 4);
       return;
@@ -188,7 +188,7 @@ describe('StringType', function() {
     try {
       validate('123456');
     } catch (e) {
-      assert.strictEqual(e.message, 'Maximum accepted length is 5, actual 6');
+      assert.strictEqual(e.message, 'Maximum accepted length for typ1 is 5, actual 6');
       assert.strictEqual(e.max, 5);
       assert.strictEqual(e.actual, 6);
       return;

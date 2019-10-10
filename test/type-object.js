@@ -22,7 +22,7 @@ describe('ObjectType', function() {
   it('should create object type if there is {} after type name', function() {
     const t = library.get({
       type: 'string{}'
-    }).solidify();
+    }).bake();
     assert.deepStrictEqual(t.baseName, 'object');
     assert.deepStrictEqual(t.properties['/.+/'].name, 'string');
   });
@@ -158,7 +158,7 @@ describe('ObjectType', function() {
           type: 'number'
         }
       }
-    }).solidify();
+    }).bake();
     assert.strictEqual(t.properties.p1.name, 'string');
     assert.strictEqual(t.properties.p2.type[0].name, 'number');
   });
@@ -173,7 +173,7 @@ describe('ObjectType', function() {
         },
         p2: library.get('number')
       }
-    }).solidify();
+    }).bake();
     assert.strictEqual(t.properties.p1.type[0].name, 'string');
     assert.strictEqual(t.properties.p2.name, 'number');
   });
@@ -187,7 +187,7 @@ describe('ObjectType', function() {
       p2: {
         type: 'number'
       }
-    }).solidify();
+    }).bake();
     assert.strictEqual(t.properties.p1.name, 'string');
     assert.deepStrictEqual(t.properties.p2.type[0].name, 'number');
   });
@@ -199,7 +199,7 @@ describe('ObjectType', function() {
     }).addProperties([
       {name: 'p1', type: 'string'},
       {name: 'p2', type: 'number'}
-    ]).solidify();
+    ]).bake();
     assert.deepStrictEqual(t.properties.p1.name, 'p1');
     assert.deepStrictEqual(t.properties.p1.type[0].name, 'string');
     assert.deepStrictEqual(t.properties.p2.name, 'p2');
@@ -213,7 +213,7 @@ describe('ObjectType', function() {
       properties: {
         'p1?': 'string'
       }
-    }).solidify();
+    }).bake();
     assert.deepStrictEqual(t.properties.p1.required, false);
   });
 
@@ -224,7 +224,7 @@ describe('ObjectType', function() {
       properties: {
         'p1!': 'string'
       }
-    }).solidify();
+    }).bake();
     assert.deepStrictEqual(t.properties.p1.required, true);
   });
 
@@ -238,7 +238,7 @@ describe('ObjectType', function() {
           type: 'number'
         }
       }
-    }).solidify();
+    }).bake();
     const t2 = t.clone();
     assert.deepStrictEqual(t, t2);
   });
@@ -247,7 +247,7 @@ describe('ObjectType', function() {
     const typ1 = library.get({
       name: 'typ1',
       type: 'object'
-    }).solidify();
+    }).bake();
     const validate = typ1.validator();
     assert.strictEqual(typeof validate, 'function');
   });
@@ -256,13 +256,13 @@ describe('ObjectType', function() {
     const typ1 = library.get({
       name: 'typ1',
       type: 'object'
-    }).solidify();
+    }).bake();
     const validate = typ1.validator({throwOnError: true});
     assert.deepStrictEqual(validate(obj1), {valid: true, value: obj1});
     assert.strictEqual(validate(obj1).value, obj1);
-    assert.throws(() => validate(''), /Value must be an object/);
-    assert.throws(() => validate(false), /Value must be an object/);
-    assert.throws(() => validate([]), /Value must be an object/);
+    assert.throws(() => validate(''), /Value for typ1 must be an object/);
+    assert.throws(() => validate(false), /Value for typ1 must be an object/);
+    assert.throws(() => validate([]), /Value for typ1 must be an object/);
   });
 
   it('should not allow additional properties if additionalProperties=false', function() {
@@ -340,9 +340,9 @@ describe('ObjectType', function() {
     const validate = typ1.validator({throwOnError: true});
     assert.throws(() =>
             validate({kind: 'User', name: 'name'}),
-        /Object`s discriminator property \(kind\) does not match to "Employee"/);
+        /Employee type requires kind property equal to "Employee"/);
     assert.throws(() => validate({name: 'name'}),
-        /Object`s discriminator property \(kind\) does not match to "Employee"/);
+        /Employee type requires kind property equal to "Employee"/);
     assert.deepStrictEqual(
         validate({
           kind: 'Employee',
@@ -388,9 +388,9 @@ describe('ObjectType', function() {
       throwOnError: true
     });
     assert.throws(() => validate({kind: 'user', name: 'name'}),
-        /Object`s discriminator property \(kind\) does not match to "employee"/);
+        /typ1 type requires kind property equal to "employee"/);
     assert.throws(() => validate({name: 'name'}),
-        /Object`s discriminator property \(kind\) does not match to "employee"/);
+        /typ1 type requires kind property equal to "employee"/);
     assert.deepStrictEqual(
         validate({
           kind: 'employee',
@@ -515,7 +515,7 @@ describe('ObjectType', function() {
     const validate = typ1.validator({throwOnError: true});
     validate({a: 1, b: 2});
     assert.throws(() => validate({a: 1}),
-        /Minimum accepted properties is 2, actual 1/);
+        /Minimum accepted properties for typ1 is 2, actual 1/);
   });
 
   it('should validate maxProperties', function() {
@@ -527,7 +527,7 @@ describe('ObjectType', function() {
     const validate = typ1.validator({throwOnError: true});
     validate({a: 1});
     assert.throws(() => validate({a: 1, b: 2}),
-        /Maximum accepted properties is 1, actual 2/);
+        /Maximum accepted properties for typ1 is 1, actual 2/);
   });
 
   it('should limit error count to maxObjectErrors', function() {
@@ -565,11 +565,55 @@ describe('ObjectType', function() {
       }
     });
     const t = typeLib.get('Node')
-        .solidify();
+        .bake();
     assert.strictEqual(t.properties.parent, t);
     assert.strictEqual(t.properties.items.baseName, 'array');
     assert.strictEqual(t.properties.items.items, t);
     t.validator();
+  });
+
+  it('should flatten properties', function() {
+    const typeLib = new TypeLibrary();
+    typeLib.add({
+      name: 'Resource',
+      properties: {
+        id: 'number'
+      }
+    });
+    typeLib.add({
+      name: 'Person',
+      properties: {
+        name: 'string',
+        age: 'number'
+      }
+    });
+    typeLib.add({
+      name: 'User',
+      type: ['Resource', 'Person'],
+      additionalProperties: false,
+      properties: {
+        username: 'string'
+      }
+    });
+    const t = typeLib.get({
+      additionalProperties: false,
+      properties: {
+        user: 'User'
+      }
+    });
+    let validate = t.validator({
+      throwOnError: true,
+      strictTypes: true,
+      coerceTypes: true
+    });
+    const user = {
+      id: 1,
+      name: 'Alex',
+      age: 21,
+      username: 'alex'
+    };
+    const x = validate({user: user});
+    assert.deepStrictEqual(x.value, {user: user});
   });
 
 });

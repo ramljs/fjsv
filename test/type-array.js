@@ -126,11 +126,9 @@ describe('ArrayType', function() {
     const validate = typ1.validator({throwOnError: true, strictTypes: true});
     assert.deepStrictEqual(validate(arr), {valid: true, value: arr});
     assert.strictEqual(validate(arr).value, arr);
-    assert.throws(() =>
-            validate(''),
-        /Value must be an array/);
-    assert.throws(() => validate(false), /Value must be an array/);
-    assert.throws(() => validate({}), /Value must be an array/);
+    assert.throws(() => validate(''), /Value for typ1 must be an array/);
+    assert.throws(() => validate(false), /Value for typ1 must be an array/);
+    assert.throws(() => validate({}), /Value for typ1 must be an array/);
   });
 
   it('should validate sub items', function() {
@@ -143,7 +141,7 @@ describe('ArrayType', function() {
     assert.deepStrictEqual(validate('abc'), {valid: true, value: 'abc'});
     assert.deepStrictEqual(validate(['abc']), {valid: true, value: ['abc']});
     assert.throws(() => validate([{}]),
-        /Value must be a string/);
+        /Value for typ1\[0] must be a string/);
   });
 
   it('should validate minItems', function() {
@@ -155,7 +153,7 @@ describe('ArrayType', function() {
     const validate = typ1.validator({throwOnError: true});
     validate([1, 2]);
     assert.throws(() => validate([1]),
-        /Minimum accepted array length is 2, actual 1/);
+        /Minimum accepted array length for typ1 is 2, actual 1/);
   });
 
   it('should validate maxItems', function() {
@@ -167,7 +165,7 @@ describe('ArrayType', function() {
     const validate = typ1.validator({throwOnError: true});
     validate([1, 2]);
     assert.throws(() => validate([1, 2, 3]),
-        /Maximum accepted array length is 2, actual 3/);
+        /Maximum accepted array length for typ1 is 2, actual 3/);
   });
 
   it('should validate unique items', function() {

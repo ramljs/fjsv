@@ -1,6 +1,6 @@
-import AnyType from './AnyType';
+import DataType from '../DataType';
 
-export default class DateTimeType extends AnyType {
+export default class DateTimeType extends DataType {
 
     default: string | Date;
     format: string;

@@ -1,6 +1,6 @@
-import AnyType from './AnyType';
+import DataType from '../DataType';
 
-export default class NilType extends AnyType {
+export default class NilType extends DataType {
     required?: undefined;
     default?: undefined;
 }

@@ -1,6 +1,6 @@
-import AnyType from './AnyType';
+import DataType from '../DataType';
 
-export default class NumberType extends AnyType {
+export default class NumberType extends DataType {
     enum?: number[];
     format?: 'int64' | 'bigint' | 'int32' | 'int' | 'int16' | 'int8' |
         'uint64' | 'uint32' | 'uint16' | 'uint8' | 'long' | 'float' | 'double';

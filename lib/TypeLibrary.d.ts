@@ -1,4 +1,3 @@
-import AnyType from './types/AnyType';
 import DataType from "./DataType";
 
 export interface ITypeLibraryOptions {
@@ -12,7 +11,7 @@ export interface ITypeLibraryOptions {
 
 export default class TypeLibrary {
 
-    readonly types: { [index: string]: AnyType; };
+    readonly types: { [index: string]: DataType; };
 
     constructor(options: ITypeLibraryOptions);
 

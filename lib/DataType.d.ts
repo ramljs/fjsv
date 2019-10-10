@@ -63,6 +63,8 @@ export default class DataType {
 
     clone(): DataType;
 
+    bake();
+
     flatten(): DataType[];
 
     validator(options?: IValidatorOptions): ValidateFunction;
