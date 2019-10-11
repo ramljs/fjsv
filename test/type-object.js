@@ -260,9 +260,9 @@ describe('ObjectType', function() {
     const validate = typ1.validator({throwOnError: true});
     assert.deepStrictEqual(validate(obj1), {valid: true, value: obj1});
     assert.strictEqual(validate(obj1).value, obj1);
-    assert.throws(() => validate(''), /Value for typ1 must be an object/);
-    assert.throws(() => validate(false), /Value for typ1 must be an object/);
-    assert.throws(() => validate([]), /Value for typ1 must be an object/);
+    assert.throws(() => validate(''), /Value must be an object/);
+    assert.throws(() => validate(false), /Value must be an object/);
+    assert.throws(() => validate([]), /Value must be an object/);
   });
 
   it('should not allow additional properties if additionalProperties=false', function() {
@@ -275,7 +275,7 @@ describe('ObjectType', function() {
     const validate = typ1.validator({throwOnError: true});
     assert.throws(() =>
             validate({...obj1, f: 'f'}),
-        /typ1 does not allow additional property/
+        /No additional property \(f\) accepted./
     );
   });
 
@@ -340,9 +340,9 @@ describe('ObjectType', function() {
     const validate = typ1.validator({throwOnError: true});
     assert.throws(() =>
             validate({kind: 'User', name: 'name'}),
-        /Employee type requires kind property equal to "Employee"/);
+        /Value is not a type of "Employee"/);
     assert.throws(() => validate({name: 'name'}),
-        /Employee type requires kind property equal to "Employee"/);
+        /Value is not a type of "Employee"/);
     assert.deepStrictEqual(
         validate({
           kind: 'Employee',
@@ -388,9 +388,9 @@ describe('ObjectType', function() {
       throwOnError: true
     });
     assert.throws(() => validate({kind: 'user', name: 'name'}),
-        /typ1 type requires kind property equal to "employee"/);
+        /Value is not a type of "employee"/);
     assert.throws(() => validate({name: 'name'}),
-        /typ1 type requires kind property equal to "employee"/);
+        /Value is not a type of "employee"/);
     assert.deepStrictEqual(
         validate({
           kind: 'employee',
@@ -515,7 +515,7 @@ describe('ObjectType', function() {
     const validate = typ1.validator({throwOnError: true});
     validate({a: 1, b: 2});
     assert.throws(() => validate({a: 1}),
-        /Minimum accepted properties for typ1 is 2, actual 1/);
+        /Minimum accepted properties is 2, actual 1/);
   });
 
   it('should validate maxProperties', function() {
@@ -527,7 +527,7 @@ describe('ObjectType', function() {
     const validate = typ1.validator({throwOnError: true});
     validate({a: 1});
     assert.throws(() => validate({a: 1, b: 2}),
-        /Maximum accepted properties for typ1 is 1, actual 2/);
+        /Maximum accepted properties is 1, actual 2/);
   });
 
   it('should limit error count to maxObjectErrors', function() {

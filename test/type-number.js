@@ -204,8 +204,8 @@ describe('NumberType', function() {
     const validate = typ1.validator({throwOnError: true});
     assert.deepStrictEqual(validate(1), {valid: true, value: 1});
     assert.deepStrictEqual(validate(2), {valid: true, value: 2});
-    assert.throws(() => validate('4'), /Value for "typ1" must be a one of enumerated value/);
-    assert.throws(() => validate(4), /Value for "typ1" must be a one of enumerated value/);
+    assert.throws(() => validate('4'), /Value must be a one of the enumerated values/);
+    assert.throws(() => validate(4), /Value must be a one of the enumerated values/);
   });
 
   it('should validate minimum', function() {

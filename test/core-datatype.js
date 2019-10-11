@@ -164,8 +164,8 @@ describe('DataType', function() {
       valid: false,
       errors: [{
         errorType: 'value-required',
-        message: 'Value required for typ1',
-        path: 'typ1'
+        message: 'Value required',
+        path: ''
       }]
     });
   });
