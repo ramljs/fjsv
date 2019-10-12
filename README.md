@@ -14,7 +14,7 @@ Fast type validation generator.
 
 ## Node Compatibility
 
-  - node `>= 6.0`;
+  - node `>= 10.0`;
   
 ### License
 [MIT](LICENSE)

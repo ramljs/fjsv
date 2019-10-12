@@ -23,14 +23,16 @@
     "swagger",
     "generator"
   ],
-  "dependencies": {},
+  "dependencies": {
+    "deep-equal-x": "^2.1.2"
+  },
   "devDependencies": {
     "mocha": "^6.2.1",
     "nyc": "^14.1.1"
   },
   "peerDependencies": {},
   "engines": {
-    "node": ">= 8.0"
+    "node": ">= 10.0"
   },
   "files": [
     "LICENSE",
