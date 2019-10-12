@@ -24,7 +24,6 @@
     "generator"
   ],
   "dependencies": {
-    "deep-equal-x": "^2.1.2"
   },
   "devDependencies": {
     "mocha": "^6.2.1",
