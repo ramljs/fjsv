@@ -1,7 +1,7 @@
 {
   "name": "valgen",
   "description": "Fast type validation generator for JavaScript",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "author": "Panates",
   "contributors": [
     "Eray Hanoglu <e.hanoglu@panates.com>",
@@ -23,8 +23,7 @@
     "swagger",
     "generator"
   ],
-  "dependencies": {
-  },
+  "dependencies": {},
   "devDependencies": {
     "mocha": "^6.2.1",
     "nyc": "^14.1.1"
