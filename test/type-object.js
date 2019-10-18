@@ -506,6 +506,24 @@ describe('ObjectType', function() {
         obj1);
   });
 
+  it('should remove null properties if removeNull=true', function() {
+    const typ1 = library.get({
+      name: 'typ1',
+      type: 'object',
+      properties: properties1
+    });
+    const validate = typ1.validator({
+      throwOnError: true,
+      removeAdditional: true,
+      removeNull: true
+    });
+    const _obj1 = {...obj1};
+    delete _obj1.a;
+    assert.deepStrictEqual(
+        validate({..._obj1, a: null}).value,
+        _obj1);
+  });
+
   it('should validate minItems', function() {
     const typ1 = library.get({
       name: 'typ1',

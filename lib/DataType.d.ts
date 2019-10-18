@@ -21,6 +21,7 @@ export interface IValidatorOptions {
     fastDateValidation?: boolean;
     fastObjectValidation?: boolean;
     ignoreRequire?: boolean | string[];
+    removeNull?: boolean
 }
 
 export interface IValidatorGenerateOptions extends IValidatorOptions {

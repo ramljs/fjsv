@@ -5,7 +5,7 @@ export interface ITypeLibraryOptions {
     defaults?: {
         type: string;
         required?: boolean;
-        additionalProperties?: boolean;
+        additionalProperties?: boolean
     }
 }
 
