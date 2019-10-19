@@ -112,6 +112,16 @@ describe('DataType', function() {
     assert.strictEqual(typeof validate, 'function');
   });
 
+  it('should generate async validator resolvePromises=true', function() {
+    const library = new TypeLibrary({typeSet: 'RAML_1_0'});
+    const typ1 = library.get({
+      name: 'typ1',
+      type: 'any'
+    });
+    const validate = typ1.validator({resolvePromises: true});
+    assert.strictEqual(validate.constructor.name, 'AsyncFunction');
+  });
+
   it('should use default if value is null', function() {
     const library = new TypeLibrary({typeSet: 'RAML_1_0'});
     const typ1 = library.get({

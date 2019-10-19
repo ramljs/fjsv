@@ -314,7 +314,8 @@ describe('NumberType', function() {
     validate(127);
     assert.throws(() => validate(123.4),
         /Value must be an integer/);
-    assert.throws(() => validate(128),
+    assert.throws(() =>
+            validate(128),
         /Maximum accepted value is/);
     assert.throws(() => validate(-129),
         /Minimum accepted value is/);

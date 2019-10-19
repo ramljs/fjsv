@@ -634,4 +634,27 @@ describe('ObjectType', function() {
     assert.deepStrictEqual(x.value, {user: user});
   });
 
+  it('should resolve promises if resolvePromises=true', async function() {
+    const typ1 = library.get({
+      name: 'typ1',
+      type: 'object'
+    });
+    const validate = typ1.validator({
+      throwOnError: true,
+      coerceTypes: true,
+      resolvePromises: true
+    });
+    assert.deepStrictEqual(
+        (await validate({
+          a: {
+            b: Promise.resolve(1)
+          },
+          c: Promise.resolve(2)
+        })).value, {
+          a: {
+            b: 1
+          }, c: 2
+        });
+  });
+
 });
