@@ -48,10 +48,22 @@ describe('TypeLibrary', function() {
       name: 'Person',
       type: 'string'
     });
-    const t = typeLib.get({
+    typeLib.add('Human', 'string');
+    typeLib.add('Animal', {type: 'string', required: true});
+    let t = typeLib.get({
       type: 'Person'
     }).embody();
     assert.strictEqual(t.type[0].name, 'Person');
+    assert.strictEqual(t.baseName, 'string');
+    t = typeLib.get({
+      type: 'Human'
+    }).embody();
+    assert.strictEqual(t.type[0].name, 'Human');
+    assert.strictEqual(t.baseName, 'string');
+    t = typeLib.get({
+      type: 'Animal'
+    }).embody();
+    assert.strictEqual(t.type[0].name, 'Animal');
     assert.strictEqual(t.baseName, 'string');
   });
 
