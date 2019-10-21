@@ -4,13 +4,13 @@ const {TypeLibrary, DataType} = require('..');
 
 describe('TypeLibrary', function() {
 
-  it('should create type with name', function() {
+  it('should get a type with its name', function() {
     const typeLib = new TypeLibrary();
     let t = typeLib.get('string');
     assert.strictEqual(t.name, 'string');
   });
 
-  it('should create type with object definition', function() {
+  it('should get a type with object definition', function() {
     const typeLib = new TypeLibrary();
     let t = typeLib.get({type: 'string'});
     assert.strictEqual(t.type[0], 'string');
@@ -18,7 +18,7 @@ describe('TypeLibrary', function() {
     assert.strictEqual(t.type[0], 'string');
   });
 
-  it('should create type from nasted type', function() {
+  it('should get a type from nested type', function() {
     const typeLib = new TypeLibrary();
     let t = typeLib.get({
       type: {
@@ -27,6 +27,13 @@ describe('TypeLibrary', function() {
       }
     });
     assert.deepStrictEqual(t.type[0].name, 'abc');
+  });
+
+  it('should set required attribute to false if name ends with ? sign', function() {
+    const typeLib = new TypeLibrary({defaults: {required: true}});
+    let t = typeLib.get('string?');
+    assert.strictEqual(t.baseName, 'string');
+    assert.strictEqual(t.required, false);
   });
 
   it('should check get() arguments', function() {
