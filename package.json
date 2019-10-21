@@ -23,7 +23,9 @@
     "swagger",
     "generator"
   ],
-  "dependencies": {},
+  "dependencies": {
+    "putil-promisify": "^1.5.1"
+  },
   "devDependencies": {
     "mocha": "^6.2.2",
     "nyc": "^14.1.1"

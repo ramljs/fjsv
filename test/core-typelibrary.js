@@ -43,7 +43,7 @@ describe('TypeLibrary', function() {
     });
     const t = typeLib.get({
       type: 'Person'
-    }).bake();
+    }).embody();
     assert.strictEqual(t.type[0].name, 'Person');
     assert.strictEqual(t.baseName, 'string');
   });
