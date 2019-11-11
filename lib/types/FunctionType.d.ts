@@ -1,5 +1,5 @@
-import DataType from '../DataType';
+import AnyType from './AnyType';
 
-export default class FunctionType extends DataType {
-    default: Function;
+export default class FunctionType extends AnyType {
+    default?: Function;
 }

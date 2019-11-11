@@ -1,84 +1,17 @@
-import TypeLibrary from "./TypeLibrary";
-
-export declare type IAttributes = { [index: string]: any };
-
-export interface IValidationError {
-    message: string;
-    errorType?: string;
-    path?: string;
-
-    [index: string]: any;
-}
-
-export interface IValidatorOptions {
-    maxObjectErrors?: number;
-    maxArrayErrors?: number;
-    throwOnError?: boolean;
-    strictTypes?: boolean;
-    coerceTypes?: boolean;
-    convertDates?: boolean;
-    removeAdditional?: boolean | 'all';
-    fastDateValidation?: boolean;
-    fastObjectValidation?: boolean;
-    ignoreRequire?: boolean | string[];
-    removeNull?: boolean;
-    resolvePromises?: boolean;
-}
-
-export interface IValidatorGenerateOptions extends IValidatorOptions {
-    isUnion?: boolean;
-}
-
-export interface IValidateResult {
-    valid: boolean;
-    value?: any;
-    errors?: IValidationError[];
-}
-
-export interface IFunctionData {
-    code: string;
-    variables?: {
-        [index: string]: any;
-    };
-}
-
-export declare type ValidateFunction = (value: any) => IValidateResult;
-export declare type LogFunction = (err: IValidationError) => void;
-export declare type InternalValidateFunction = (v: any, path: string, error: LogFunction, ...args: any[]) => any;
+import TypeLibrary, {ICompileOptions, TypeFactory, ValidateFunction} from "./TypeLibrary";
 
 export default class DataType {
-    library: TypeLibrary;
-    type: DataType[];
-    attributes: IAttributes;
-    readonly baseName: string;
-    name: string;
-    required?: boolean;
-    default?: any;
-    readonly?: boolean;
-    writeonly?: boolean;
+    readonly library: TypeLibrary;
+    readonly typeName: string;
+    readonly factory: TypeFactory;
+    name?: string;
 
-    constructor(library?: TypeLibrary);
-
-    assign(values: IAttributes, overwrite?: boolean);
-
-    createNew(library: TypeLibrary, def?: IAttributes);
+    create(instance?: object): DataType;
 
     clone(): DataType;
 
-    bake();
+    compile(options?: ICompileOptions): ValidateFunction;
 
-    flatten(): DataType[];
+    set(attribute: string, value: any);
 
-    validator(options?: IValidatorOptions): ValidateFunction;
-
-    protected _getRequired(): boolean;
-
-    protected _getDefault(): any;
-
-    protected _assignAttributes(keys: string[], values: { [index: string]: any },
-                                overwrite?: boolean);
-
-    protected _generateValidateFunction(options: IValidatorOptions): InternalValidateFunction;
-
-    protected _generateValidationCode(options: IValidatorGenerateOptions): IFunctionData;
 }

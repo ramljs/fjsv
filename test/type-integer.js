@@ -6,32 +6,35 @@ describe('IntegerType', function() {
 
   let library;
   beforeEach(function() {
-    library = new TypeLibrary();
-    library.register('integer', IntegerType);
+    library = new TypeLibrary({defaults: {throwOnError: true}});
+    library.addDataType('integer', new IntegerType());
   });
 
-  it('should set "default" attribute as number', function() {
+  it('should create IntegerType instance', function() {
+    let t = library.get({
+      type: 'integer',
+      name: 'typ1'
+    });
+    assert.strictEqual(t.name, 'typ1');
+    assert.strictEqual(t.typeName, 'integer');
+  });
+
+  it('should set "default" attribute as integer', function() {
     const t = library.get({
       type: 'integer',
       name: 'typ1',
-      default: '1'
+      default: '5.1'
     });
-    assert.strictEqual(t.default, 1);
-    t.default = '5.1';
     assert.strictEqual(t.default, 5);
-    t.default = null;
-    assert.strictEqual(t.default, null);
-    t.default = undefined;
-    assert.strictEqual(t.default, undefined);
   });
 
   it('should throw if "default" value is not valid', function() {
     assert.throws(() =>
-        library.get({
+        library.compile({
           type: 'integer',
           name: 'typ1',
           default: 'abcd'
-        }), /"abcd" is not a valid integer value for default attribute/);
+        }), /Schema error at typ1\.default\. "abcd" is not a valid integer value/);
   });
 
   it('should set "enum" attribute as string array', function() {
@@ -51,11 +54,11 @@ describe('IntegerType', function() {
 
   it('should throw if "enum" value is not array', function() {
     assert.throws(() =>
-        library.get({
+        library.compile({
           type: 'integer',
           name: 'typ1',
           enum: 1
-        }), /Array type required for "enum" attribute/);
+        }), /Schema error at typ1\.enum\. "1" is not an array value./);
   });
 
   it('should set "format" attribute', function() {
@@ -75,59 +78,47 @@ describe('IntegerType', function() {
 
   it('should throw if "format" value is not valid', function() {
     assert.throws(() =>
-        library.get({
+        library.compile({
           type: 'integer',
           name: 'typ1',
           format: 'abcd'
-        }), /Unknown integer format \(abcd\)/);
+        }), /Schema error at typ1\.format\. "abcd" is not a valid integer format identifier/);
   });
 
   it('should set "minimum" attribute', function() {
     const t = library.get({
       type: 'integer',
       name: 'typ1',
-      minimum: 0
+      minimum: 0.1
     });
     assert.strictEqual(t.minimum, 0);
-    t.minimum = '1';
-    assert.deepStrictEqual(t.minimum, 1);
-    t.minimum = null;
-    assert.strictEqual(t.minimum, null);
-    t.minimum = undefined;
-    assert.strictEqual(t.minimum, undefined);
   });
 
   it('should throw if "minimum" value is not valid', function() {
     assert.throws(() =>
-        library.get({
+        library.compile({
           type: 'integer',
           name: 'typ1',
           minimum: 'abcd'
-        }), /"abcd" is not a valid number value for minimum attribute/);
+        }), /Schema error at typ1\.minimum\. "abcd" is not a valid integer value/);
   });
 
   it('should set "maximum" attribute', function() {
     const t = library.get({
       type: 'integer',
       name: 'typ1',
-      maximum: 10
+      maximum: 10.1
     });
     assert.strictEqual(t.maximum, 10);
-    t.maximum = '1';
-    assert.deepStrictEqual(t.maximum, 1);
-    t.maximum = null;
-    assert.strictEqual(t.maximum, null);
-    t.maximum = undefined;
-    assert.strictEqual(t.maximum, undefined);
   });
 
   it('should throw if "maximum" value is not valid', function() {
     assert.throws(() =>
-        library.get({
+        library.compile({
           type: 'integer',
           name: 'typ1',
           maximum: 'abcd'
-        }), /"abcd" is not a valid number value for maximum attribute/);
+        }), /Schema error at typ1\.maximum\. "abcd" is not a valid integer value/);
   });
 
   it('should set "multipleOf" attribute', function() {
@@ -137,47 +128,33 @@ describe('IntegerType', function() {
       multipleOf: 1.2
     });
     assert.strictEqual(t.multipleOf, 1);
-    t.multipleOf = '2';
-    assert.deepStrictEqual(t.multipleOf, 2);
-    t.multipleOf = null;
-    assert.strictEqual(t.multipleOf, null);
-    t.multipleOf = undefined;
-    assert.strictEqual(t.multipleOf, undefined);
   });
 
   it('should throw if "multipleOf" value is not valid', function() {
     assert.throws(() =>
-        library.get({
+        library.compile({
           type: 'integer',
           name: 'typ1',
           multipleOf: 'abcd'
-        }), /"abcd" is not a valid number value for multipleOf attribute/);
+        }), /Schema error at typ1\.multipleOf\. "abcd" is not a valid integer value/);
   });
 
   it('should generate validator', function() {
-    const typ1 = library.get({
-      name: 'typ1',
-      type: 'integer'
-    });
-    const validate = typ1.validator();
+    const validate = library.compile('integer');
     assert.strictEqual(typeof validate, 'function');
   });
 
   if (global.BigInt) {
     it('should validator accept strings and numbers in non-strict mode', function() {
-      const t = library.get({
-        name: 'typ1',
-        type: 'integer'
-      });
-      const validate = t.validator({throwOnError: true});
+      const validate = library.compile('integer');
       assert.deepStrictEqual(validate(0), {valid: true, value: 0});
       assert.deepStrictEqual(validate(BigInt(123)), {
         valid: true,
         value: BigInt(123)
       });
       assert.deepStrictEqual(validate('0'), {valid: true, value: '0'});
-      assert.throws(() => validate(''), / Value must be an integer or integer formatted string/);
-      assert.throws(() => validate(0.5), / Value must be an integer or integer formatted string/);
+      assert.throws(() => validate(''), /Value must be an integer or integer formatted string/);
+      assert.throws(() => validate(0.5), /Value must be an integer or integer formatted string/);
       assert.throws(() => validate(false), /Value must be an integer or integer formatted string/);
       assert.throws(() => validate([]), /Value must be an integer or integer formatted string/);
       assert.throws(() => validate({}), /Value must be an integer or integer formatted string/);
@@ -185,11 +162,7 @@ describe('IntegerType', function() {
   }
 
   it('should validator accept only number value in strict mode', function() {
-    const typ1 = library.get({
-      name: 'typ1',
-      type: 'integer'
-    });
-    const validate = typ1.validator({strictTypes: true, throwOnError: true});
+    const validate = library.compile('integer', {strictFormat: true});
     validate(0);
     validate(null);
     validate(123);
@@ -198,12 +171,10 @@ describe('IntegerType', function() {
   });
 
   it('should validator accept enum values if set', function() {
-    const typ1 = library.get({
-      name: 'typ1',
+    const validate = library.compile({
       type: 'integer',
       enum: [1, 2, 3]
     });
-    const validate = typ1.validator({throwOnError: true});
     assert.deepStrictEqual(validate(1), {valid: true, value: 1});
     assert.deepStrictEqual(validate(2), {valid: true, value: 2});
     assert.throws(() => validate('4'), /Value must be a one of the enumerated values/);
@@ -211,12 +182,10 @@ describe('IntegerType', function() {
   });
 
   it('should validate minimum', function() {
-    const typ1 = library.get({
-      name: 'typ1',
+    const validate = library.compile({
       type: 'integer',
       minimum: 5
     });
-    const validate = typ1.validator({throwOnError: true});
     validate(5);
     try {
       validate(4);
@@ -230,12 +199,10 @@ describe('IntegerType', function() {
   });
 
   it('should validate maximum', function() {
-    const typ1 = library.get({
-      name: 'typ1',
+    const validate = library.compile({
       type: 'integer',
       maximum: 5
     });
-    const validate = typ1.validator({throwOnError: true});
     validate(5);
     try {
       validate(6);
@@ -249,12 +216,10 @@ describe('IntegerType', function() {
   });
 
   it('should validate multipleOf', function() {
-    const typ1 = library.get({
-      name: 'typ1',
+    const validate = library.compile({
       type: 'integer',
       multipleOf: 2
     });
-    const validate = typ1.validator({throwOnError: true});
     validate(4);
     try {
       validate(3);
@@ -266,11 +231,7 @@ describe('IntegerType', function() {
   });
 
   it('should coerce value to integer', function() {
-    const typ1 = library.get({
-      name: 'typ1',
-      type: 'integer'
-    });
-    const validate = typ1.validator({coerceTypes: true});
+    const validate = library.compile('integer', {coerceTypes: true});
     assert.deepStrictEqual(validate('0'), {valid: true, value: 0});
     assert.deepStrictEqual(validate(0), {valid: true, value: 0});
     if (global.BigInt)
@@ -278,12 +239,10 @@ describe('IntegerType', function() {
   });
 
   it('should coerce value to default if null', function() {
-    const typ1 = library.get({
-      name: 'typ1',
+    const validate = library.compile({
       type: 'integer',
       default: 1
-    });
-    const validate = typ1.validator({coerceTypes: true});
+    }, {coerceTypes: true});
     assert.deepStrictEqual(validate(), {valid: true, value: 1});
   });
 

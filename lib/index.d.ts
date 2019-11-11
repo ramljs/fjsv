@@ -1,9 +1,9 @@
 import TypeLibrary from './TypeLibrary';
-import DataType from './DataType';
+import TypeFactory from './TypeFactory';
 import AnyType from './types/AnyType';
 import ArrayType from './types/ArrayType';
 import BooleanType from './types/BooleanType';
-import DateTimeType from './types/DateTimeType';
+import DateType from './types/DateType';
 import DateOnlyType from './types/DateOnlyType';
 import TimeOnlyType from './types/TimeOnlyType';
 import DateTimeOnlyType from './types/DateTimeOnlyType';
@@ -16,11 +16,11 @@ import UnionType from './types/UnionType';
 
 export {
     TypeLibrary,
-    DataType,
+    TypeFactory,
     AnyType,
     ArrayType,
     BooleanType,
-    DateTimeType,
+    DateType,
     DateOnlyType,
     TimeOnlyType,
     DateTimeOnlyType,

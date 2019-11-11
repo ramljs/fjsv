@@ -6,14 +6,13 @@ describe('FunctionType', function() {
 
   let library;
   beforeEach(function() {
-    library = new TypeLibrary();
+    library = new TypeLibrary({defaults: {throwOnError: true}});
   });
 
   it('should set "default" attribute as function', function() {
     const fn = () => 1;
     const t = library.get({
       type: 'function',
-      name: 'typ1',
       default: fn
     });
     assert.strictEqual(t.default, fn);
@@ -24,21 +23,13 @@ describe('FunctionType', function() {
   });
 
   it('should generate validator', function() {
-    const typ1 = library.get({
-      name: 'typ1',
-      type: 'function'
-    });
-    const validate = typ1.validator();
+    const validate = library.compile('function');
     assert.strictEqual(typeof validate, 'function');
   });
 
   it('should validator accept only function values', function() {
     const fn = () => 1;
-    const typ1 = library.get({
-      name: 'typ1',
-      type: 'function'
-    });
-    const validate = typ1.validator({throwOnError: true});
+    const validate = library.compile('function');
     validate(fn);
     validate(null);
     assert.throws(() => validate(0), /Value must be a function/);

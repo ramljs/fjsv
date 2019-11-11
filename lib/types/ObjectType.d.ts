@@ -1,6 +1,6 @@
-import DataType from '../DataType';
+import AnyType from './AnyType';
 
-export default class ObjectType extends DataType {
+export default class ObjectType extends AnyType {
     discriminator?: string;
     discriminatorValue?: any;
     additionalProperties?: boolean;
@@ -8,11 +8,18 @@ export default class ObjectType extends DataType {
     maxProperties?: number;
     isTypeOf: (value: any, t: ObjectType) => boolean;
     properties: {
-        [index: string]: DataType;
+        [index: string]: Property;
     };
 
-    addProperty(name: string, prop: object | DataType): DataType;
+    addProperty(name: string, prop: object | AnyType): Property;
 
-    addProperties(properties: { [index: string]: object | DataType }): this;
+    addProperties(properties: { [index: string]: object | AnyType }): this;
 
+}
+
+declare class Property {
+    owner: ObjectType;
+    name: string;
+    type: AnyType;
+    required?: boolean | string[];
 }

@@ -1,8 +1,10 @@
-export declare function normalizeTypeDef(def: string | object, defaultType: string): object;
+export declare function coerceToString(v: any): string;
 
-export declare function parseTypeName(v: string): string | object;
+export declare function coerceToInt(v: any): number;
 
-export declare function coalesce(...v: any[]): any;
+export declare function coerceToNumber(v: any): number;
+
+export declare function coerceToArray(v: any): any[];
 
 export declare function isValidDate(d: Date): boolean;
 

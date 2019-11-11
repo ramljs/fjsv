@@ -1,6 +1,5 @@
-import DataType from '../DataType';
+import AnyType from './AnyType';
 
-export default class UnionType extends DataType {
-    anyOf?: DataType[];
-
+export default class UnionType extends AnyType {
+    anyOf?: AnyType[];
 }

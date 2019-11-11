@@ -1,13 +1,12 @@
 /* eslint-disable */
 const assert = require('assert');
-const {TypeLibrary, UnionType} = require('..');
+const {TypeLibrary} = require('..');
 
 describe('UnionType', function() {
 
   let library;
-
   beforeEach(function() {
-    library = new TypeLibrary();
+    library = new TypeLibrary({defaults: {throwOnError: true}});
   });
 
   it('should throw if "anyOf" value is not array', function() {
@@ -16,7 +15,7 @@ describe('UnionType', function() {
           type: 'union',
           name: 'typ1',
           anyOf: 1
-        }), /Array type required for "anyOf" attribute/);
+        }), /Schema error at typ1\.anyOf\. Value must be an array/);
   });
 
   it('should "anyOf" must have at least 2 values', function() {
@@ -25,7 +24,7 @@ describe('UnionType', function() {
           type: 'union',
           name: 'typ1',
           anyOf: ['string']
-        }), /"anyOf" attribute must contain at least 2 items/);
+        }), /Schema error at typ1\.anyOf\. Value must contain at least 2 items/);
   });
 
   it('should generate validator', function() {
@@ -34,8 +33,41 @@ describe('UnionType', function() {
       type: 'union',
       anyOf: ['string', 'number']
     });
-    const validate = typ1.validator();
+    const validate = typ1.compile();
     assert.strictEqual(typeof validate, 'function');
+  });
+
+  it('should mixin', function() {
+    const types = {
+      RequiredString: {
+        type: 'string',
+        required: true
+      },
+      LocalPhoneNumber: {
+        type: 'string',
+        pattern: '123\\d+'
+      },
+      CellularNumber: {
+        type: 'string',
+        pattern: '555\\d+'
+      }
+    };
+    library.lookupSchema = (n) => types[n];
+    library.get('RequiredString');
+    library.get('LocalPhoneNumber');
+    library.get('CellularNumber');
+
+    const typ1 = library.get({
+      name: 'typ1',
+      type: '[RequiredString, LocalPhoneNumber|CellularNumber]',
+      maxLength: 15
+    });
+
+    assert.strictEqual(typ1.typeName, 'union');
+    const anyOf = typ1.getAttribute('anyOf');
+    assert.strictEqual(anyOf.length, 2);
+    assert.deepStrictEqual(anyOf[0].getAttribute('pattern'), ['123\\d+']);
+    assert.strictEqual(anyOf[0].getAttribute('maxLength'), 15);
   });
 
   it('should flatten nested unions to one', function() {
@@ -64,7 +96,7 @@ describe('UnionType', function() {
         }
       }
     };
-    library.onTypeLookup = (n) => types[n];
+    library.lookupSchema = (n) => types[n];
 
     const typ1 = library.get({
       name: 'typ1',
@@ -78,7 +110,7 @@ describe('UnionType', function() {
     assert.strictEqual(x.anyOf[1].name, 'Employee');
     assert.strictEqual(x.anyOf[2].name, 'Company');
     assert.strictEqual(x.anyOf[3].name, 'Individual');
-    const validate = typ1.validator();
+    const validate = typ1.compile();
     assert.strictEqual(typeof validate, 'function');
   });
 

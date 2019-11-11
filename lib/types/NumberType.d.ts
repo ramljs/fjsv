@@ -1,14 +1,12 @@
-import DataType from '../DataType';
+import AnyType from './AnyType';
 
-export default class NumberType extends DataType {
+export default class NumberType extends AnyType {
+    default?: number;
     enum?: number[];
-    format?: 'int64' | 'bigint' | 'int32' | 'int' | 'int16' | 'int8' |
-        'uint64' | 'uint32' | 'uint16' | 'uint8' | 'long' | 'float' | 'double';
+    format?: string;
     minimum?: number;
     maximum?: number;
     multipleOf?: number;
-
-    protected _getFormat(): string;
 
     static NumberFormats: string[];
     static IntegerFormats: string[];

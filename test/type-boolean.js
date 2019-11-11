@@ -6,43 +6,55 @@ describe('BooleanType', function() {
 
   let library;
   beforeEach(function() {
-    library = new TypeLibrary();
+    library = new TypeLibrary({defaults: {throwOnError: true}});
   });
-  
+
+  it('should create BooleanType instance', function() {
+    let t = library.get({
+      type: 'boolean',
+      name: 'typ1'
+    });
+    assert.strictEqual(t.name, 'typ1');
+    assert.strictEqual(t.typeName, 'boolean');
+  });
+
   it('should set "default" attribute as boolean', function() {
     const t = library.get({
       type: 'boolean',
       name: 'typ1',
-      default: true
+      default: 1
     });
     assert.strictEqual(t.default, true);
-    t.default = 1;
+  });
+
+  it('should set "enum" attribute as boolean', function() {
+    const t = library.get({
+      type: 'boolean',
+      name: 'typ1',
+      enum: [1, 0]
+    });
+    assert.deepStrictEqual(t.enum, [true, false]);
+  });
+
+  it('should create mixin types', function() {
+    let t = library.get({
+      type: [{
+        type: 'boolean'
+      }, {
+        type: 'boolean',
+        default: true
+      }]
+    });
     assert.strictEqual(t.default, true);
-    t.default = 0;
-    assert.strictEqual(t.default, false);
-    t.default = '';
-    assert.strictEqual(t.default, false);
-    t.default = null;
-    assert.strictEqual(t.default, null);
-    t.default = undefined;
-    assert.strictEqual(t.default, undefined);
   });
 
   it('should generate validator', function() {
-    const typ1 = library.get({
-      name: 'typ1',
-      type: 'boolean'
-    });
-    const validate = typ1.validator();
+    const validate = library.compile('boolean');
     assert.strictEqual(typeof validate, 'function');
   });
 
   it('should validator accept other values in non-strict mode', function() {
-    const t = library.get({
-      name: 'typ1',
-      type: 'boolean'
-    });
-    const validate = t.validator({throwOnError: true});
+    const validate = library.compile('boolean');
     assert.deepStrictEqual(validate(null), {valid: true, value: null});
     assert.deepStrictEqual(validate(false), {valid: true, value: false});
     assert.deepStrictEqual(validate(true), {valid: true, value: true});
@@ -57,11 +69,7 @@ describe('BooleanType', function() {
   });
 
   it('should validator accept only boolean values in strict mode', function() {
-    const typ1 = library.get({
-      name: 'typ1',
-      type: 'boolean'
-    });
-    const validate = typ1.validator({strictTypes: true, throwOnError: true});
+    const validate = library.compile('boolean', {strictFormat: true});
     validate(false);
     validate(true);
     validate(null);
@@ -73,11 +81,7 @@ describe('BooleanType', function() {
   });
 
   it('should coerce value to boolean type', function() {
-    const typ1 = library.get({
-      name: 'typ1',
-      type: 'boolean'
-    });
-    const validate = typ1.validator({coerceTypes: true});
+    const validate = library.compile('boolean', {coerceTypes: true});
     assert.deepStrictEqual(validate(false), {valid: true, value: false});
     assert.deepStrictEqual(validate(true), {valid: true, value: true});
     assert.deepStrictEqual(validate(0), {valid: true, value: false});
@@ -87,12 +91,10 @@ describe('BooleanType', function() {
   });
 
   it('should coerce value to default if null', function() {
-    const typ1 = library.get({
-      name: 'typ1',
+    const validate = library.compile({
       type: 'boolean',
       default: 1
-    });
-    const validate = typ1.validator({coerceTypes: true});
+    }, {coerceTypes: true});
     assert.deepStrictEqual(validate(), {valid: true, value: true});
   });
 

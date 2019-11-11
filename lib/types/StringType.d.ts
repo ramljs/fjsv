@@ -1,9 +1,8 @@
-import DataType from '../DataType';
+import AnyType from './AnyType';
 
-export default class StringType extends DataType {
+export default class StringType extends AnyType {
+    default?: string;
     enum?: string[];
-    pattern?: string;
     minLength?: number;
     maxLength?: number;
-
 }

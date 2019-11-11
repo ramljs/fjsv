@@ -1,141 +1,164 @@
 /* eslint-disable */
 const assert = require('assert');
-const {TypeLibrary, DataType} = require('..');
+const {TypeLibrary, TypeFactory} = require('..');
 
 describe('TypeLibrary', function() {
 
-  it('should get a type with its name', function() {
-    const typeLib = new TypeLibrary();
-    let t = typeLib.get('string');
-    assert.strictEqual(t.name, 'string');
+  it('should create a type using name', function() {
+    const library = new TypeLibrary();
+    //let t = library.get('any');
+    //assert.strictEqual(t.name, 'any');
   });
 
-  it('should get a type with object definition', function() {
-    const typeLib = new TypeLibrary();
-    let t = typeLib.get({type: 'string'});
-    assert.strictEqual(t.type[0], 'string');
-    t = typeLib.get({type: ['string']});
-    assert.strictEqual(t.type[0], 'string');
+  it('should create a type using name', function() {
+    const library = new TypeLibrary();
+    let t = library.get('any');
+    assert.strictEqual(t.name, 'any');
   });
 
-  it('should get a type from nested type', function() {
-    const typeLib = new TypeLibrary();
-    let t = typeLib.get({
+  it('should create a type with object definition', function() {
+    const library = new TypeLibrary();
+    let t = library.get({type: 'any', name: 'typ1'});
+    assert.strictEqual(t.name, 'typ1');
+    assert.strictEqual(t.typeName, 'any');
+    t = library.get({type: ['any']});
+    assert.strictEqual(t.typeName, 'any');
+  });
+
+  it('should create a type from nested schema', function() {
+    const library = new TypeLibrary();
+    let t = library.get({
       type: {
-        type: 'string',
+        type: 'any',
         name: 'abc'
       }
     });
-    assert.deepStrictEqual(t.type[0].name, 'abc');
+    assert.strictEqual(t.typeName, 'any');
   });
 
-  it('should set required attribute to false if name ends with ? sign', function() {
-    const typeLib = new TypeLibrary({defaults: {required: true}});
-    let t = typeLib.get('string?');
-    assert.strictEqual(t.baseName, 'string');
-    assert.strictEqual(t.required, false);
+  it('should return cached instance except creating a second one', function() {
+    const library = new TypeLibrary();
+    library.addSchema('t1', 'any');
+    const t1 = library.get('t1');
+    assert.strictEqual(t1, library.get('t1'));
+    library.reset();
+    assert.notStrictEqual(t1, library.get('t1'));
   });
 
   it('should check get() arguments', function() {
-    const typeLib = new TypeLibrary({defaults: {required: true}});
+    const library = new TypeLibrary();
     assert.throws(() =>
-        typeLib.get(), /Invalid argument/);
+        library.get(), /Invalid argument/);
   });
 
-  it('should add type schema to library', function() {
-    const typeLib = new TypeLibrary();
-    typeLib.add({
-      name: 'Person',
-      type: 'string'
-    });
-    typeLib.add('Human', 'string');
-    typeLib.add('Animal', {type: 'string', required: true});
-    let t = typeLib.get({
-      type: 'Person'
-    }).embody();
-    assert.strictEqual(t.type[0].name, 'Person');
-    assert.strictEqual(t.baseName, 'string');
-    t = typeLib.get({
-      type: 'Human'
-    }).embody();
-    assert.strictEqual(t.type[0].name, 'Human');
-    assert.strictEqual(t.baseName, 'string');
-    t = typeLib.get({
-      type: 'Animal'
-    }).embody();
-    assert.strictEqual(t.type[0].name, 'Animal');
-    assert.strictEqual(t.baseName, 'string');
+  it('should throw error if type not found', function() {
+    const library = new TypeLibrary();
+    assert.throws(() => library.get({type: 'unknown'}), /Unknown type/);
   });
 
-  it('should call lookup callback for custom types', function() {
-    const typeLib = new TypeLibrary({
-      onTypeLookup: (n) => {
-        if (n === 'CustomType1')
-          return 'string';
-        if (n === 'CustomType2')
-          return {type: 'number', required: false};
-        if (n === 'CustomType3')
-          return 'string[]';
-        return n;
-      }
-    });
-    const t1 = typeLib.get({type: 'CustomType1'});
-    const t2 = typeLib.get({type: 'CustomType2', required: true});
-    const t3 = typeLib.get({type: 'CustomType3', minItems: 3});
-    const t4 = typeLib.get({type: 'CustomType2'});
-    assert.strictEqual(t1.type[0], 'CustomType1');
-    assert.strictEqual(t2.type[0], 'CustomType2');
-    assert.strictEqual(t3.type[0], 'CustomType3');
-    assert.strictEqual(t4.type[0], 'CustomType2');
-    assert.strictEqual(t2.required, true);
-    assert.strictEqual(typeLib.types.CustomType1.type[0], 'string');
-    assert.strictEqual(typeLib.types.CustomType2.type[0], 'number');
-    assert.strictEqual(typeLib.types.CustomType3.type[0], 'array');
-    assert.deepStrictEqual(t2.type, t4.type);
-    assert.strictEqual(t3.items, undefined);
-    assert.strictEqual(t3.minItems, 3);
-    assert.strictEqual(t3.type[0], 'CustomType3');
+  it('should throw error if lookup callback returns null', function() {
+    const library = new TypeLibrary({lookupSchema: () => undefined});
+    assert.throws(() => library.get({type: 'unknown'}), /Unknown type/);
   });
 
-  it('should throw Unknown type error if type not found', function() {
-    const typeLib = new TypeLibrary();
-    assert.throws(() => typeLib.get({type: 'unknown'}), /Unknown type/);
-  });
-
-  it('should throw Unknown type error if lookup callback returns null', function() {
-    const typeLib = new TypeLibrary({onTypeLookup: () => undefined});
-    assert.throws(() => typeLib.get({type: 'unknown'}), /Unknown type/);
-  });
-
-  it('should throw Unknown type error if lookup callback returns same value', function() {
-    const typeLib = new TypeLibrary({onTypeLookup: (v) => v});
-    assert.throws(() => typeLib.get({type: 'unknown'}), /Unknown type/);
+  it('should throw error if lookup callback returns same value', function() {
+    const library = new TypeLibrary({lookupSchema: (v) => v});
+    assert.throws(() => library.get({type: 'unknown'}), /Unknown type/);
   });
 
   it('should set default type', function() {
-    const typeLib = new TypeLibrary({defaults: {type: 'boolean'}});
-    let t = typeLib.get({name: 'abc'});
-    assert.strictEqual(t.baseName, 'boolean');
+    const library = new TypeLibrary({defaults: {type: 'any'}});
+    let t = library.get({name: 'abc'});
+    assert.strictEqual(t.typeName, 'any');
   });
 
-  it('should set default required', function() {
-    const typeLib = new TypeLibrary({defaults: {required: true}});
-    assert.strictEqual(typeLib.defaults.required, true);
+  it('should add type schema to library', function() {
+    const library = new TypeLibrary();
+    library.addSchema({
+      name: 'Person',
+      type: 'any'
+    });
+    library.addSchema('Human', 'any');
+    library.addSchema('Animal', {type: 'any', default: true});
+
+    let t = library.get('Person');
+    assert.strictEqual(t.name, 'Person');
+    assert.strictEqual(t.typeName, 'any');
+
+    t = library.get('Human');
+    assert.strictEqual(t.name, 'Human');
+    assert.strictEqual(t.typeName, 'any');
+
+    t = library.get('Animal');
+    assert.strictEqual(t.name, 'Animal');
+    assert.strictEqual(t.typeName, 'any');
   });
 
-  it('should register a new type class', function() {
-    const typeLib = new TypeLibrary({defaults: {required: true}});
-    const CustomType = class extends DataType {
-    };
-    typeLib.register('custom', CustomType);
-    let t = typeLib.get({type: 'custom'});
-    assert.strictEqual(t.baseName, 'custom');
+  it('should register a new type factory', function() {
+    const library = new TypeLibrary();
+    library.addDataType('custom', {
+      compile() {
+      }
+    });
+    let t = library.get({type: 'custom'});
+    assert.strictEqual(t.typeName, 'custom');
   });
 
-  it('should throw error if type class is not extended from DataType', function() {
-    const typeLib = new TypeLibrary({defaults: {required: true}});
+  it('should register a new type factory', function() {
+    const library = new TypeLibrary();
     assert.throws(() =>
-        typeLib.register('custom', Number), /Class must be extended from DataType/);
+        library.addDataType('custom', {}), /Factory must contain a "compile" function/);
+  });
+
+  it('should call "create" function of custom type factory', function() {
+    const library = new TypeLibrary();
+    let ok;
+    library.addDataType('custom', {
+      create() {
+        ok = 1;
+      },
+      compile() {}
+    });
+    library.get({type: 'custom'});
+    assert.strictEqual(ok, 1);
+  });
+
+  it('should call "set" function of custom type factory', function() {
+    const library = new TypeLibrary();
+    const ok = {};
+    library.addDataType('custom', {
+      set(dataType, attr, v) {
+        return ok[attr] = v;
+      },
+      compile() {}
+    });
+    const t = library.get({type: 'custom', v1: 1, v2: 2});
+    assert.deepStrictEqual(ok, {v1: 1, v2: 2});
+  });
+
+  it('should call lookup callback for custom types', function() {
+    const library = new TypeLibrary({
+      lookupSchema: (n) => {
+        if (n === 'CustomType1')
+          return 'string';
+        if (n === 'CustomType2')
+          return {type: 'any', default: 1};
+        if (n === 'CustomType3')
+          return {type: 'any', default: 3};
+        return n;
+      }
+    });
+    const t1 = library.get({type: 'CustomType1'});
+    const t2 = library.get({type: 'CustomType2', default: 21});
+    const t3 = library.get({type: 'CustomType3', default: 31});
+    const t4 = library.get({type: 'CustomType2'});
+    assert.strictEqual(t1.typeName, 'string');
+    assert.strictEqual(t2.typeName, 'any');
+    assert.strictEqual(t3.typeName, 'any');
+    assert.strictEqual(t4.typeName, 'any');
+    assert.strictEqual(t2.default, 21);
+    assert.strictEqual(t3.default, 31);
+    assert.strictEqual(t4.default, 1);
   });
 
 });

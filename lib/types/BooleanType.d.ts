@@ -1,5 +1,6 @@
-import DataType from '../DataType';
+import AnyType from './AnyType';
 
-export default class BooleanType extends DataType {
-    default: boolean;
+export default class BooleanType extends AnyType {
+    default?: boolean[];
+    enum?: boolean[];
 }
