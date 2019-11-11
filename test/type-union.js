@@ -64,35 +64,39 @@ describe('UnionType', function() {
     });
 
     assert.strictEqual(typ1.typeName, 'union');
-    const anyOf = typ1.getAttribute('anyOf');
-    assert.strictEqual(anyOf.length, 2);
-    assert.deepStrictEqual(anyOf[0].getAttribute('pattern'), ['123\\d+']);
-    assert.strictEqual(anyOf[0].getAttribute('maxLength'), 15);
+    assert.strictEqual(typ1.anyOf.length, 2);
+    assert.deepStrictEqual(typ1.anyOf[0].pattern, [/123\d+/]);
+    assert.strictEqual(typ1.anyOf[0].maxLength, 15);
   });
 
   it('should flatten nested unions to one', function() {
     const types = {
-      Company: {
+      Resource: {
         properties: {
-          companyId: 'string'
+          id: 'string'
         }
       },
-      Individual: {
+      Patient: {
+        type: ['Human|Animal']
+      },
+      Human: {
         properties: {
-          IndividualId: 'string'
+          firstName: 'string',
+          lastName: 'string'
         }
       },
-      Customer: {
-        type: ['Company|Individual']
+      Animal: {
+        type: ['PetAnimal|WildAnimal']
       },
-      Employee: {
+      PetAnimal: {
         properties: {
-          employeeId: 'string'
+          name: 'string',
+          owner: 'string'
         }
       },
-      Bank: {
+      WildAnimal: {
         properties: {
-          bankId: 'string'
+          classification: 'string'
         }
       }
     };
@@ -100,16 +104,14 @@ describe('UnionType', function() {
 
     const typ1 = library.get({
       name: 'typ1',
-      type: '[Bank|Employee|Customer]',
+      type: '[Resource, Patient]',
       additionalProperties: false
     });
-    const x = typ1.flatten();
-    assert(x instanceof UnionType, 'x is not UnionType');
-    assert.strictEqual(x.anyOf.length, 4);
-    assert.strictEqual(x.anyOf[0].name, 'Bank');
-    assert.strictEqual(x.anyOf[1].name, 'Employee');
-    assert.strictEqual(x.anyOf[2].name, 'Company');
-    assert.strictEqual(x.anyOf[3].name, 'Individual');
+    assert.strictEqual(typ1.anyOf.length, 4);
+    assert.strictEqual(typ1.anyOf[0].name, 'Bank');
+    assert.strictEqual(typ1.anyOf[1].name, 'Employee');
+    assert.strictEqual(typ1.anyOf[2].name, 'Company');
+    assert.strictEqual(typ1.anyOf[3].name, 'Individual');
     const validate = typ1.compile();
     assert.strictEqual(typeof validate, 'function');
   });

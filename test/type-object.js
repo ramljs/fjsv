@@ -458,7 +458,7 @@ describe('ObjectType', function() {
         c: 'number',
         d: 'number'
       }
-    }, {maxObjectErrors: 2});
+    }, {maxObjectErrors: 2, throwOnError: false});
     let x = validate({a: 'a', b: 'b', c: 'c'});
     assert.strictEqual(x.errors.length, 2);
 
@@ -468,7 +468,7 @@ describe('ObjectType', function() {
         x: 'string'
       },
       additionalProperties: false
-    }, {maxObjectErrors: 2});
+    }, {maxObjectErrors: 2, throwOnError: false});
     x = validate({a: 'a', b: 'b', c: 'c'});
     assert.strictEqual(x.errors.length, 2);
   });
@@ -483,9 +483,9 @@ describe('ObjectType', function() {
       }
     });
     const t = library.get('Node');
-    assert.strictEqual(t.properties.items.typeName, 'array');
-    assert.strictEqual(t.properties.items.items, t);
-    assert.strictEqual(t.properties.parent.properties.items, t);
+    assert.strictEqual(t.properties.items.dataType.typeName, 'array');
+    assert.strictEqual(t.properties.items.dataType.items, t);
+    assert.strictEqual(t.properties.parent.dataType.properties.items.dataType.items, t);
     t.compile();
   });
 

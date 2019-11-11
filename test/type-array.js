@@ -104,7 +104,7 @@ describe('ArrayType', function() {
     assert.deepStrictEqual(validate('abc'), {valid: true, value: 'abc'});
     assert.deepStrictEqual(validate(['abc']), {valid: true, value: ['abc']});
     assert.throws(() => validate([{}]),
-        /Value at \[0] must be a string/);
+        /Value must be a string/);
   });
 
   it('should validate minItems', function() {

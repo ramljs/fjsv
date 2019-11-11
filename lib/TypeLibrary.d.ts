@@ -46,7 +46,7 @@ export interface TypeFactory {
     create?: (instance: object) => void;
     compile: (dataType: DataType, options?: ICompileOptions) => ValidateFunction;
     prepareCompileOptions?: (options?: ICompileOptions) => ICompileOptions;
-    set?: (dataType: DataType, attribute:string, value: any) => any;
+    set?: (dataType: DataType, attribute: string, value: any, parentSchema: object) => any;
 }
 
 export default class TypeLibrary {

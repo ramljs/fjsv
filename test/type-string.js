@@ -197,8 +197,7 @@ describe('StringType', function() {
       valid: false,
       errors: [{
         errorType: 'invalid-value-format',
-        message: 'Value does not match required format',
-        path: ''
+        message: 'Value does not match required format'
       }]
     });
   });
