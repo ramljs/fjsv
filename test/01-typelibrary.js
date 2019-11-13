@@ -1,13 +1,13 @@
 /* eslint-disable */
 const assert = require('assert');
-const {TypeLibrary, TypeFactory} = require('..');
+const {TypeLibrary} = require('..');
 
 describe('TypeLibrary', function() {
 
   it('should create a type using name', function() {
     const library = new TypeLibrary();
-    //let t = library.get('any');
-    //assert.strictEqual(t.name, 'any');
+    let t = library.get('any');
+    assert.strictEqual(t.name, 'any');
   });
 
   it('should create a type using name', function() {
@@ -34,6 +34,25 @@ describe('TypeLibrary', function() {
       }
     });
     assert.strictEqual(t.typeName, 'any');
+  });
+
+  it('should add schema to library', function() {
+    const library = new TypeLibrary();
+    library.addSchema('t1', {
+      type: 'any',
+      default: 1
+    });
+    library.addSchema({
+      name: 't2',
+      type: 'any',
+      default: 2
+    });
+    assert.strictEqual(library.schemas['t1'].default, 1);
+    assert.strictEqual(library.schemas['t2'].default, 2);
+    assert.throws(() => library.addSchema('t1', 'any'), /Schema "t1" already defined/);
+    assert.throws(() => library.addSchema('t1', 2323), /Second argument must be an object or string/);
+    assert.throws(() => library.addSchema(1), /You must provide object instance as first argument/);
+    assert.throws(() => library.addSchema({}), /You must provide type name/);
   });
 
   it('should return cached instance except creating a second one', function() {
@@ -104,15 +123,26 @@ describe('TypeLibrary', function() {
     assert.strictEqual(t.typeName, 'custom');
   });
 
-  it('should register a new type factory', function() {
+  it('should validate type factory', function() {
     const library = new TypeLibrary();
     assert.throws(() =>
+        library.addDataType('', {}), /You must provide type name/);
+    assert.throws(() =>
+        library.addDataType('custom', null), / Factory argument must be an object/);
+    assert.throws(() =>
+        library.addDataType('custom', 123), / Factory argument must be an object/);
+    assert.throws(() =>
         library.addDataType('custom', {}), /Factory must contain a "compile" function/);
+    library.addDataType('custom', {compile() {}});
+    assert.throws(() =>
+            library.addDataType('custom', {compile() {}}),
+        /Data type "custom" already registered/);
+
   });
 
   it('should call "create" function of custom type factory', function() {
     const library = new TypeLibrary();
-    let ok;
+    let ok = 0;
     library.addDataType('custom', {
       create() {
         ok = 1;
@@ -132,7 +162,7 @@ describe('TypeLibrary', function() {
       },
       compile() {}
     });
-    const t = library.get({type: 'custom', v1: 1, v2: 2});
+    library.get({type: 'custom', v1: 1, v2: 2});
     assert.deepStrictEqual(ok, {v1: 1, v2: 2});
   });
 

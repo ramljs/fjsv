@@ -1,6 +1,6 @@
-import TypeFactory from '../TypeFactory';
+import AnyType from './AnyType';
 
-export default class DateType extends TypeFactory {
+export default class DateType extends AnyType {
 
     dateFormats: { [index: string]: string };
     TIMESTAMP_PATTERN: RegExp;

@@ -1,22 +1,24 @@
 /* eslint-disable */
 const assert = require('assert');
-const {TypeLibrary, IntegerType} = require('..');
+const valgen = require('..');
 
 describe('IntegerType', function() {
 
   let library;
   beforeEach(function() {
-    library = new TypeLibrary({defaults: {throwOnError: true}});
-    library.addDataType('integer', new IntegerType());
+    library = valgen({defaults: {throwOnError: true}});
+    library.addDataType('integer', new valgen.types.IntegerType());
   });
 
   it('should create IntegerType instance', function() {
     let t = library.get({
       type: 'integer',
-      name: 'typ1'
+      name: 'typ1',
+      other: 123
     });
     assert.strictEqual(t.name, 'typ1');
     assert.strictEqual(t.typeName, 'integer');
+    assert.strictEqual(t.other, undefined);
   });
 
   it('should set "default" attribute as integer', function() {

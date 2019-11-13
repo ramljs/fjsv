@@ -1,6 +1,6 @@
 /* eslint-disable */
 const assert = require('assert');
-const {TypeLibrary} = require('..');
+const valgen = require('..');
 
 describe('ObjectType', function() {
 
@@ -15,16 +15,18 @@ describe('ObjectType', function() {
   };
 
   beforeEach(function() {
-    library = new TypeLibrary({defaults: {throwOnError: true}});
+    library = valgen({defaults: {throwOnError: true}});
   });
 
   it('should create ObjectType instance', function() {
     let t = library.get({
       type: 'object',
-      name: 'typ1'
+      name: 'typ1',
+      other: 123
     });
     assert.strictEqual(t.name, 'typ1');
     assert.strictEqual(t.typeName, 'object');
+    assert.strictEqual(t.other, undefined);
   });
 
   it('should create object type if there is {} after type name', function() {
@@ -175,10 +177,12 @@ describe('ObjectType', function() {
       type: 'object',
       name: 'typ1',
       properties: {
-        'p1?': 'string'
+        'p1?': 'string',
+        'p2!': 'string'
       }
     });
     assert.deepStrictEqual(t.properties.p1.required, false);
+    assert.deepStrictEqual(t.properties.p2.required, true);
   });
 
   it('should use ! to set properties required attribute to false', function() {
@@ -207,21 +211,65 @@ describe('ObjectType', function() {
   });
 
   it('should not allow additional properties if additionalProperties=false', function() {
-    const validate = library.compile({
+    let validate = library.compile({
       properties: properties1,
       additionalProperties: false
     });
-    assert.throws(() => validate({...obj1, f: 'f'}),
+    assert.throws(() =>
+            validate({...obj1, f: 'f'}),
+        /Additional property "f" is not allowed/
+    );
+    library = valgen({
+      defaults: {
+        throwOnError: true, additionalProperties: false
+      }
+    });
+    validate = library.compile({
+      properties: properties1
+    });
+    assert.throws(() =>
+            validate({...obj1, f: 'f'}),
         /Additional property "f" is not allowed/
     );
   });
 
   it('should allow additional properties if additionalProperties=true', function() {
-    const validate = library.compile({
+    let validate = library.compile({
       properties: properties1,
       additionalProperties: true
     }, {coerceTypes: true});
-    assert.strictEqual(validate({...obj1, f: 'f'}).value.f, 'f');
+    assert.strictEqual(
+        validate({...obj1, f: 'f'}).value.f, 'f');
+    library = valgen({
+      defaults: {
+        throwOnError: true, additionalProperties: true
+      }
+    });
+    validate = library.compile({
+      properties: properties1,
+      additionalProperties: true
+    }, {coerceTypes: true});
+    assert.strictEqual(
+        validate({...obj1, f: 'f'}).value.f, 'f');
+  });
+
+  it('should use a type name for additionalProperties', function() {
+    let validate = library.compile({
+      properties: properties1,
+      additionalProperties: 'string'
+    });
+    assert.throws(() =>
+            validate({a: 1, f: 'f', g: 1}),
+        /Additional property "g" is not allowed/
+    );
+    validate = library.compile({
+      properties: properties1,
+      additionalProperties: 'string'
+    }, {coerceTypes: true});
+    assert.throws(() =>
+            validate({a: 1, f: 'f', g: 1}),
+        /Additional property "g" is not allowed/
+    );
   });
 
   it('should use regexp patterns as property names', function() {
@@ -243,7 +291,33 @@ describe('ObjectType', function() {
         'name': 'string'
       }
     });
-    assert.throws(() => validate({name: 'name'}), /Value required/);
+    assert.throws(() => validate({name: 'name'}), /Error at "id"\. Value required/);
+  });
+
+  it('should validate required properties by operation', function() {
+    let validate = library.compile({
+      properties: {
+        'id': {type: 'string', required: 'post,delete'},
+        'name': 'string'
+      }
+    }, {operation: 'get'});
+    validate({name: 'name'});
+
+    validate = library.compile({
+      properties: {
+        'id': {type: 'string', required: 'post,delete'},
+        'name': 'string'
+      }
+    }, {operation: 'post'});
+    assert.throws(() => validate({name: 'name'}), / Error at "id"\. Value required/);
+
+    validate = library.compile({
+      properties: {
+        'id': {type: 'string', required: 'post,delete'},
+        'name': 'string'
+      }
+    }, {operation: 'delete'});
+    assert.throws(() => validate({name: 'name'}), /Error at "id"\. Value required./);
   });
 
   it('should validate sub properties', function() {
@@ -314,7 +388,8 @@ describe('ObjectType', function() {
 
     const validate = library.compile({
       type: 'Employee',
-      additionalProperties: false
+      additionalProperties: false,
+      coerceTypes: true
     });
     assert.throws(() =>
             validate({kind: 'user', name: 'name'}),
@@ -447,7 +522,7 @@ describe('ObjectType', function() {
     });
     validate({a: 1});
     assert.throws(() => validate({a: 1, b: 2}),
-        /Maximum accepted properties is 1, actual 2/);
+        /Maximum allowed properties is 1, actual 2/);
   });
 
   it('should limit error count to maxObjectErrors', function() {
@@ -486,7 +561,13 @@ describe('ObjectType', function() {
     assert.strictEqual(t.properties.items.dataType.typeName, 'array');
     assert.strictEqual(t.properties.items.dataType.items, t);
     assert.strictEqual(t.properties.parent.dataType.properties.items.dataType.items, t);
-    t.compile();
+    const validate = t.compile();
+    validate({
+      id: 1,
+      parent: {
+        id: 2
+      }
+    })
   });
 
   it('should resolve promises if resolvePromises=true', async function() {

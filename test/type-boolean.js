@@ -1,21 +1,23 @@
 /* eslint-disable */
 const assert = require('assert');
-const {TypeLibrary} = require('..');
+const valgen = require('..');
 
 describe('BooleanType', function() {
 
   let library;
   beforeEach(function() {
-    library = new TypeLibrary({defaults: {throwOnError: true}});
+    library = valgen({defaults: {throwOnError: true}});
   });
 
   it('should create BooleanType instance', function() {
     let t = library.get({
       type: 'boolean',
-      name: 'typ1'
+      name: 'typ1',
+      other: 123
     });
     assert.strictEqual(t.name, 'typ1');
     assert.strictEqual(t.typeName, 'boolean');
+    assert.strictEqual(t.other, undefined);
   });
 
   it('should set "default" attribute as boolean', function() {
@@ -34,6 +36,24 @@ describe('BooleanType', function() {
       enum: [1, 0]
     });
     assert.deepStrictEqual(t.enum, [true, false]);
+  });
+
+  it('should throw if "enum" value is not an array', function() {
+    assert.throws(() =>
+        library.get({
+          type: 'boolean',
+          name: 'typ1',
+          enum: 'abcd'
+        }), /Schema error at typ1\.enum\. "abcd" is not an array value/);
+  });
+
+  it('should set "strictFormat" attribute as boolean', function() {
+    const t = library.get({
+      type: 'boolean',
+      name: 'typ1',
+      strictFormat: 1
+    });
+    assert.strictEqual(t.strictFormat, true);
   });
 
   it('should create mixin types', function() {

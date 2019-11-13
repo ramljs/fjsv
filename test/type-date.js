@@ -1,13 +1,13 @@
 /* eslint-disable */
 const assert = require('assert');
-const {TypeLibrary, DateType} = require('..');
+const valgen = require('..');
 
 describe('DateType', function() {
 
   let library;
   beforeEach(function() {
-    library = new TypeLibrary({defaults: {throwOnError: true}});
-    library.addDataType('date', new DateType());
+    library = valgen({defaults: {throwOnError: true}});
+    library.addDataType('date', new valgen.types.DateType());
   });
 
   it('should create DateType instance', function() {
@@ -42,6 +42,17 @@ describe('DateType', function() {
           name: 'typ1',
           default: {}
         }), /Schema error at typ1\.default\. "\[object Object]" is not a string or Date instance/);
+  });
+
+  it('should not set "enum" attribute', function() {
+    const t = library.get({
+      type: 'date',
+      name: 'typ1',
+      enum: [1, 2, '3'],
+      other: 123
+    });
+    assert.deepStrictEqual(t.enum, undefined);
+    assert.deepStrictEqual(t.other, undefined);
   });
 
   it('should set "format" attribute', function() {
@@ -230,6 +241,53 @@ describe('DateType', function() {
     validate(new Date());
   });
 
+  it('should coerce to "time" format', function() {
+    const validate = library.compile({type: 'date', format: 'time'},
+        {coerceTypes: true});
+    assert.strictEqual(
+        validate('101112').value, '10:11:12');
+    assert.strictEqual(
+        validate(new Date('2000-01-01T10:11:12Z')).value, '10:11:12');
+    assert.strictEqual(
+        validate(new Date('2000-01-01T10:11:12.123Z')).value, '10:11:12.123');
+  });
+
+  it('should validate "rfc2616" format', function() {
+    const validate = library.compile({type: 'date', format: 'rfc2616'});
+    validate('Sun Jan 02 2011 02:00:00 GMT+0200 (GMT+03:00)');
+    validate('2011-01-02');
+    validate('20110102');
+    validate('2011-01-02T10:30');
+    validate('201101021030');
+    validate('2011-01-02T10:30:15');
+    validate('2011-01-02T10:30:15.123');
+    validate('20110102103015.123');
+    validate('2011-01-02T10:30:15.123+03:00');
+    validate('2011-01-02T10:30:15.123Z');
+    validate('2011-01-02T10:30:15Z');
+    validate(new Date());
+  });
+
+  it('should validate strict "rfc2616" format', function() {
+    const validate = library.compile({
+      type: 'date',
+      format: 'rfc2616',
+      strictFormat: true
+    });
+    assert.throws(() =>
+            validate('2011-01-02'),
+        /Value must be/);
+    assert.throws(() => validate('2011-01-02T10:30'), /Value must be/);
+    validate('Sun Jan 02 2011 02:00:00 GMT+0200 (GMT+03:00)');
+    validate(new Date());
+  });
+
+  it('should convert value to Date instance', function() {
+    const validate = library.compile({type: 'date', format: 'timestamp'},
+        {convertDates: true});
+    assert(validate('2011-01-02').value instanceof Date);
+  });
+
   it('should use strict mode if options.strictFormat = true', function() {
     const validate = library.compile({
       type: 'date',
@@ -249,7 +307,7 @@ describe('DateType', function() {
   });
 
   it('should validate in fast-mode', function() {
-    const validate = library.compile({type: 'date', format: 'timestamp'},
+    let validate = library.compile({type: 'date', format: 'timestamp'},
         {coerceTypes: true, fastDateValidation: true});
     assert.strictEqual(validate('2011-01-02').value, '2011-01-02T00:00:00Z');
     assert.strictEqual(validate('2011-01-02T10:30').value, '2011-01-02T10:30:00Z');
@@ -260,11 +318,13 @@ describe('DateType', function() {
     assert.strictEqual(validate('2011-01-02T10:30:15Z').value, '2011-01-02T10:30:15Z');
     const d1 = new Date('2019-09-30T19:34:40.668Z');
     assert.strictEqual(validate(d1).value, '2019-09-30T19:34:40.668Z');
+    validate = library.compile({type: 'date', format: 'timestamp'}, {fastDateValidation: true});
+    validate('2011-01-02');
   });
 
   it('should overwrite format names', function() {
-    const library = new TypeLibrary({defaults: {throwOnError: true}});
-    library.addDataType('date', new DateType({
+    const library = valgen({defaults: {throwOnError: true}});
+    library.addDataType('date', new valgen.types.DateType({
       dateFormats: {
         'date-only': 'date',
         'datetime-only': 'datetime',

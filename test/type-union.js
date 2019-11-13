@@ -1,18 +1,17 @@
 /* eslint-disable */
 const assert = require('assert');
-const {TypeLibrary} = require('..');
+const valgen = require('..');
 
 describe('UnionType', function() {
 
   let library;
   beforeEach(function() {
-    library = new TypeLibrary({defaults: {throwOnError: true}});
+    library = valgen({defaults: {throwOnError: true}});
   });
 
   it('should throw if "anyOf" value is not array', function() {
     assert.throws(() =>
         library.get({
-          type: 'union',
           name: 'typ1',
           anyOf: 1
         }), /Schema error at typ1\.anyOf\. Value must be an array/);
@@ -69,7 +68,7 @@ describe('UnionType', function() {
     assert.strictEqual(typ1.anyOf[0].maxLength, 15);
   });
 
-  it('should flatten nested unions to one', function() {
+  it('Union merge test - 1', function() {
     const types = {
       Resource: {
         properties: {
@@ -90,7 +89,6 @@ describe('UnionType', function() {
       },
       PetAnimal: {
         properties: {
-          name: 'string',
           owner: 'string'
         }
       },
@@ -104,16 +102,96 @@ describe('UnionType', function() {
 
     const typ1 = library.get({
       name: 'typ1',
-      type: '[Resource, Patient]',
-      additionalProperties: false
+      type: '[Resource, Patient]'
     });
-    assert.strictEqual(typ1.anyOf.length, 4);
-    assert.strictEqual(typ1.anyOf[0].name, 'Bank');
-    assert.strictEqual(typ1.anyOf[1].name, 'Employee');
-    assert.strictEqual(typ1.anyOf[2].name, 'Company');
-    assert.strictEqual(typ1.anyOf[3].name, 'Individual');
-    const validate = typ1.compile();
-    assert.strictEqual(typeof validate, 'function');
+    assert.strictEqual(typ1.anyOf.length, 3);
+    assert.strictEqual(Object.keys(typ1.anyOf[0].properties).length, 3);
+    assert(typ1.anyOf[0].properties.id);
+    assert(typ1.anyOf[0].properties.firstName);
+    assert(typ1.anyOf[0].properties.lastName);
+    assert.strictEqual(Object.keys(typ1.anyOf[1].properties).length, 2);
+    assert(typ1.anyOf[1].properties.id);
+    assert(typ1.anyOf[1].properties.owner);
+    assert.strictEqual(Object.keys(typ1.anyOf[2].properties).length, 2);
+    assert(typ1.anyOf[2].properties.id);
+    assert(typ1.anyOf[2].properties.classification);
+  });
+
+  it('Union merge test - 2', function() {
+    const types = {
+      Resource: {
+        properties: {
+          id: 'string'
+        }
+      },
+      Human: {
+        properties: {
+          firstName: 'string',
+          lastName: 'string'
+        }
+      },
+      Animal: {
+        type: ['PetAnimal|WildAnimal']
+      },
+      PetAnimal: {
+        properties: {
+          owner: 'string'
+        }
+      },
+      WildAnimal: {
+        properties: {
+          classification: 'string'
+        }
+      },
+      StartLimit: {
+        properties: {
+          start: 'number'
+        }
+      },
+      Pagination: {
+        properties: {
+          page: 'number'
+        }
+      }
+    };
+    library.lookupSchema = (n) => types[n];
+
+    const typ1 = library.get({
+      name: 'typ1',
+      type: '[Resource, Human|Animal, StartLimit | Pagination]'
+    });
+    assert.strictEqual(typ1.anyOf.length, 6);
+    assert.strictEqual(Object.keys(typ1.anyOf[0].properties).length, 4);
+    assert(typ1.anyOf[0].properties.id);
+    assert(typ1.anyOf[0].properties.firstName);
+    assert(typ1.anyOf[0].properties.lastName);
+    assert(typ1.anyOf[0].properties.start);
+
+    assert.strictEqual(Object.keys(typ1.anyOf[1].properties).length, 3);
+    assert(typ1.anyOf[1].properties.id);
+    assert(typ1.anyOf[1].properties.owner);
+    assert(typ1.anyOf[1].properties.start);
+
+    assert.strictEqual(Object.keys(typ1.anyOf[2].properties).length, 3);
+    assert(typ1.anyOf[2].properties.id);
+    assert(typ1.anyOf[2].properties.classification);
+    assert(typ1.anyOf[2].properties.start);
+
+    assert.strictEqual(Object.keys(typ1.anyOf[3].properties).length, 4);
+    assert(typ1.anyOf[3].properties.id);
+    assert(typ1.anyOf[3].properties.firstName);
+    assert(typ1.anyOf[3].properties.lastName);
+    assert(typ1.anyOf[3].properties.page);
+
+    assert.strictEqual(Object.keys(typ1.anyOf[4].properties).length, 3);
+    assert(typ1.anyOf[4].properties.id);
+    assert(typ1.anyOf[4].properties.owner);
+    assert(typ1.anyOf[4].properties.page);
+
+    assert.strictEqual(Object.keys(typ1.anyOf[5].properties).length, 3);
+    assert(typ1.anyOf[5].properties.id);
+    assert(typ1.anyOf[5].properties.classification);
+    assert(typ1.anyOf[5].properties.page);
   });
 
 });

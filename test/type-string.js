@@ -1,12 +1,12 @@
 /* eslint-disable */
 const assert = require('assert');
-const {TypeLibrary} = require('..');
+const valgen = require('..');
 
 describe('StringType', function() {
 
   let library;
   beforeEach(function() {
-    library = new TypeLibrary({defaults: {throwOnError: true}});
+    library = valgen({defaults: {throwOnError: true}});
   });
 
   it('should create StringType instance', function() {
@@ -35,6 +35,15 @@ describe('StringType', function() {
       enum: [1, 2, '3']
     });
     assert.deepStrictEqual(t.enum, ['1', '2', '3']);
+  });
+
+  it('should throw if "enum" value is not an array', function() {
+    assert.throws(() =>
+        library.get({
+          type: 'string',
+          name: 'typ1',
+          enum: 'abcd'
+        }), /Schema error at typ1\.enum\. "abcd" is not an array value/);
   });
 
   it('should set "minLength" attribute', function() {

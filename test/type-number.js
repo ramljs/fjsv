@@ -1,21 +1,23 @@
 /* eslint-disable */
 const assert = require('assert');
-const {TypeLibrary} = require('..');
+const valgen = require('..');
 
 describe('NumberType', function() {
 
   let library;
   beforeEach(function() {
-    library = new TypeLibrary({defaults: {throwOnError: true}});
+    library = valgen({defaults: {throwOnError: true}});
   });
 
   it('should create NumberType instance', function() {
     let t = library.get({
       type: 'number',
-      name: 'typ1'
+      name: 'typ1',
+      other: 123
     });
     assert.strictEqual(t.name, 'typ1');
     assert.strictEqual(t.typeName, 'number');
+    assert.strictEqual(t.other, undefined);
   });
 
   it('should set "default" attribute as number', function() {
@@ -54,6 +56,15 @@ describe('NumberType', function() {
     assert.deepStrictEqual(t.enum, [1, 2, 3]);
   });
 
+  it('should throw if "enum" value is not an array', function() {
+    assert.throws(() =>
+        library.get({
+          type: 'number',
+          name: 'typ1',
+          enum: 'abcd'
+        }), /Schema error at typ1\.enum\. "abcd" is not an array value/);
+  });
+
   it('should set "format" attribute', function() {
     const t = library.get({
       type: 'number',
@@ -70,6 +81,15 @@ describe('NumberType', function() {
           name: 'typ1',
           format: 'abcd'
         }), /Schema error at typ1\.format\. "abcd" is not a valid number format identifier/);
+  });
+
+  it('should set "format" attribute', function() {
+    const t = library.get({
+      type: 'number',
+      name: 'typ1',
+      strictFormat: 1
+    });
+    assert.strictEqual(t.strictFormat, true);
   });
 
   it('should set "minimum" attribute', function() {

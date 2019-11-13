@@ -1,12 +1,12 @@
 /* eslint-disable */
 const assert = require('assert');
-const {TypeLibrary} = require('..');
+const valgen = require('..');
 
 describe('ArrayType', function() {
 
   let library;
   beforeEach(function() {
-    library = new TypeLibrary({defaults: {throwOnError: true}});
+    library = valgen({defaults: {throwOnError: true}});
   });
 
   it('should create array type if there is [] after type name', function() {
@@ -19,11 +19,22 @@ describe('ArrayType', function() {
 
   it('should set "items" attribute', function() {
     const t = library.get({
-      type: 'array',
       name: 'typ1',
       items: 'string'
     });
     assert.deepStrictEqual(t.items.name, 'string');
+  });
+
+  it('should ignore "enum" attribute', function() {
+    const t = library.get({
+      type: 'array',
+      name: 'typ1',
+      enum: [1, 2],
+      other: 123,
+      items: null
+    });
+    assert.deepStrictEqual(t.enum, undefined);
+    assert.deepStrictEqual(t.items, null);
   });
 
   it('should set "minItems" attribute', function() {
@@ -135,7 +146,7 @@ describe('ArrayType', function() {
     validate([1, 2]);
     assert.throws(() =>
             validate([1, 2, 3, 3]),
-        /Unique array contains non-unique items/);
+        /Items must be unique/);
   });
 
   it('should coerce value to array', function() {
