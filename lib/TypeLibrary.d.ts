@@ -6,7 +6,14 @@ declare type TypeLookupMethod = (typeName: string) => TypeDef;
 
 export interface ITypeLibraryOptions {
     lookupSchema?: TypeLookupMethod;
-    defaults: ICompileOptions;
+    defaults: ILibraryDefaults;
+}
+
+export interface ILibraryDefaults {
+    propertiesRequired?: boolean;
+    additionalProperties?: boolean;
+    type?: string;
+    throwOnError?: boolean;
 }
 
 export interface ICompileOptions {
@@ -22,6 +29,7 @@ export interface ICompileOptions {
     removeNull?: boolean;
     fastDateValidation?: boolean;
     fastObjectValidation?: boolean;
+
 
     [index: string]: any;
 }

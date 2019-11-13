@@ -196,13 +196,26 @@ describe('ObjectType', function() {
     assert.deepStrictEqual(t.properties.p1.required, true);
   });
 
+  it('should use propertiesRequired default value', function() {
+    library.defaults.propertiesRequired = true;
+    const t = library.get({
+      type: 'object',
+      name: 'typ1',
+      properties: {
+        'p1': 'string'
+      }
+    });
+    assert.deepStrictEqual(t.properties.p1.required, true);
+    library.defaults.propertiesRequired = undefined;
+  });
+
   it('should generate validator', function() {
     const validate = library.compile('object');
     assert.strictEqual(typeof validate, 'function');
   });
 
   it('should validator accept objects', function() {
-    const validate = library.compile('object');
+    const validate = library.compile('object', {coerceTypes: true});
     assert.deepStrictEqual(validate(obj1), {valid: true, value: obj1});
     assert.strictEqual(validate(obj1).value, obj1);
     assert.throws(() => validate(''), /Value must be an object/);
@@ -567,7 +580,7 @@ describe('ObjectType', function() {
       parent: {
         id: 2
       }
-    })
+    });
   });
 
   it('should resolve promises if resolvePromises=true', async function() {
