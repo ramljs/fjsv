@@ -68,7 +68,7 @@ export default class TypeLibrary {
     defaults: ICompileOptions;
     lookupSchema?: TypeLookupMethod;
 
-    constructor(options: ITypeLibraryOptions);
+    constructor(options?: ITypeLibraryOptions);
 
     addDataType(name: string, factory: TypeFactory): void;
 
