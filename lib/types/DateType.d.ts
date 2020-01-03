@@ -1,5 +1,16 @@
 import AnyType from './AnyType';
 
+export interface IDateTypeOptions {
+    dateFormats: {
+        date: string,
+        datetime: string,
+        timestamp: string,
+        time: string,
+        rfc2616: string
+    };
+    format: string;
+}
+
 export default class DateType extends AnyType {
 
     dateFormats: { [index: string]: string };
@@ -14,4 +25,6 @@ export default class DateType extends AnyType {
 
     default: string | Date;
     format?: string;
+
+    constructor(options?: IDateTypeOptions);
 }

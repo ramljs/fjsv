@@ -1,5 +1,12 @@
-import NumberType from './NumberType';
+import NumberType, {IntegerFormat} from './NumberType';
+
+export interface IIntegerTypeOptions {
+    format?: IntegerFormat;
+}
 
 export default class IntegerType extends NumberType {
-    format?: string;
+
+    format?: IntegerFormat;
+
+    constructor(options?: IIntegerTypeOptions);
 }
