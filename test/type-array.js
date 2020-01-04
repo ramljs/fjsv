@@ -1,12 +1,12 @@
 /* eslint-disable */
 const assert = require('assert');
-const valgen = require('..');
+const {TypeLibrary} = require('..');
 
 describe('ArrayType', function() {
 
   let library;
   beforeEach(function() {
-    library = valgen({defaults: {throwOnError: true}});
+    library = new TypeLibrary({defaults: {throwOnError: true}});
   });
 
   it('should create array type if there is [] after type name', function() {

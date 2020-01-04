@@ -1,6 +1,8 @@
-import TypeLibrary, {ICompileOptions, TypeFactory, ValidateFunction} from "./TypeLibrary";
+import {TypeLibrary, ICompileOptions, TypeFactory, ValidateFunction} from "./TypeLibrary";
 
-export default class DataType {
+export declare const Failed: unique symbol;
+
+export class DataType {
     readonly library: TypeLibrary;
     readonly typeName: string;
     readonly factory: TypeFactory;

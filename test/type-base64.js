@@ -1,13 +1,13 @@
 /* eslint-disable */
 const assert = require('assert');
-const valgen = require('..');
+const {TypeLibrary, Base64Type} = require('..');
 
 describe('Base64Type', function() {
 
   let library;
   beforeEach(function() {
-    library = valgen({defaults: {throwOnError: true}});
-    library.addDataType('file', new valgen.types.Base64Type());
+    library = new TypeLibrary({defaults: {throwOnError: true}});
+    library.addDataType('file', new Base64Type());
   });
 
   it('should not set "enum" attribute', function() {

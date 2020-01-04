@@ -1,4 +1,4 @@
-import DataType from "./DataType";
+import {DataType} from "./DataType";
 
 declare type TypeDef = string | object;
 
@@ -34,7 +34,7 @@ export interface ICompileOptions {
     [index: string]: any;
 }
 
-export declare type ValidateFunction = (value: any) => IValidationResult;
+export type ValidateFunction = (value: any) => IValidationResult;
 
 export interface IValidationError {
     message: string;
@@ -57,7 +57,7 @@ export interface TypeFactory {
     set?: (dataType: DataType, attribute: string, value: any, parentSchema: object) => any;
 }
 
-export default class TypeLibrary {
+export class TypeLibrary {
     protected _internals: { [name: string]: object };
     protected _cache: { [name: string]: object };
     protected _stacks: string[][];

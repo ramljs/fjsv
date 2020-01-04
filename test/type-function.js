@@ -1,13 +1,13 @@
 /* eslint-disable */
 const assert = require('assert');
-const valgen = require('..');
+const {TypeLibrary, FunctionType} = require('..');
 
 describe('FunctionType', function() {
 
   let library;
   beforeEach(function() {
-    library = valgen({defaults: {throwOnError: true}});
-    library.addDataType('function', new valgen.types.FunctionType());
+    library = new TypeLibrary({defaults: {throwOnError: true}});
+    library.addDataType('function', new FunctionType());
   });
 
   it('should set "default" attribute as function', function() {

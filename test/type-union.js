@@ -1,12 +1,12 @@
 /* eslint-disable */
 const assert = require('assert');
-const valgen = require('..');
+const {TypeLibrary} = require('..');
 
 describe('UnionType', function() {
 
   let library;
   beforeEach(function() {
-    library = valgen({defaults: {throwOnError: true}});
+    library = new TypeLibrary({defaults: {throwOnError: true}});
   });
 
   it('should throw if "anyOf" value is not array', function() {

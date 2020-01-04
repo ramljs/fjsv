@@ -1,13 +1,13 @@
 /* eslint-disable */
 const assert = require('assert');
-const valgen = require('..');
+const {TypeLibrary, NilType} = require('..');
 
 describe('NilType', function() {
 
   let library;
   beforeEach(function() {
-    library = valgen({defaults: {throwOnError: true}});
-    library.addDataType('nil', new valgen.types.NilType());
+    library = new TypeLibrary({defaults: {throwOnError: true}});
+    library.addDataType('nil', new NilType());
   });
 
   it('should not set "default" attribute', function() {

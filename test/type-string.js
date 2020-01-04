@@ -1,12 +1,12 @@
 /* eslint-disable */
 const assert = require('assert');
-const valgen = require('..');
+const {TypeLibrary} = require('..');
 
 describe('StringType', function() {
 
   let library;
   beforeEach(function() {
-    library = valgen({defaults: {throwOnError: true}});
+    library = new TypeLibrary({defaults: {throwOnError: true}});
   });
 
   it('should create StringType instance', function() {

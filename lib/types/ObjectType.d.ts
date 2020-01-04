@@ -1,6 +1,6 @@
-import AnyType from './AnyType';
+import {AnyType} from './AnyType';
 
-export default class ObjectType extends AnyType {
+export class ObjectType extends AnyType {
     discriminator?: string;
     discriminatorValue?: any;
     additionalProperties?: boolean;

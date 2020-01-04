@@ -1,4 +1,4 @@
-import AnyType from './AnyType';
+import {AnyType} from './AnyType';
 
 export type IntegerFormat = 'int64' | 'bigint' | 'int32' | 'int' | 'int16' | 'int8' |
     'uint64' | 'uint32' | 'uint16' | 'uint8' | 'long' | 'float';
@@ -9,7 +9,7 @@ export interface INumberTypeOptions {
     format?: NumberFormat;
 }
 
-export default class NumberType extends AnyType {
+export class NumberType extends AnyType {
     default?: number;
     enum?: number[];
     format?: NumberFormat;

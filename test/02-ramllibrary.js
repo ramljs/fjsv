@@ -1,15 +1,11 @@
 /* eslint-disable */
 const assert = require('assert');
-const valgen = require('..');
+const {RamlLibrary} = require('..');
 
 describe('RamlLibrary', function() {
-
-  it('should create a type using name', function() {
-    valgen.raml();
-  });
-
+  
   it('should create integer type', function() {
-    const library = valgen.raml();
+    const library = new RamlLibrary();
     let t = library.get('integer');
     assert.strictEqual(t.name, 'integer');
     const validate = t.compile({coerceTypes: true});
@@ -17,7 +13,7 @@ describe('RamlLibrary', function() {
   });
 
   it('should create file type', function() {
-    const library = valgen.raml();
+    const library = new RamlLibrary();
     let t = library.get('file');
     assert.strictEqual(t.name, 'file');
     const validate = t.compile({coerceTypes: true});
@@ -25,7 +21,7 @@ describe('RamlLibrary', function() {
   });
 
   it('should create datetime type', function() {
-    const library = valgen.raml();
+    const library = new RamlLibrary();
     let t = library.get('datetime');
     assert.strictEqual(t.name, 'datetime');
     const validate = t.compile({coerceTypes: true});
@@ -33,7 +29,7 @@ describe('RamlLibrary', function() {
   });
 
   it('should create datetime-only type', function() {
-    const library = valgen.raml();
+    const library = new RamlLibrary();
     let t = library.get('datetime-only');
     assert.strictEqual(t.name, 'datetime-only');
     const validate = t.compile({coerceTypes: true});
@@ -41,7 +37,7 @@ describe('RamlLibrary', function() {
   });
 
   it('should create date-only type', function() {
-    const library = valgen.raml();
+    const library = new RamlLibrary();
     let t = library.get('date-only');
     assert.strictEqual(t.name, 'date-only');
     const validate = t.compile({coerceTypes: true});
@@ -49,7 +45,7 @@ describe('RamlLibrary', function() {
   });
 
   it('should create time-only type', function() {
-    const library = valgen.raml();
+    const library = new RamlLibrary();
     let t = library.get('time-only');
     assert.strictEqual(t.name, 'time-only');
     const validate = t.compile({coerceTypes: true});
@@ -57,7 +53,7 @@ describe('RamlLibrary', function() {
   });
 
   it('should create nil type', function() {
-    const library = valgen.raml();
+    const library = new RamlLibrary();
     let t = library.get('nil');
     assert.strictEqual(t.name, 'nil');
     const validate = t.compile({coerceTypes: true});

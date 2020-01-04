@@ -1,5 +1,5 @@
 import {ICompileOptions, IValidationError, TypeFactory, ValidateFunction} from "../TypeLibrary";
-import DataType from "../DataType";
+import {DataType} from "../DataType";
 
 export interface IFunctionData {
     code: string;
@@ -11,7 +11,7 @@ export interface IFunctionData {
 export declare type ErrorLogFunction = (err: IValidationError) => void;
 export declare type InternalValidateFunction = (v: any, path: string, error: ErrorLogFunction, ...args: any[]) => any;
 
-export default class AnyType implements TypeFactory {
+export class AnyType implements TypeFactory {
     default?: any;
     enum?: any[];
 

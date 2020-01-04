@@ -8,7 +8,7 @@
     "Arhun Hınçalan <ahincalan@hotmail.com>"
   ],
   "main": "./lib/index.js",
-  "types": "./lib",
+  "types": "./lib/index.d.ts",
   "license": "MIT",
   "repository": {
     "type": "git",

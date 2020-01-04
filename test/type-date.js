@@ -1,13 +1,13 @@
 /* eslint-disable */
 const assert = require('assert');
-const valgen = require('..');
+const {TypeLibrary, DateType} = require('..');
 
 describe('DateType', function() {
 
   let library;
   beforeEach(function() {
-    library = valgen({defaults: {throwOnError: true}});
-    library.addDataType('date', new valgen.types.DateType());
+    library = new TypeLibrary({defaults: {throwOnError: true}});
+    library.addDataType('date', new DateType());
   });
 
   it('should create DateType instance', function() {
@@ -323,8 +323,8 @@ describe('DateType', function() {
   });
 
   it('should overwrite format names', function() {
-    const library = valgen({defaults: {throwOnError: true}});
-    library.addDataType('date', new valgen.types.DateType({
+    const library = new TypeLibrary({defaults: {throwOnError: true}});
+    library.addDataType('date', new DateType({
       dateFormats: {
         'date-only': 'date',
         'datetime-only': 'datetime',

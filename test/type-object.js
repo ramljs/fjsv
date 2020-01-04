@@ -1,6 +1,6 @@
 /* eslint-disable */
 const assert = require('assert');
-const valgen = require('..');
+const {TypeLibrary} = require('..');
 
 describe('ObjectType', function() {
 
@@ -15,7 +15,7 @@ describe('ObjectType', function() {
   };
 
   beforeEach(function() {
-    library = valgen({defaults: {throwOnError: true}});
+    library = new TypeLibrary({defaults: {throwOnError: true}});
   });
 
   it('should create ObjectType instance', function() {
@@ -232,7 +232,7 @@ describe('ObjectType', function() {
             validate({...obj1, f: 'f'}),
         /Additional property "f" is not allowed/
     );
-    library = valgen({
+    library = new TypeLibrary({
       defaults: {
         throwOnError: true, additionalProperties: false
       }
@@ -253,7 +253,7 @@ describe('ObjectType', function() {
     }, {coerceTypes: true});
     assert.strictEqual(
         validate({...obj1, f: 'f'}).value.f, 'f');
-    library = valgen({
+    library = new TypeLibrary({
       defaults: {
         throwOnError: true, additionalProperties: true
       }

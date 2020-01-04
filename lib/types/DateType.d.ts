@@ -1,4 +1,4 @@
-import AnyType from './AnyType';
+import {AnyType} from './AnyType';
 
 export interface IDateTypeOptions {
     dateFormats?: {
@@ -11,7 +11,7 @@ export interface IDateTypeOptions {
     format?: string;
 }
 
-export default class DateType extends AnyType {
+export class DateType extends AnyType {
 
     dateFormats: { [index: string]: string };
     TIMESTAMP_PATTERN: RegExp;

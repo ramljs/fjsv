@@ -1,5 +1,5 @@
-import AnyType from './AnyType';
+import {AnyType} from './AnyType';
 
-export default class FunctionType extends AnyType {
+export class FunctionType extends AnyType {
     default?: Function;
 }

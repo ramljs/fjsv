@@ -1,6 +1,6 @@
-import AnyType from './AnyType';
+import {AnyType} from './AnyType';
 
-export default class BooleanType extends AnyType {
+export class BooleanType extends AnyType {
     default?: boolean[];
     enum?: boolean[];
 }

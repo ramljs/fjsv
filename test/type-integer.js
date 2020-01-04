@@ -1,13 +1,13 @@
 /* eslint-disable */
 const assert = require('assert');
-const valgen = require('..');
+const {TypeLibrary, IntegerType} = require('..');
 
 describe('IntegerType', function() {
 
   let library;
   beforeEach(function() {
-    library = valgen({defaults: {throwOnError: true}});
-    library.addDataType('integer', new valgen.types.IntegerType());
+    library = new TypeLibrary({defaults: {throwOnError: true}});
+    library.addDataType('integer', new IntegerType());
   });
 
   it('should create IntegerType instance', function() {

@@ -1,3 +1,3 @@
-export default class TypeDefError extends Error {
+export class SchemaError extends Error {
     constructor(msg: string | Error, schemaStack: string[]);
 }

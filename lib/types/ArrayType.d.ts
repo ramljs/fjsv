@@ -1,6 +1,6 @@
-import AnyType from './AnyType';
+import {AnyType} from './AnyType';
 
-export default class ArrayType extends AnyType {
+export class ArrayType extends AnyType {
     default?: any[];
     items?: AnyType;
     minItems?: number;

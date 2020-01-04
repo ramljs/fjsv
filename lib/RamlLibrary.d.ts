@@ -1,5 +1,5 @@
-import TypeLibrary from './TypeLibrary';
+import {TypeLibrary} from './TypeLibrary';
 
-export default class RamlLibrary extends TypeLibrary {
+export class RamlLibrary extends TypeLibrary {
 
 }

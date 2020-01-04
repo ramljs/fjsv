@@ -1,4 +1,4 @@
-import AnyType from './AnyType';
+import {AnyType} from './AnyType';
 
-export default class NilType extends AnyType {
+export class NilType extends AnyType {
 }

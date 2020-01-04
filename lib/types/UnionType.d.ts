@@ -1,5 +1,5 @@
-import AnyType from './AnyType';
+import {AnyType} from './AnyType';
 
-export default class UnionType extends AnyType {
+export class UnionType extends AnyType {
     anyOf?: AnyType[];
 }
