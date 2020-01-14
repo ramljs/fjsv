@@ -52,7 +52,7 @@ export interface IValidationResult {
 
 export interface TypeFactory {
     create?: (instance: object) => void;
-    compile: (dataType: DataType, options?: ICompileOptions) => ValidateFunction;
+    compile: (dataType: DataType, options?: ICompileOptions, orgOptions?: ICompileOptions) => ValidateFunction;
     prepareCompileOptions?: (options?: ICompileOptions) => ICompileOptions;
     set?: (dataType: DataType, attribute: string, value: any, parentSchema: object) => any;
 }

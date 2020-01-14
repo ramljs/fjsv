@@ -17,11 +17,9 @@ export class AnyType implements TypeFactory {
 
     assign(dataType: DataType, schema: object);
 
-    compile(dataType: DataType, options?: ICompileOptions): ValidateFunction;
+    compile(dataType: DataType, options?: ICompileOptions, orgOptions?: ICompileOptions): ValidateFunction;
 
     prepareCompileOptions(options: ICompileOptions): ICompileOptions;
 
-    protected _generateFunction(dataType: DataType, options: ICompileOptions): InternalValidateFunction;
-
-    protected _generateValidationCode(dataType: DataType, options: ICompileOptions): IFunctionData;
+    protected _generateValidationCode(dataType: DataType, options: ICompileOptions, orgOptions?: ICompileOptions): IFunctionData;
 }

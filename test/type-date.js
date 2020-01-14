@@ -80,8 +80,9 @@ describe('DateType', function() {
 
   it('should validate "timestamp" format', function() {
     const validate = library.compile({type: 'date', format: 'timestamp'});
-    validate('2011-01-02');
+    validate('2011');
     validate('20110102');
+    validate('2011-01-02');
     validate('2011-01-02T10:30');
     validate('201101021030');
     validate('2011-01-02T10:30:15');
@@ -172,7 +173,6 @@ describe('DateType', function() {
     const validate = library.compile({type: 'date', format: 'date'});
     validate('2011-01-02');
     validate('20110102');
-    assert.throws(() => validate('2011'), /Value must be/);
     assert.throws(() => validate('2011-01-02T10:30'), /Value must be/);
     assert.throws(() => validate('2011-01-02T10:30:15'), /Value must be/);
     assert.throws(() => validate('2011-01-02T10:30:15.123'), /Value must be/);
