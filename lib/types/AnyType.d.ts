@@ -19,7 +19,7 @@ export class AnyType implements TypeFactory {
 
     compile(dataType: DataType, options?: ICompileOptions, orgOptions?: ICompileOptions): ValidateFunction;
 
-    prepareCompileOptions(options: ICompileOptions): ICompileOptions;
+    prepareCompileOptions(options?: ICompileOptions): ICompileOptions;
 
     protected _generateValidationCode(dataType: DataType, options: ICompileOptions, orgOptions?: ICompileOptions): IFunctionData;
 }

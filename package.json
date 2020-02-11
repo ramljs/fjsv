@@ -49,8 +49,6 @@
   "scripts": {
     "test": "mocha --require ./test/support/env --reporter spec --bail --check-leaks test/",
     "cover": "nyc --reporter html --reporter text npm run test",
-    "travis-cover": "nyc --reporter lcovonly npm run test",
-    "type-check": "tsc --noEmit",
-    "type-check:watch": "npm run type-check -- --watch"
+    "travis-cover": "nyc --reporter lcovonly npm run test"
   }
 }
