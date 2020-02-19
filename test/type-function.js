@@ -7,7 +7,7 @@ describe('FunctionType', function() {
   let library;
   beforeEach(function() {
     library = new TypeLibrary({defaults: {throwOnError: true}});
-    library.addDataType('function', new FunctionType());
+    library.define('function', new FunctionType());
   });
 
   it('should set "default" attribute as function', function() {

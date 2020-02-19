@@ -38,26 +38,26 @@ describe('TypeLibrary', function() {
 
   it('should add schema to library', function() {
     const library = new TypeLibrary();
-    library.addSchema('t1', {
+    library.add('t1', {
       type: 'any',
       default: 1
     });
-    library.addSchema({
+    library.add({
       name: 't2',
       type: 'any',
       default: 2
     });
     assert.strictEqual(library.schemas['t1'].default, 1);
     assert.strictEqual(library.schemas['t2'].default, 2);
-    assert.throws(() => library.addSchema('t1', 'any'), /Schema "t1" already defined/);
-    assert.throws(() => library.addSchema('t1', 2323), /Second argument must be an object or string/);
-    assert.throws(() => library.addSchema(1), /You must provide object instance as first argument/);
-    assert.throws(() => library.addSchema({}), /You must provide type name/);
+    assert.throws(() => library.add('t1', 'any'), /Schema "t1" already defined/);
+    assert.throws(() => library.add('t1', 2323), /Second argument must be an object or string/);
+    assert.throws(() => library.add(1), /You must provide object instance as first argument/);
+    assert.throws(() => library.add({}), /You must provide type name/);
   });
 
   it('should return cached instance except creating a second one', function() {
     const library = new TypeLibrary();
-    library.addSchema('t1', 'any');
+    library.add('t1', 'any');
     const t1 = library.get('t1');
     assert.strictEqual(t1, library.get('t1'));
     library.reset();
@@ -93,12 +93,12 @@ describe('TypeLibrary', function() {
 
   it('should add type schema to library', function() {
     const library = new TypeLibrary();
-    library.addSchema({
+    library.add({
       name: 'Person',
       type: 'any'
     });
-    library.addSchema('Human', 'any');
-    library.addSchema('Animal', {type: 'any', default: true});
+    library.add('Human', 'any');
+    library.add('Animal', {type: 'any', default: true});
 
     let t = library.get('Person');
     assert.strictEqual(t.name, 'Person');
@@ -115,7 +115,7 @@ describe('TypeLibrary', function() {
 
   it('should register a new type factory', function() {
     const library = new TypeLibrary();
-    library.addDataType('custom', {
+    library.define('custom', {
       compile() {
       }
     });
@@ -126,16 +126,16 @@ describe('TypeLibrary', function() {
   it('should validate type factory', function() {
     const library = new TypeLibrary();
     assert.throws(() =>
-        library.addDataType('', {}), /You must provide type name/);
+        library.define('', {}), /You must provide type name/);
     assert.throws(() =>
-        library.addDataType('custom', null), / Factory argument must be an object/);
+        library.define('custom', null), / Factory argument must be an object/);
     assert.throws(() =>
-        library.addDataType('custom', 123), / Factory argument must be an object/);
+        library.define('custom', 123), / Factory argument must be an object/);
     assert.throws(() =>
-        library.addDataType('custom', {}), /Factory must contain a "compile" function/);
-    library.addDataType('custom', {compile() {}});
+        library.define('custom', {}), /Factory must contain a "compile" function/);
+    library.define('custom', {compile() {}});
     assert.throws(() =>
-            library.addDataType('custom', {compile() {}}),
+            library.define('custom', {compile() {}}),
         /Data type "custom" already registered/);
 
   });
@@ -143,7 +143,7 @@ describe('TypeLibrary', function() {
   it('should call "create" function of custom type factory', function() {
     const library = new TypeLibrary();
     let ok = 0;
-    library.addDataType('custom', {
+    library.define('custom', {
       create() {
         ok = 1;
       },
@@ -156,7 +156,7 @@ describe('TypeLibrary', function() {
   it('should call "set" function of custom type factory', function() {
     const library = new TypeLibrary();
     const ok = {};
-    library.addDataType('custom', {
+    library.define('custom', {
       set(dataType, attr, v) {
         return ok[attr] = v;
       },

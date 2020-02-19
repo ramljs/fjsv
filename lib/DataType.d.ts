@@ -8,11 +8,13 @@ export class DataType {
     readonly factory: TypeFactory;
     name?: string;
 
-    create(instance?: object): DataType;
+    extend(instance?: object): DataType;
 
     clone(): DataType;
 
     compile(options?: ICompileOptions): ValidateFunction;
+
+    get(attr: string): any;
 
     set(attribute: string, value: any);
 

@@ -70,9 +70,9 @@ export class TypeLibrary {
 
     constructor(options?: ITypeLibraryOptions);
 
-    addDataType(name: string, factory: TypeFactory): void;
+    define(name: string, factory: TypeFactory): void;
 
-    addSchema(name: string, schema: object);
+    add(name: string, schema: object);
 
     compile(schema: string | object, options?: ICompileOptions): ValidateFunction;
 

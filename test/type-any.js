@@ -58,7 +58,7 @@ describe('AnyType', function() {
   });
 
   it('should return cached validator for same options', function() {
-    library.addSchema('typ1', {type: 'any'});
+    library.add('typ1', {type: 'any'});
     const typ1 = library.get('typ1');
     library.compile('typ1');
     assert.strictEqual(Object.keys(typ1._cache).length, 1);
@@ -92,7 +92,7 @@ describe('AnyType', function() {
   });
 
   it('should throw if mixing recursive', function() {
-    library.addSchema('Type1', {
+    library.add('Type1', {
       type: ['Type1']
     });
     assert.throws(() => library.compile('Type1'),

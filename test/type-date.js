@@ -7,7 +7,7 @@ describe('DateType', function() {
   let library;
   beforeEach(function() {
     library = new TypeLibrary({defaults: {throwOnError: true}});
-    library.addDataType('date', new DateType());
+    library.define('date', new DateType());
   });
 
   it('should create DateType instance', function() {
@@ -324,7 +324,7 @@ describe('DateType', function() {
 
   it('should overwrite format names', function() {
     const library = new TypeLibrary({defaults: {throwOnError: true}});
-    library.addDataType('date', new DateType({
+    library.define('date', new DateType({
       dateFormats: {
         'date-only': 'date',
         'datetime-only': 'datetime',

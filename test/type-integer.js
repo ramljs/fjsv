@@ -7,7 +7,7 @@ describe('IntegerType', function() {
   let library;
   beforeEach(function() {
     library = new TypeLibrary({defaults: {throwOnError: true}});
-    library.addDataType('integer', new IntegerType());
+    library.define('integer', new IntegerType());
   });
 
   it('should create IntegerType instance', function() {

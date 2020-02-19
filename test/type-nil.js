@@ -7,7 +7,7 @@ describe('NilType', function() {
   let library;
   beforeEach(function() {
     library = new TypeLibrary({defaults: {throwOnError: true}});
-    library.addDataType('nil', new NilType());
+    library.define('nil', new NilType());
   });
 
   it('should not set "default" attribute', function() {

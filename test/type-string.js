@@ -212,7 +212,7 @@ describe('StringType', function() {
   });
 
   it('should extend', function() {
-    library.addSchema('Type1', {
+    library.add('Type1', {
       type: 'string',
       default: '12345'
     });

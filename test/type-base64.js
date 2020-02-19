@@ -7,7 +7,7 @@ describe('Base64Type', function() {
   let library;
   beforeEach(function() {
     library = new TypeLibrary({defaults: {throwOnError: true}});
-    library.addDataType('file', new Base64Type());
+    library.define('file', new Base64Type());
   });
 
   it('should not set "enum" attribute', function() {

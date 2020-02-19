@@ -120,10 +120,10 @@ describe('ObjectType', function() {
   });
 
   it('should set "properties" attribute', function() {
-    library.addSchema('PersonName', {
+    library.add('PersonName', {
       type: 'string'
     });
-    library.addSchema('PersonAge', {
+    library.add('PersonAge', {
       type: 'number'
     });
     const t = library.get({
@@ -562,7 +562,7 @@ describe('ObjectType', function() {
   });
 
   it('should allow recursive properties', function() {
-    library.addSchema({
+    library.add({
       name: 'Node',
       properties: {
         id: 'number',
