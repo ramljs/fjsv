@@ -98,7 +98,7 @@ describe('StringType', function() {
   });
 
   it('should generate validator', function() {
-    const validate = library.compile('string');
+    const validate = library.generate('string');
     assert.strictEqual(typeof validate, 'function');
   });
 
@@ -107,7 +107,7 @@ describe('StringType', function() {
       name: 'typ1',
       type: 'string'
     });
-    const validate = t.compile({throwOnError: true});
+    const validate = t.generate({throwOnError: true});
     assert.deepStrictEqual(validate(''), {valid: true, value: ''});
     assert.deepStrictEqual(validate(0), {valid: true, value: 0});
     assert.deepStrictEqual(validate(1.1), {valid: true, value: 1.1});
@@ -117,7 +117,7 @@ describe('StringType', function() {
   });
 
   it('should validator accept only strings in strict mode', function() {
-    const validate = library.compile('string', {strictFormat: true});
+    const validate = library.generate('string', {strictFormat: true});
     validate('');
     validate(null);
     assert.throws(() => validate(0), /Value must be a string/);
@@ -126,7 +126,7 @@ describe('StringType', function() {
   });
 
   it('should validator accept enum values if set', function() {
-    const validate = library.compile({
+    const validate = library.generate({
       type: 'string',
       enum: ['a', 'b']
     });
@@ -137,7 +137,7 @@ describe('StringType', function() {
   });
 
   it('should validate min length', function() {
-    const validate = library.compile({
+    const validate = library.generate({
       type: 'string',
       minLength: 5
     });
@@ -154,7 +154,7 @@ describe('StringType', function() {
   });
 
   it('should validate max length', function() {
-    const validate = library.compile({
+    const validate = library.generate({
       type: 'string',
       maxLength: 5
     });
@@ -171,7 +171,7 @@ describe('StringType', function() {
   });
 
   it('should validate patterns', function() {
-    const validate = library.compile({
+    const validate = library.generate({
       type: 'string',
       pattern: ['[abcd]+', '[1234]']
     });
@@ -182,7 +182,7 @@ describe('StringType', function() {
   });
 
   it('should coerce value to string', function() {
-    const validate = library.compile('string', {coerceTypes: true});
+    const validate = library.generate('string', {coerceTypes: true});
     assert.deepStrictEqual(validate(''), {valid: true, value: ''});
     assert.deepStrictEqual(validate('0'), {valid: true, value: '0'});
     assert.deepStrictEqual(validate(0), {valid: true, value: '0'});
@@ -190,7 +190,7 @@ describe('StringType', function() {
   });
 
   it('should coerce value to default if null', function() {
-    const validate = library.compile({
+    const validate = library.generate({
       type: 'string',
       default: 1
     }, {coerceTypes: true});
@@ -198,7 +198,7 @@ describe('StringType', function() {
   });
 
   it('should return "errors" property on error', function() {
-    const validate = library.compile({
+    const validate = library.generate({
       type: 'string',
       pattern: '\\d+'
     }, {throwOnError: false});
@@ -216,7 +216,7 @@ describe('StringType', function() {
       type: 'string',
       default: '12345'
     });
-    const validate = library.compile({
+    const validate = library.generate({
       type: 'Type1'
     }, {coerceTypes: true});
     assert.deepStrictEqual(validate(), {valid: true, value: '12345'});

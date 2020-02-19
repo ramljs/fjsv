@@ -32,7 +32,7 @@ describe('UnionType', function() {
       type: 'union',
       anyOf: ['string', 'number']
     });
-    const validate = typ1.compile();
+    const validate = typ1.generate();
     assert.strictEqual(typeof validate, 'function');
   });
 

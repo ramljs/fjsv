@@ -32,7 +32,7 @@ describe('IntegerType', function() {
 
   it('should throw if "default" value is not valid', function() {
     assert.throws(() =>
-        library.compile({
+        library.generate({
           type: 'integer',
           name: 'typ1',
           default: 'abcd'
@@ -56,7 +56,7 @@ describe('IntegerType', function() {
 
   it('should throw if "enum" value is not array', function() {
     assert.throws(() =>
-        library.compile({
+        library.generate({
           type: 'integer',
           name: 'typ1',
           enum: 1
@@ -80,7 +80,7 @@ describe('IntegerType', function() {
 
   it('should throw if "format" value is not valid', function() {
     assert.throws(() =>
-        library.compile({
+        library.generate({
           type: 'integer',
           name: 'typ1',
           format: 'abcd'
@@ -98,7 +98,7 @@ describe('IntegerType', function() {
 
   it('should throw if "minimum" value is not valid', function() {
     assert.throws(() =>
-        library.compile({
+        library.generate({
           type: 'integer',
           name: 'typ1',
           minimum: 'abcd'
@@ -116,7 +116,7 @@ describe('IntegerType', function() {
 
   it('should throw if "maximum" value is not valid', function() {
     assert.throws(() =>
-        library.compile({
+        library.generate({
           type: 'integer',
           name: 'typ1',
           maximum: 'abcd'
@@ -134,7 +134,7 @@ describe('IntegerType', function() {
 
   it('should throw if "multipleOf" value is not valid', function() {
     assert.throws(() =>
-        library.compile({
+        library.generate({
           type: 'integer',
           name: 'typ1',
           multipleOf: 'abcd'
@@ -142,13 +142,13 @@ describe('IntegerType', function() {
   });
 
   it('should generate validator', function() {
-    const validate = library.compile('integer');
+    const validate = library.generate('integer');
     assert.strictEqual(typeof validate, 'function');
   });
 
   if (global.BigInt) {
     it('should validator accept strings and numbers in non-strict mode', function() {
-      const validate = library.compile('integer');
+      const validate = library.generate('integer');
       assert.deepStrictEqual(validate(0), {valid: true, value: 0});
       assert.deepStrictEqual(validate(BigInt(123)), {
         valid: true,
@@ -164,7 +164,7 @@ describe('IntegerType', function() {
   }
 
   it('should validator accept only number value in strict mode', function() {
-    const validate = library.compile('integer', {strictFormat: true});
+    const validate = library.generate('integer', {strictFormat: true});
     validate(0);
     validate(null);
     validate(123);
@@ -173,7 +173,7 @@ describe('IntegerType', function() {
   });
 
   it('should validator accept enum values if set', function() {
-    const validate = library.compile({
+    const validate = library.generate({
       type: 'integer',
       enum: [1, 2, 3]
     });
@@ -184,7 +184,7 @@ describe('IntegerType', function() {
   });
 
   it('should validate minimum', function() {
-    const validate = library.compile({
+    const validate = library.generate({
       type: 'integer',
       minimum: 5
     });
@@ -201,7 +201,7 @@ describe('IntegerType', function() {
   });
 
   it('should validate maximum', function() {
-    const validate = library.compile({
+    const validate = library.generate({
       type: 'integer',
       maximum: 5
     });
@@ -218,7 +218,7 @@ describe('IntegerType', function() {
   });
 
   it('should validate multipleOf', function() {
-    const validate = library.compile({
+    const validate = library.generate({
       type: 'integer',
       multipleOf: 2
     });
@@ -233,7 +233,7 @@ describe('IntegerType', function() {
   });
 
   it('should coerce value to integer', function() {
-    const validate = library.compile('integer', {coerceTypes: true});
+    const validate = library.generate('integer', {coerceTypes: true});
     assert.deepStrictEqual(validate('0'), {valid: true, value: 0});
     assert.deepStrictEqual(validate(0), {valid: true, value: 0});
     if (global.BigInt)
@@ -241,7 +241,7 @@ describe('IntegerType', function() {
   });
 
   it('should coerce value to default if null', function() {
-    const validate = library.compile({
+    const validate = library.generate({
       type: 'integer',
       default: 1
     }, {coerceTypes: true});

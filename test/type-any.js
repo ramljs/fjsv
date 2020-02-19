@@ -53,23 +53,23 @@ describe('AnyType', function() {
   });
 
   it('should generate validator', function() {
-    const validate = library.compile('any');
+    const validate = library.generate('any');
     assert.strictEqual(typeof validate, 'function');
   });
 
   it('should return cached validator for same options', function() {
     library.add('typ1', {type: 'any'});
     const typ1 = library._create('typ1');
-    library.compile('typ1');
+    library.generate('typ1');
     assert.strictEqual(Object.keys(typ1._cache).length, 1);
-    library.compile('typ1');
+    library.generate('typ1');
     assert.strictEqual(Object.keys(typ1._cache).length, 1);
-    library.compile('typ1', {resolvePromises: true});
+    library.generate('typ1', {resolvePromises: true});
     assert.strictEqual(Object.keys(typ1._cache).length, 2);
   });
 
   it('should return default value if given value is null', function() {
-    const validate = library.compile({
+    const validate = library.generate({
       type: 'any',
       default: 123
     });
@@ -77,7 +77,7 @@ describe('AnyType', function() {
   });
 
   it('should use mixin attributes', function() {
-    const validate = library.compile({
+    const validate = library.generate({
       name: 'typ1',
       type: [
         {
@@ -95,17 +95,17 @@ describe('AnyType', function() {
     library.add('Type1', {
       type: ['Type1']
     });
-    assert.throws(() => library.compile('Type1'),
+    assert.throws(() => library.generate('Type1'),
         /Schema error at Type1\.type\. Circular reference detected/);
   });
 
   it('should generate async validator resolvePromises=true', function() {
-    const validate = library.compile('any', {resolvePromises: true});
+    const validate = library.generate('any', {resolvePromises: true});
     assert.strictEqual(validate.constructor.name, 'AsyncFunction');
   });
 
   it('should revolve value if resolvePromises=true', async function() {
-    const validate = library.compile('any', {resolvePromises: true});
+    const validate = library.generate('any', {resolvePromises: true});
     const v = new Promise((resolve) => setTimeout(() => resolve(123), 10));
     assert.strictEqual((await validate(v)).value, 123);
   });

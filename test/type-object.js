@@ -210,12 +210,12 @@ describe('ObjectType', function() {
   });
 
   it('should generate validator', function() {
-    const validate = library.compile('object');
+    const validate = library.generate('object');
     assert.strictEqual(typeof validate, 'function');
   });
 
   it('should validator accept objects', function() {
-    const validate = library.compile('object', {coerceTypes: true});
+    const validate = library.generate('object', {coerceTypes: true});
     assert.deepStrictEqual(validate(obj1), {valid: true, value: obj1});
     assert.strictEqual(validate(obj1).value, obj1);
     assert.throws(() => validate(''), /Value must be an object/);
@@ -224,7 +224,7 @@ describe('ObjectType', function() {
   });
 
   it('should not allow additional properties if additionalProperties=false', function() {
-    let validate = library.compile({
+    let validate = library.generate({
       properties: properties1,
       additionalProperties: false
     });
@@ -237,7 +237,7 @@ describe('ObjectType', function() {
         throwOnError: true, additionalProperties: false
       }
     });
-    validate = library.compile({
+    validate = library.generate({
       properties: properties1
     });
     assert.throws(() =>
@@ -247,7 +247,7 @@ describe('ObjectType', function() {
   });
 
   it('should allow additional properties if additionalProperties=true', function() {
-    let validate = library.compile({
+    let validate = library.generate({
       properties: properties1,
       additionalProperties: true
     }, {coerceTypes: true});
@@ -258,7 +258,7 @@ describe('ObjectType', function() {
         throwOnError: true, additionalProperties: true
       }
     });
-    validate = library.compile({
+    validate = library.generate({
       properties: properties1,
       additionalProperties: true
     }, {coerceTypes: true});
@@ -267,7 +267,7 @@ describe('ObjectType', function() {
   });
 
   it('should use a type name for additionalProperties', function() {
-    let validate = library.compile({
+    let validate = library.generate({
       properties: properties1,
       additionalProperties: 'string'
     });
@@ -275,7 +275,7 @@ describe('ObjectType', function() {
             validate({a: 1, f: 'f', g: 1}),
         /Additional property "g" is not allowed/
     );
-    validate = library.compile({
+    validate = library.generate({
       properties: properties1,
       additionalProperties: 'string'
     }, {coerceTypes: true});
@@ -286,7 +286,7 @@ describe('ObjectType', function() {
   });
 
   it('should use regexp patterns as property names', function() {
-    const validate = library.compile({
+    const validate = library.generate({
       additionalProperties: false,
       properties: {
         '/a[\\d]/': 'string'
@@ -298,7 +298,7 @@ describe('ObjectType', function() {
   });
 
   it('should validate required properties', function() {
-    const validate = library.compile({
+    const validate = library.generate({
       properties: {
         'id': {type: 'string', required: true},
         'name': 'string'
@@ -308,7 +308,7 @@ describe('ObjectType', function() {
   });
 
   it('should validate required properties by operation', function() {
-    let validate = library.compile({
+    let validate = library.generate({
       properties: {
         'id': {type: 'string', required: 'post,delete'},
         'name': 'string'
@@ -316,7 +316,7 @@ describe('ObjectType', function() {
     }, {operation: 'get'});
     validate({name: 'name'});
 
-    validate = library.compile({
+    validate = library.generate({
       properties: {
         'id': {type: 'string', required: 'post,delete'},
         'name': 'string'
@@ -324,7 +324,7 @@ describe('ObjectType', function() {
     }, {operation: 'post'});
     assert.throws(() => validate({name: 'name'}), / Error at "id"\. Value required/);
 
-    validate = library.compile({
+    validate = library.generate({
       properties: {
         'id': {type: 'string', required: 'post,delete'},
         'name': 'string'
@@ -334,7 +334,7 @@ describe('ObjectType', function() {
   });
 
   it('should validate sub properties', function() {
-    const validate = library.compile({
+    const validate = library.generate({
       properties: {
         'id': {type: 'string', pattern: '\\d+'},
         'name': 'string'
@@ -357,7 +357,7 @@ describe('ObjectType', function() {
     };
     library.lookupSchema = (n) => types[n];
 
-    const validate = library.compile('Employee');
+    const validate = library.generate('Employee');
     assert.throws(() =>
             validate({kind: 'User', name: 'name'}),
         /Value is not a type of "Employee"/);
@@ -399,7 +399,7 @@ describe('ObjectType', function() {
     };
     library.lookupSchema = (n) => types[n];
 
-    const validate = library.compile({
+    const validate = library.generate({
       type: 'Employee',
       additionalProperties: false,
       coerceTypes: true
@@ -435,7 +435,7 @@ describe('ObjectType', function() {
     };
     library.lookupSchema = (n) => types[n];
     let ok = 0;
-    const validate = library.compile({
+    const validate = library.generate({
       type: 'Employee|User',
       isTypeOf: (v, t) => {
         ok = true;
@@ -487,7 +487,7 @@ describe('ObjectType', function() {
     };
     library.lookupSchema = (n) => types[n];
 
-    const validate = library.compile({
+    const validate = library.generate({
       type: '[Person, Employee|User]'
     }, {coerceTypes: true});
     assert.deepStrictEqual(
@@ -499,7 +499,7 @@ describe('ObjectType', function() {
   });
 
   it('should remove additional properties if removeAdditional=true', function() {
-    const validate = library.compile({
+    const validate = library.generate({
       properties: properties1
     }, {removeAdditional: true});
     assert.deepStrictEqual(
@@ -508,7 +508,7 @@ describe('ObjectType', function() {
   });
 
   it('should remove null properties if removeNull=true', function() {
-    const validate = library.compile({
+    const validate = library.generate({
       properties: properties1
     }, {removeNull: true});
     const _obj1 = {...obj1};
@@ -519,7 +519,7 @@ describe('ObjectType', function() {
   });
 
   it('should validate minItems', function() {
-    const validate = library.compile({
+    const validate = library.generate({
       type: 'object',
       minProperties: 2
     });
@@ -529,7 +529,7 @@ describe('ObjectType', function() {
   });
 
   it('should validate maxProperties', function() {
-    const validate = library.compile({
+    const validate = library.generate({
       type: 'object',
       maxProperties: 1
     });
@@ -539,7 +539,7 @@ describe('ObjectType', function() {
   });
 
   it('should limit error count to maxObjectErrors', function() {
-    let validate = library.compile({
+    let validate = library.generate({
       properties: {
         a: 'number',
         b: 'number',
@@ -550,7 +550,7 @@ describe('ObjectType', function() {
     let x = validate({a: 'a', b: 'b', c: 'c'});
     assert.strictEqual(x.errors.length, 2);
 
-    validate = library.compile({
+    validate = library.generate({
       type: 'object',
       properties: {
         x: 'string'
@@ -574,7 +574,7 @@ describe('ObjectType', function() {
     assert.strictEqual(t.properties.items.dataType.typeName, 'array');
     assert.strictEqual(t.properties.items.dataType.items, t);
     assert.strictEqual(t.properties.parent.dataType.properties.items.dataType.items, t);
-    const validate = t.compile();
+    const validate = t.generate();
     validate({
       id: 1,
       parent: {
@@ -584,7 +584,7 @@ describe('ObjectType', function() {
   });
 
   it('should resolve promises if resolvePromises=true', async function() {
-    const validate = library.compile('object', {
+    const validate = library.generate('object', {
       coerceTypes: true,
       resolvePromises: true
     });

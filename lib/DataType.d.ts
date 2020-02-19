@@ -12,7 +12,7 @@ export class DataType {
 
     clone(): DataType;
 
-    compile(options?: ICompileOptions): ValidateFunction;
+    generate(options?: ICompileOptions): ValidateFunction;
 
     get(attr: string): any;
 

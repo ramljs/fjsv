@@ -37,7 +37,7 @@ describe('DateType', function() {
 
   it('should throw if "default" value is not valid', function() {
     assert.throws(() =>
-        library.compile({
+        library.generate({
           type: 'date',
           name: 'typ1',
           default: {}
@@ -74,12 +74,12 @@ describe('DateType', function() {
   });
 
   it('should generate validator', function() {
-    const validate = library.compile('date');
+    const validate = library.generate('date');
     assert.strictEqual(typeof validate, 'function');
   });
 
   it('should validate "timestamp" format', function() {
-    const validate = library.compile({type: 'date', format: 'timestamp'});
+    const validate = library.generate({type: 'date', format: 'timestamp'});
     validate('2011');
     validate('20110102');
     validate('2011-01-02');
@@ -95,7 +95,7 @@ describe('DateType', function() {
   });
 
   it('should validate strict "timestamp" format', function() {
-    const validate = library.compile({
+    const validate = library.generate({
       type: 'date',
       format: 'timestamp',
       strictFormat: true
@@ -111,7 +111,7 @@ describe('DateType', function() {
   });
 
   it('should coerce to "timestamp" format', function() {
-    const validate = library.compile({type: 'date', format: 'timestamp'},
+    const validate = library.generate({type: 'date', format: 'timestamp'},
         {coerceTypes: true});
     assert.strictEqual(validate('2011-01-02').value, '2011-01-02T00:00:00Z');
     assert.strictEqual(validate('2011-01-02T10:30').value, '2011-01-02T10:30:00Z');
@@ -125,7 +125,7 @@ describe('DateType', function() {
   });
 
   it('should validate "datetime" format', function() {
-    const validate = library.compile({type: 'date', format: 'datetime'});
+    const validate = library.generate({type: 'date', format: 'datetime'});
     validate('2011-01-02');
     validate('20110102');
     validate('2011-01-02T10:30');
@@ -142,7 +142,7 @@ describe('DateType', function() {
   });
 
   it('should validate strict "datetime" format', function() {
-    const validate = library.compile({
+    const validate = library.generate({
       type: 'date',
       format: 'datetime',
       strictFormat: true
@@ -159,7 +159,7 @@ describe('DateType', function() {
   });
 
   it('should coerce to "datetime" format', function() {
-    const validate = library.compile({type: 'date', format: 'datetime'},
+    const validate = library.generate({type: 'date', format: 'datetime'},
         {coerceTypes: true});
     assert.strictEqual(validate('2011-01-02').value, '2011-01-02T00:00:00');
     assert.strictEqual(validate('2011-01-02T10:30').value, '2011-01-02T10:30:00');
@@ -170,7 +170,7 @@ describe('DateType', function() {
   });
 
   it('should validate "date" format', function() {
-    const validate = library.compile({type: 'date', format: 'date'});
+    const validate = library.generate({type: 'date', format: 'date'});
     validate('2011-01-02');
     validate('20110102');
     assert.throws(() => validate('2011-01-02T10:30'), /Value must be/);
@@ -183,7 +183,7 @@ describe('DateType', function() {
   });
 
   it('should validate strict "date" format', function() {
-    const validate = library.compile({
+    const validate = library.generate({
       type: 'date',
       format: 'date',
       strictFormat: true
@@ -201,7 +201,7 @@ describe('DateType', function() {
   });
 
   it('should coerce to "date" format', function() {
-    const validate = library.compile({type: 'date', format: 'date'},
+    const validate = library.generate({type: 'date', format: 'date'},
         {coerceTypes: true});
     assert.strictEqual(validate('2011-01-02').value, '2011-01-02');
     assert.strictEqual(validate('20110102').value, '2011-01-02');
@@ -210,7 +210,7 @@ describe('DateType', function() {
   });
 
   it('should validate "time" format', function() {
-    const validate = library.compile({type: 'date', format: 'time'});
+    const validate = library.generate({type: 'date', format: 'time'});
     validate('13:14:15.123');
     validate('131415.123');
     validate('131415');
@@ -224,7 +224,7 @@ describe('DateType', function() {
   });
 
   it('should validate strict "time" format', function() {
-    const validate = library.compile({
+    const validate = library.generate({
       type: 'date',
       format: 'time',
       strictFormat: true
@@ -242,7 +242,7 @@ describe('DateType', function() {
   });
 
   it('should coerce to "time" format', function() {
-    const validate = library.compile({type: 'date', format: 'time'},
+    const validate = library.generate({type: 'date', format: 'time'},
         {coerceTypes: true});
     assert.strictEqual(
         validate('101112').value, '10:11:12');
@@ -253,7 +253,7 @@ describe('DateType', function() {
   });
 
   it('should validate "rfc2616" format', function() {
-    const validate = library.compile({type: 'date', format: 'rfc2616'});
+    const validate = library.generate({type: 'date', format: 'rfc2616'});
     validate('Sun Jan 02 2011 02:00:00 GMT+0200 (GMT+03:00)');
     validate('2011-01-02');
     validate('20110102');
@@ -269,7 +269,7 @@ describe('DateType', function() {
   });
 
   it('should validate strict "rfc2616" format', function() {
-    const validate = library.compile({
+    const validate = library.generate({
       type: 'date',
       format: 'rfc2616',
       strictFormat: true
@@ -283,13 +283,13 @@ describe('DateType', function() {
   });
 
   it('should convert value to Date instance', function() {
-    const validate = library.compile({type: 'date', format: 'timestamp'},
+    const validate = library.generate({type: 'date', format: 'timestamp'},
         {convertDates: true});
     assert(validate('2011-01-02').value instanceof Date);
   });
 
   it('should use strict mode if options.strictFormat = true', function() {
-    const validate = library.compile({
+    const validate = library.generate({
       type: 'date',
       format: 'time'
     }, {strictFormat: true});
@@ -298,7 +298,7 @@ describe('DateType', function() {
   });
 
   it('should validator reject invalid dates', function() {
-    const validate = library.compile('date');
+    const validate = library.generate('date');
     assert.throws(() => validate('2011-02-30T10:30:15Z'),
         /Value must be/);
     assert.throws(() => validate(0), /Value must be/);
@@ -307,7 +307,7 @@ describe('DateType', function() {
   });
 
   it('should validate in fast-mode', function() {
-    let validate = library.compile({type: 'date', format: 'timestamp'},
+    let validate = library.generate({type: 'date', format: 'timestamp'},
         {coerceTypes: true, fastDateValidation: true});
     assert.strictEqual(validate('2011-01-02').value, '2011-01-02T00:00:00Z');
     assert.strictEqual(validate('2011-01-02T10:30').value, '2011-01-02T10:30:00Z');
@@ -318,7 +318,7 @@ describe('DateType', function() {
     assert.strictEqual(validate('2011-01-02T10:30:15Z').value, '2011-01-02T10:30:15Z');
     const d1 = new Date('2019-09-30T19:34:40.668Z');
     assert.strictEqual(validate(d1).value, '2019-09-30T19:34:40.668Z');
-    validate = library.compile({type: 'date', format: 'timestamp'}, {fastDateValidation: true});
+    validate = library.generate({type: 'date', format: 'timestamp'}, {fastDateValidation: true});
     validate('2011-01-02');
   });
 
@@ -333,17 +333,17 @@ describe('DateType', function() {
         'rfc2616': 'rfc2616'
       }
     }));
-    let validate = library.compile({
+    let validate = library.generate({
       type: 'date',
       format: 'time-only'
     }, {coerceTypes: true});
     assert.strictEqual(validate('131415.123').value, '13:14:15.123');
-    validate = library.compile({
+    validate = library.generate({
       type: 'date',
       format: 'date-only'
     }, {coerceTypes: true});
     assert.strictEqual(validate('20110102').value, '2011-01-02');
-    assert.throws(() => library.compile({
+    assert.throws(() => library.generate({
       type: 'date',
       format: 'time'
     }), /Unknown date format/);

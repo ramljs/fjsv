@@ -31,12 +31,12 @@ describe('Base64Type', function() {
   });
 
   it('should generate validator', function() {
-    const validate = library.compile('file');
+    const validate = library.generate('file');
     assert.strictEqual(typeof validate, 'function');
   });
 
   it('should validator accept only base64 strings', function() {
-    const validate = library.compile('file', {strictFormat: true});
+    const validate = library.generate('file', {strictFormat: true});
     validate('');
     validate(null);
     validate('RmlsZSBjb250ZW50');

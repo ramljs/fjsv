@@ -45,13 +45,13 @@ describe('FunctionType', function() {
 
 
   it('should generate validator', function() {
-    const validate = library.compile('function');
+    const validate = library.generate('function');
     assert.strictEqual(typeof validate, 'function');
   });
 
   it('should validator accept only function values', function() {
     const fn = () => 1;
-    const validate = library.compile('function');
+    const validate = library.generate('function');
     validate(fn);
     validate(null);
     assert.throws(() => validate(0), /Value must be a function/);

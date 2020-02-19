@@ -52,7 +52,7 @@ export interface IValidationResult {
 
 export interface TypeFactory {
     create?: (instance: object) => void;
-    compile: (dataType: DataType, options?: ICompileOptions, orgOptions?: ICompileOptions) => ValidateFunction;
+    generate: (dataType: DataType, options?: ICompileOptions, orgOptions?: ICompileOptions) => ValidateFunction;
     prepareCompileOptions?: (options?: ICompileOptions) => ICompileOptions;
     set?: (dataType: DataType, attribute: string, value: any, parentSchema: object) => any;
 }
@@ -74,7 +74,7 @@ export class TypeLibrary {
 
     clearCache();
 
-    compile(schema: string | object, options?: ICompileOptions): ValidateFunction;
+    generate(schema: string | object, options?: ICompileOptions): ValidateFunction;
 
     define(name: string, factory: TypeFactory): void;
 

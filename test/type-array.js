@@ -66,7 +66,7 @@ describe('ArrayType', function() {
 
   it('should throw if "maxItems" value is not valid', function() {
     assert.throws(() =>
-        library.compile({
+        library.generate({
           type: 'array',
           name: 'typ1',
           maxItems: 'abcd'
@@ -83,13 +83,13 @@ describe('ArrayType', function() {
   });
 
   it('should generate validator', function() {
-    const validate = library.compile('array');
+    const validate = library.generate('array');
     assert.strictEqual(typeof validate, 'function');
   });
 
   it('should validator accept any type in non-strict mode', function() {
     const arr = [1, 2, 3];
-    const validate = library.compile('array');
+    const validate = library.generate('array');
     assert.deepStrictEqual(validate(arr), {valid: true, value: arr});
     assert.strictEqual(validate(arr).value, arr);
     assert.deepStrictEqual(validate(''), {valid: true, value: ''});
@@ -99,7 +99,7 @@ describe('ArrayType', function() {
 
   it('should validator accept only array type in strict mode', function() {
     const arr = [1, 2, 3];
-    const validate = library.compile('array', {strictFormat: true});
+    const validate = library.generate('array', {strictFormat: true});
     assert.deepStrictEqual(validate(arr), {valid: true, value: arr});
     assert.strictEqual(validate(arr).value, arr);
     assert.throws(() => validate(''), /Value must be an array/);
@@ -108,7 +108,7 @@ describe('ArrayType', function() {
   });
 
   it('should validate sub items', function() {
-    const validate = library.compile({
+    const validate = library.generate({
       type: 'array',
       items: 'string'
     });
@@ -119,7 +119,7 @@ describe('ArrayType', function() {
   });
 
   it('should validate minItems', function() {
-    const validate = library.compile({
+    const validate = library.generate({
       type: 'array',
       minItems: 2
     });
@@ -129,7 +129,7 @@ describe('ArrayType', function() {
   });
 
   it('should validate maxItems', function() {
-    const validate = library.compile({
+    const validate = library.generate({
       type: 'array',
       maxItems: 2
     });
@@ -139,7 +139,7 @@ describe('ArrayType', function() {
   });
 
   it('should validate unique items', function() {
-    const validate = library.compile({
+    const validate = library.generate({
       type: 'array',
       uniqueItems: true
     });
@@ -150,7 +150,7 @@ describe('ArrayType', function() {
   });
 
   it('should coerce value to array', function() {
-    const validate = library.compile('array', {coerceTypes: true});
+    const validate = library.generate('array', {coerceTypes: true});
     assert.deepStrictEqual(
         validate(false),
         {valid: true, value: [false]});
@@ -160,7 +160,7 @@ describe('ArrayType', function() {
   });
 
   it('should coerce sub items', function() {
-    const validate = library.compile({
+    const validate = library.generate({
       type: 'array',
       items: 'string'
     }, {coerceTypes: true});
@@ -171,7 +171,7 @@ describe('ArrayType', function() {
   });
 
   it('should coerce default value to array type', function() {
-    const validate = library.compile({
+    const validate = library.generate({
       type: 'array',
       default: 1
     }, {coerceTypes: true});
@@ -179,7 +179,7 @@ describe('ArrayType', function() {
   });
 
   it('should limit error count to maxArrayErrors', function() {
-    const validate = library.compile({
+    const validate = library.generate({
       type: 'array',
       items: 'number'
     }, {maxArrayErrors: 2, throwOnError: false});

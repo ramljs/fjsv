@@ -116,7 +116,7 @@ describe('TypeLibrary', function() {
   it('should register a new type factory', function() {
     const library = new TypeLibrary();
     library.define('custom', {
-      compile() {
+      generate() {
       }
     });
     let t = library._create({type: 'custom'});
@@ -132,10 +132,10 @@ describe('TypeLibrary', function() {
     assert.throws(() =>
         library.define('custom', 123), / Factory argument must be an object/);
     assert.throws(() =>
-        library.define('custom', {}), /Factory must contain a "compile" function/);
-    library.define('custom', {compile() {}});
+        library.define('custom', {}), /Factory must contain a "generate" function/);
+    library.define('custom', {generate() {}});
     assert.throws(() =>
-            library.define('custom', {compile() {}}),
+            library.define('custom', {generate() {}}),
         /Data type "custom" already registered/);
 
   });
@@ -147,7 +147,7 @@ describe('TypeLibrary', function() {
       create() {
         ok = 1;
       },
-      compile() {}
+      generate() {}
     });
     library._create({type: 'custom'});
     assert.strictEqual(ok, 1);
@@ -160,7 +160,7 @@ describe('TypeLibrary', function() {
       set(dataType, attr, v) {
         return ok[attr] = v;
       },
-      compile() {}
+      generate() {}
     });
     library._create({type: 'custom', v1: 1, v2: 2});
     assert.deepStrictEqual(ok, {v1: 1, v2: 2});

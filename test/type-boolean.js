@@ -69,12 +69,12 @@ describe('BooleanType', function() {
   });
 
   it('should generate validator', function() {
-    const validate = library.compile('boolean');
+    const validate = library.generate('boolean');
     assert.strictEqual(typeof validate, 'function');
   });
 
   it('should validator accept other values in non-strict mode', function() {
-    const validate = library.compile('boolean');
+    const validate = library.generate('boolean');
     assert.deepStrictEqual(validate(null), {valid: true, value: null});
     assert.deepStrictEqual(validate(false), {valid: true, value: false});
     assert.deepStrictEqual(validate(true), {valid: true, value: true});
@@ -89,7 +89,7 @@ describe('BooleanType', function() {
   });
 
   it('should validator accept only boolean values in strict mode', function() {
-    const validate = library.compile('boolean', {strictFormat: true});
+    const validate = library.generate('boolean', {strictFormat: true});
     validate(false);
     validate(true);
     validate(null);
@@ -101,7 +101,7 @@ describe('BooleanType', function() {
   });
 
   it('should coerce value to boolean type', function() {
-    const validate = library.compile('boolean', {coerceTypes: true});
+    const validate = library.generate('boolean', {coerceTypes: true});
     assert.deepStrictEqual(validate(false), {valid: true, value: false});
     assert.deepStrictEqual(validate(true), {valid: true, value: true});
     assert.deepStrictEqual(validate(0), {valid: true, value: false});
@@ -111,7 +111,7 @@ describe('BooleanType', function() {
   });
 
   it('should coerce value to default if null', function() {
-    const validate = library.compile({
+    const validate = library.generate({
       type: 'boolean',
       default: 1
     }, {coerceTypes: true});

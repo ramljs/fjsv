@@ -20,12 +20,12 @@ describe('NilType', function() {
   });
 
   it('should generate validator', function() {
-    const validate = library.compile('nil');
+    const validate = library.generate('nil');
     assert.strictEqual(typeof validate, 'function');
   });
 
   it('should validator accept null and undefined', function() {
-    const validate = library.compile('nil');
+    const validate = library.generate('nil');
     validate(null);
     validate();
     assert.throws(() => validate(0), /Value must be null/);
@@ -33,7 +33,7 @@ describe('NilType', function() {
   });
 
   it('should coerce value to null', function() {
-    const validate = library.compile('nil', {coerceTypes: true});
+    const validate = library.generate('nil', {coerceTypes: true});
     assert.deepStrictEqual(validate(null), {valid: true, value: null});
     assert.deepStrictEqual(validate(undefined), {valid: true, value: null});
   });
