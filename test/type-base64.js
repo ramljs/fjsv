@@ -11,7 +11,7 @@ describe('Base64Type', function() {
   });
 
   it('should not set "enum" attribute', function() {
-    const t = library.get({
+    const t = library._create({
       type: 'file',
       name: 'typ1',
       enum: [1, 2, '3']
@@ -20,7 +20,7 @@ describe('Base64Type', function() {
   });
 
   it('should set "default" attribute', function() {
-    const t = library.get({
+    const t = library._create({
       type: 'file',
       name: 'typ1',
       default: 'RmlsZSBjb250ZW50',

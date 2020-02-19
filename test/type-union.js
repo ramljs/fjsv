@@ -11,7 +11,7 @@ describe('UnionType', function() {
 
   it('should throw if "anyOf" value is not array', function() {
     assert.throws(() =>
-        library.get({
+        library._create({
           name: 'typ1',
           anyOf: 1
         }), /Schema error at typ1\.anyOf\. Value must be an array/);
@@ -19,7 +19,7 @@ describe('UnionType', function() {
 
   it('should "anyOf" must have at least 2 values', function() {
     assert.throws(() =>
-        library.get({
+        library._create({
           type: 'union',
           name: 'typ1',
           anyOf: ['string']
@@ -27,7 +27,7 @@ describe('UnionType', function() {
   });
 
   it('should generate validator', function() {
-    const typ1 = library.get({
+    const typ1 = library._create({
       name: 'typ1',
       type: 'union',
       anyOf: ['string', 'number']
@@ -52,11 +52,11 @@ describe('UnionType', function() {
       }
     };
     library.lookupSchema = (n) => types[n];
-    library.get('RequiredString');
-    library.get('LocalPhoneNumber');
-    library.get('CellularNumber');
+    library._create('RequiredString');
+    library._create('LocalPhoneNumber');
+    library._create('CellularNumber');
 
-    const typ1 = library.get({
+    const typ1 = library._create({
       name: 'typ1',
       type: '[RequiredString, LocalPhoneNumber|CellularNumber]',
       maxLength: 15
@@ -100,7 +100,7 @@ describe('UnionType', function() {
     };
     library.lookupSchema = (n) => types[n];
 
-    const typ1 = library.get({
+    const typ1 = library._create({
       name: 'typ1',
       type: '[Resource, Patient]'
     });
@@ -156,7 +156,7 @@ describe('UnionType', function() {
     };
     library.lookupSchema = (n) => types[n];
 
-    const typ1 = library.get({
+    const typ1 = library._create({
       name: 'typ1',
       type: '[Resource, Human|Animal, StartLimit | Pagination]'
     });

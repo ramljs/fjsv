@@ -19,7 +19,7 @@ describe('ObjectType', function() {
   });
 
   it('should create ObjectType instance', function() {
-    let t = library.get({
+    let t = library._create({
       type: 'object',
       name: 'typ1',
       other: 123
@@ -30,7 +30,7 @@ describe('ObjectType', function() {
   });
 
   it('should create object type if there is {} after type name', function() {
-    const t = library.get({
+    const t = library._create({
       type: 'string{}'
     });
     assert.deepStrictEqual(t.typeName, 'object');
@@ -38,7 +38,7 @@ describe('ObjectType', function() {
   });
 
   it('should set "discriminator" attribute', function() {
-    const t = library.get({
+    const t = library._create({
       type: 'object',
       name: 'typ1',
       discriminator: 'kind'
@@ -47,7 +47,7 @@ describe('ObjectType', function() {
   });
 
   it('should set "discriminatorValue" attribute', function() {
-    const t = library.get({
+    const t = library._create({
       type: 'object',
       name: 'typ1',
       discriminator: 'kind',
@@ -57,7 +57,7 @@ describe('ObjectType', function() {
   });
 
   it('should set "additionalProperties" attribute', function() {
-    const t = library.get({
+    const t = library._create({
       type: 'object',
       name: 'typ1',
       additionalProperties: false
@@ -66,7 +66,7 @@ describe('ObjectType', function() {
   });
 
   it('should set "minProperties" attribute', function() {
-    const t = library.get({
+    const t = library._create({
       type: 'object',
       name: 'typ1',
       minProperties: 0
@@ -76,7 +76,7 @@ describe('ObjectType', function() {
 
   it('should throw if "minProperties" value is not valid', function() {
     assert.throws(() =>
-        library.get({
+        library._create({
           type: 'object',
           name: 'typ1',
           minProperties: 'abcd'
@@ -84,7 +84,7 @@ describe('ObjectType', function() {
   });
 
   it('should set "maxProperties" attribute', function() {
-    const t = library.get({
+    const t = library._create({
       type: 'object',
       name: 'typ1',
       maxProperties: 0
@@ -94,7 +94,7 @@ describe('ObjectType', function() {
 
   it('should throw if "maxProperties" value is not valid', function() {
     assert.throws(() =>
-        library.get({
+        library._create({
           type: 'object',
           name: 'typ1',
           maxProperties: 'abcd'
@@ -102,7 +102,7 @@ describe('ObjectType', function() {
   });
 
   it('should set "isTypeOf" attribute', function() {
-    const t = library.get({
+    const t = library._create({
       type: 'object',
       name: 'typ1',
       isTypeOf: () => true
@@ -112,7 +112,7 @@ describe('ObjectType', function() {
 
   it('should throw if "isTypeOf" value is not a function', function() {
     assert.throws(() =>
-        library.get({
+        library._create({
           type: 'object',
           name: 'typ1',
           isTypeOf: 'abcd'
@@ -126,7 +126,7 @@ describe('ObjectType', function() {
     library.add('PersonAge', {
       type: 'number'
     });
-    const t = library.get({
+    const t = library._create({
       type: 'object',
       name: 'typ1',
       properties: {
@@ -143,14 +143,14 @@ describe('ObjectType', function() {
   });
 
   it('should use AnyType instance as property.type', function() {
-    const t = library.get({
+    const t = library._create({
       type: 'object',
       name: 'typ1',
       properties: {
         p1: {
-          type: library.get('string')
+          type: library._create('string')
         },
-        p2: library.get('number')
+        p2: library._create('number')
       }
     });
     assert.strictEqual(t.properties.p1.dataType.typeName, 'string');
@@ -158,7 +158,7 @@ describe('ObjectType', function() {
   });
 
   it('should set array of properties', function() {
-    const t = library.get({
+    const t = library._create({
       type: 'object',
       name: 'typ1',
       properties: [
@@ -173,7 +173,7 @@ describe('ObjectType', function() {
   });
 
   it('should use ? to set properties required attribute to false', function() {
-    const t = library.get({
+    const t = library._create({
       type: 'object',
       name: 'typ1',
       properties: {
@@ -186,7 +186,7 @@ describe('ObjectType', function() {
   });
 
   it('should use ! to set properties required attribute to false', function() {
-    const t = library.get({
+    const t = library._create({
       type: 'object',
       name: 'typ1',
       properties: {
@@ -198,7 +198,7 @@ describe('ObjectType', function() {
 
   it('should use propertiesRequired default value', function() {
     library.defaults.propertiesRequired = true;
-    const t = library.get({
+    const t = library._create({
       type: 'object',
       name: 'typ1',
       properties: {
@@ -570,7 +570,7 @@ describe('ObjectType', function() {
         items: 'Node[]'
       }
     });
-    const t = library.get('Node');
+    const t = library._create('Node');
     assert.strictEqual(t.properties.items.dataType.typeName, 'array');
     assert.strictEqual(t.properties.items.dataType.items, t);
     assert.strictEqual(t.properties.parent.dataType.properties.items.dataType.items, t);

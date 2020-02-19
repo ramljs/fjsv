@@ -11,7 +11,7 @@ describe('IntegerType', function() {
   });
 
   it('should create IntegerType instance', function() {
-    let t = library.get({
+    let t = library._create({
       type: 'integer',
       name: 'typ1',
       other: 123
@@ -22,7 +22,7 @@ describe('IntegerType', function() {
   });
 
   it('should set "default" attribute as integer', function() {
-    const t = library.get({
+    const t = library._create({
       type: 'integer',
       name: 'typ1',
       default: '5.1'
@@ -40,7 +40,7 @@ describe('IntegerType', function() {
   });
 
   it('should set "enum" attribute as string array', function() {
-    const t = library.get({
+    const t = library._create({
       type: 'integer',
       name: 'typ1',
       enum: [1, 2, '3']
@@ -64,7 +64,7 @@ describe('IntegerType', function() {
   });
 
   it('should set "format" attribute', function() {
-    const t = library.get({
+    const t = library._create({
       type: 'integer',
       name: 'typ1',
       format: 'int'
@@ -88,7 +88,7 @@ describe('IntegerType', function() {
   });
 
   it('should set "minimum" attribute', function() {
-    const t = library.get({
+    const t = library._create({
       type: 'integer',
       name: 'typ1',
       minimum: 0.1
@@ -106,7 +106,7 @@ describe('IntegerType', function() {
   });
 
   it('should set "maximum" attribute', function() {
-    const t = library.get({
+    const t = library._create({
       type: 'integer',
       name: 'typ1',
       maximum: 10.1
@@ -124,7 +124,7 @@ describe('IntegerType', function() {
   });
 
   it('should set "multipleOf" attribute', function() {
-    const t = library.get({
+    const t = library._create({
       type: 'integer',
       name: 'typ1',
       multipleOf: 1.2

@@ -70,15 +70,17 @@ export class TypeLibrary {
 
     constructor(options?: ITypeLibraryOptions);
 
-    define(name: string, factory: TypeFactory): void;
-
     add(name: string, schema: object);
+
+    clearCache();
 
     compile(schema: string | object, options?: ICompileOptions): ValidateFunction;
 
-    get(schema: string | object): DataType;
+    define(name: string, factory: TypeFactory): void;
 
-    reset();
+    use(name: string, library: TypeLibrary): void;
+
+    protected _create(schema: string | object): DataType;
 
     protected _createType(instance: object | DataType, schema: object): DataType;
 

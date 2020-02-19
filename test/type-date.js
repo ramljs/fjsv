@@ -11,7 +11,7 @@ describe('DateType', function() {
   });
 
   it('should create DateType instance', function() {
-    let t = library.get({
+    let t = library._create({
       type: 'date',
       name: 'typ1'
     });
@@ -20,7 +20,7 @@ describe('DateType', function() {
   });
 
   it('should set "default" attribute', function() {
-    const t = library.get({
+    const t = library._create({
       type: 'date',
       name: 'typ1',
       default: '2001-02-03T08:30:15'
@@ -45,7 +45,7 @@ describe('DateType', function() {
   });
 
   it('should not set "enum" attribute', function() {
-    const t = library.get({
+    const t = library._create({
       type: 'date',
       name: 'typ1',
       enum: [1, 2, '3'],
@@ -56,7 +56,7 @@ describe('DateType', function() {
   });
 
   it('should set "format" attribute', function() {
-    const t = library.get({
+    const t = library._create({
       type: 'date',
       name: 'typ1',
       format: 'time'
@@ -66,7 +66,7 @@ describe('DateType', function() {
 
   it('should throw if "format" value is not valid', function() {
     assert.throws(() =>
-        library.get({
+        library._create({
           type: 'date',
           name: 'typ1',
           format: 'abcd'

@@ -10,7 +10,7 @@ describe('NumberType', function() {
   });
 
   it('should create NumberType instance', function() {
-    let t = library.get({
+    let t = library._create({
       type: 'number',
       name: 'typ1',
       other: 123
@@ -21,7 +21,7 @@ describe('NumberType', function() {
   });
 
   it('should set "default" attribute as number', function() {
-    const t = library.get({
+    const t = library._create({
       type: 'number',
       name: 'typ1',
       default: '1.2'
@@ -31,7 +31,7 @@ describe('NumberType', function() {
 
   it('should throw if "default" value is not valid', function() {
     assert.throws(() =>
-        library.get({
+        library._create({
           type: 'number',
           name: 'typ1',
           default: 'abcd'
@@ -39,7 +39,7 @@ describe('NumberType', function() {
   });
 
   it('should set "enum" attribute as string array', function() {
-    const t = library.get({
+    const t = library._create({
       type: 'number',
       name: 'typ1',
       enum: [1, 2, '3']
@@ -48,7 +48,7 @@ describe('NumberType', function() {
   });
 
   it('should set "enum" attribute as string array', function() {
-    const t = library.get({
+    const t = library._create({
       type: 'number',
       name: 'typ1',
       enum: [1, 2, '3']
@@ -58,7 +58,7 @@ describe('NumberType', function() {
 
   it('should throw if "enum" value is not an array', function() {
     assert.throws(() =>
-        library.get({
+        library._create({
           type: 'number',
           name: 'typ1',
           enum: 'abcd'
@@ -66,7 +66,7 @@ describe('NumberType', function() {
   });
 
   it('should set "format" attribute', function() {
-    const t = library.get({
+    const t = library._create({
       type: 'number',
       name: 'typ1',
       format: 'int'
@@ -76,7 +76,7 @@ describe('NumberType', function() {
 
   it('should throw if "format" value is not valid', function() {
     assert.throws(() =>
-        library.get({
+        library._create({
           type: 'number',
           name: 'typ1',
           format: 'abcd'
@@ -84,7 +84,7 @@ describe('NumberType', function() {
   });
 
   it('should set "format" attribute', function() {
-    const t = library.get({
+    const t = library._create({
       type: 'number',
       name: 'typ1',
       strictFormat: 1
@@ -93,7 +93,7 @@ describe('NumberType', function() {
   });
 
   it('should set "minimum" attribute', function() {
-    const t = library.get({
+    const t = library._create({
       type: 'number',
       name: 'typ1',
       minimum: '0'
@@ -103,7 +103,7 @@ describe('NumberType', function() {
 
   it('should throw if "minimum" value is not valid', function() {
     assert.throws(() =>
-        library.get({
+        library._create({
           type: 'number',
           name: 'typ1',
           minimum: 'abcd'
@@ -111,7 +111,7 @@ describe('NumberType', function() {
   });
 
   it('should set "maximum" attribute', function() {
-    const t = library.get({
+    const t = library._create({
       type: 'number',
       name: 'typ1',
       maximum: '10.5'
@@ -121,7 +121,7 @@ describe('NumberType', function() {
 
   it('should throw if "maximum" value is not valid', function() {
     assert.throws(() =>
-        library.get({
+        library._create({
           type: 'number',
           name: 'typ1',
           maximum: 'abcd'
@@ -129,7 +129,7 @@ describe('NumberType', function() {
   });
 
   it('should set "multipleOf" attribute', function() {
-    const t = library.get({
+    const t = library._create({
       type: 'number',
       name: 'typ1',
       multipleOf: '1.2'
@@ -139,7 +139,7 @@ describe('NumberType', function() {
 
   it('should throw if "multipleOf" value is not valid', function() {
     assert.throws(() =>
-        library.get({
+        library._create({
           type: 'number',
           name: 'typ1',
           multipleOf: 'abcd'

@@ -10,7 +10,7 @@ describe('StringType', function() {
   });
 
   it('should create StringType instance', function() {
-    let t = library.get({
+    let t = library._create({
       type: 'string',
       name: 'typ1',
       enum: [1, 2, '3']
@@ -20,7 +20,7 @@ describe('StringType', function() {
   });
 
   it('should set "default" attribute as string', function() {
-    const t = library.get({
+    const t = library._create({
       type: 'string',
       name: 'typ1',
       default: 1
@@ -29,7 +29,7 @@ describe('StringType', function() {
   });
 
   it('should set "enum" attribute as string', function() {
-    const t = library.get({
+    const t = library._create({
       type: 'string',
       name: 'typ1',
       enum: [1, 2, '3']
@@ -39,7 +39,7 @@ describe('StringType', function() {
 
   it('should throw if "enum" value is not an array', function() {
     assert.throws(() =>
-        library.get({
+        library._create({
           type: 'string',
           name: 'typ1',
           enum: 'abcd'
@@ -47,7 +47,7 @@ describe('StringType', function() {
   });
 
   it('should set "minLength" attribute', function() {
-    const t = library.get({
+    const t = library._create({
       type: 'string',
       name: 'typ1',
       minLength: 0
@@ -57,7 +57,7 @@ describe('StringType', function() {
 
   it('should throw if "minLength" value is not valid', function() {
     assert.throws(() =>
-        library.get({
+        library._create({
           type: 'string',
           name: 'typ1',
           minLength: 'abcd'
@@ -65,7 +65,7 @@ describe('StringType', function() {
   });
 
   it('should set "maxLength" attribute', function() {
-    const t = library.get({
+    const t = library._create({
       type: 'string',
       name: 'typ1',
       maxLength: 0
@@ -75,7 +75,7 @@ describe('StringType', function() {
 
   it('should throw if "maxLength" value is not valid', function() {
     assert.throws(() =>
-        library.get({
+        library._create({
           type: 'string',
           name: 'typ1',
           maxLength: 'abcd'
@@ -83,7 +83,7 @@ describe('StringType', function() {
   });
 
   it('should create mixin types', function() {
-    let t = library.get({
+    let t = library._create({
       type: [{
         type: 'string',
         default: '1'
@@ -103,7 +103,7 @@ describe('StringType', function() {
   });
 
   it('should validator accept strings and numbers in non-strict mode', function() {
-    const t = library.get({
+    const t = library._create({
       name: 'typ1',
       type: 'string'
     });

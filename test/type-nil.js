@@ -11,7 +11,7 @@ describe('NilType', function() {
   });
 
   it('should not set "default" attribute', function() {
-    const t = library.get({
+    const t = library._create({
       type: 'nil',
       name: 'typ1',
       default: 1

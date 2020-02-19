@@ -10,7 +10,7 @@ describe('BooleanType', function() {
   });
 
   it('should create BooleanType instance', function() {
-    let t = library.get({
+    let t = library._create({
       type: 'boolean',
       name: 'typ1',
       other: 123
@@ -21,7 +21,7 @@ describe('BooleanType', function() {
   });
 
   it('should set "default" attribute as boolean', function() {
-    const t = library.get({
+    const t = library._create({
       type: 'boolean',
       name: 'typ1',
       default: 1
@@ -30,7 +30,7 @@ describe('BooleanType', function() {
   });
 
   it('should set "enum" attribute as boolean', function() {
-    const t = library.get({
+    const t = library._create({
       type: 'boolean',
       name: 'typ1',
       enum: [1, 0]
@@ -40,7 +40,7 @@ describe('BooleanType', function() {
 
   it('should throw if "enum" value is not an array', function() {
     assert.throws(() =>
-        library.get({
+        library._create({
           type: 'boolean',
           name: 'typ1',
           enum: 'abcd'
@@ -48,7 +48,7 @@ describe('BooleanType', function() {
   });
 
   it('should set "strictFormat" attribute as boolean', function() {
-    const t = library.get({
+    const t = library._create({
       type: 'boolean',
       name: 'typ1',
       strictFormat: 1
@@ -57,7 +57,7 @@ describe('BooleanType', function() {
   });
 
   it('should create mixin types', function() {
-    let t = library.get({
+    let t = library._create({
       type: [{
         type: 'boolean'
       }, {

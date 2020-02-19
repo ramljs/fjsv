@@ -12,7 +12,7 @@ describe('FunctionType', function() {
 
   it('should set "default" attribute as function', function() {
     const fn = () => 1;
-    const t = library.get({
+    const t = library._create({
       type: 'function',
       default: fn
     });
@@ -24,7 +24,7 @@ describe('FunctionType', function() {
   });
 
   it('should not set "enum" attribute', function() {
-    const t = library.get({
+    const t = library._create({
       type: 'function',
       name: 'typ1',
       enum: [1, 2, '3'],
@@ -36,7 +36,7 @@ describe('FunctionType', function() {
 
   it('should throw if "default" value is not valid', function() {
     assert.throws(() =>
-        library.get({
+        library._create({
           type: 'function',
           name: 'typ1',
           default: 'abcd'

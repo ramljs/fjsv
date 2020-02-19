@@ -10,7 +10,7 @@ describe('AnyType', function() {
   });
 
   it('should create AnyType instance', function() {
-    let t = library.get({
+    let t = library._create({
       type: 'any',
       name: 'typ1',
       default: 0,
@@ -23,7 +23,7 @@ describe('AnyType', function() {
   });
 
   it('should create mixin types', function() {
-    let t = library.get({
+    let t = library._create({
       type: [{
         type: 'any',
         default: 1
@@ -38,7 +38,7 @@ describe('AnyType', function() {
   it('should not mix with other internals', function() {
     const tryType = (x) => {
       try {
-        library.get({
+        library._create({
           name: 'Type1',
           type: ['any', x]
         });
@@ -59,7 +59,7 @@ describe('AnyType', function() {
 
   it('should return cached validator for same options', function() {
     library.add('typ1', {type: 'any'});
-    const typ1 = library.get('typ1');
+    const typ1 = library._create('typ1');
     library.compile('typ1');
     assert.strictEqual(Object.keys(typ1._cache).length, 1);
     library.compile('typ1');

@@ -10,7 +10,7 @@ describe('ArrayType', function() {
   });
 
   it('should create array type if there is [] after type name', function() {
-    const t = library.get({
+    const t = library._create({
       type: 'string[]'
     });
     assert.deepStrictEqual(t.typeName, 'array');
@@ -18,7 +18,7 @@ describe('ArrayType', function() {
   });
 
   it('should set "items" attribute', function() {
-    const t = library.get({
+    const t = library._create({
       name: 'typ1',
       items: 'string'
     });
@@ -26,7 +26,7 @@ describe('ArrayType', function() {
   });
 
   it('should ignore "enum" attribute', function() {
-    const t = library.get({
+    const t = library._create({
       type: 'array',
       name: 'typ1',
       enum: [1, 2],
@@ -38,7 +38,7 @@ describe('ArrayType', function() {
   });
 
   it('should set "minItems" attribute', function() {
-    const t = library.get({
+    const t = library._create({
       type: 'array',
       name: 'typ1',
       minItems: 0
@@ -48,7 +48,7 @@ describe('ArrayType', function() {
 
   it('should throw if "minItems" value is not valid', function() {
     assert.throws(() =>
-        library.get({
+        library._create({
           type: 'array',
           name: 'typ1',
           minItems: 'abcd'
@@ -56,7 +56,7 @@ describe('ArrayType', function() {
   });
 
   it('should set "maxItems" attribute', function() {
-    const t = library.get({
+    const t = library._create({
       type: 'array',
       name: 'typ1',
       maxItems: 0
@@ -74,7 +74,7 @@ describe('ArrayType', function() {
   });
 
   it('should set "uniqueItems" attribute', function() {
-    const t = library.get({
+    const t = library._create({
       type: 'array',
       name: 'typ1',
       uniqueItems: 1

@@ -6,28 +6,28 @@ describe('TypeLibrary', function() {
 
   it('should create a type using name', function() {
     const library = new TypeLibrary();
-    let t = library.get('any');
+    let t = library._create('any');
     assert.strictEqual(t.name, 'any');
   });
 
   it('should create a type using name', function() {
     const library = new TypeLibrary();
-    let t = library.get('any');
+    let t = library._create('any');
     assert.strictEqual(t.name, 'any');
   });
 
   it('should create a type with object definition', function() {
     const library = new TypeLibrary();
-    let t = library.get({type: 'any', name: 'typ1'});
+    let t = library._create({type: 'any', name: 'typ1'});
     assert.strictEqual(t.name, 'typ1');
     assert.strictEqual(t.typeName, 'any');
-    t = library.get({type: ['any']});
+    t = library._create({type: ['any']});
     assert.strictEqual(t.typeName, 'any');
   });
 
   it('should create a type from nested schema', function() {
     const library = new TypeLibrary();
-    let t = library.get({
+    let t = library._create({
       type: {
         type: 'any',
         name: 'abc'
@@ -58,36 +58,36 @@ describe('TypeLibrary', function() {
   it('should return cached instance except creating a second one', function() {
     const library = new TypeLibrary();
     library.add('t1', 'any');
-    const t1 = library.get('t1');
-    assert.strictEqual(t1, library.get('t1'));
-    library.reset();
-    assert.notStrictEqual(t1, library.get('t1'));
+    const t1 = library._create('t1');
+    assert.strictEqual(t1, library._create('t1'));
+    library.clearCache();
+    assert.notStrictEqual(t1, library._create('t1'));
   });
 
   it('should check get() arguments', function() {
     const library = new TypeLibrary();
     assert.throws(() =>
-        library.get(), /Invalid argument/);
+        library._create(), /Invalid argument/);
   });
 
   it('should throw error if type not found', function() {
     const library = new TypeLibrary();
-    assert.throws(() => library.get({type: 'unknown'}), /Unknown type/);
+    assert.throws(() => library._create({type: 'unknown'}), /Unknown type/);
   });
 
   it('should throw error if lookup callback returns null', function() {
     const library = new TypeLibrary({lookupSchema: () => undefined});
-    assert.throws(() => library.get({type: 'unknown'}), /Unknown type/);
+    assert.throws(() => library._create({type: 'unknown'}), /Unknown type/);
   });
 
   it('should throw error if lookup callback returns same value', function() {
     const library = new TypeLibrary({lookupSchema: (v) => v});
-    assert.throws(() => library.get({type: 'unknown'}), /Unknown type/);
+    assert.throws(() => library._create({type: 'unknown'}), /Unknown type/);
   });
 
   it('should set default type', function() {
     const library = new TypeLibrary({defaults: {type: 'any'}});
-    let t = library.get({name: 'abc'});
+    let t = library._create({name: 'abc'});
     assert.strictEqual(t.typeName, 'any');
   });
 
@@ -100,15 +100,15 @@ describe('TypeLibrary', function() {
     library.add('Human', 'any');
     library.add('Animal', {type: 'any', default: true});
 
-    let t = library.get('Person');
+    let t = library._create('Person');
     assert.strictEqual(t.name, 'Person');
     assert.strictEqual(t.typeName, 'any');
 
-    t = library.get('Human');
+    t = library._create('Human');
     assert.strictEqual(t.name, 'Human');
     assert.strictEqual(t.typeName, 'any');
 
-    t = library.get('Animal');
+    t = library._create('Animal');
     assert.strictEqual(t.name, 'Animal');
     assert.strictEqual(t.typeName, 'any');
   });
@@ -119,7 +119,7 @@ describe('TypeLibrary', function() {
       compile() {
       }
     });
-    let t = library.get({type: 'custom'});
+    let t = library._create({type: 'custom'});
     assert.strictEqual(t.typeName, 'custom');
   });
 
@@ -149,7 +149,7 @@ describe('TypeLibrary', function() {
       },
       compile() {}
     });
-    library.get({type: 'custom'});
+    library._create({type: 'custom'});
     assert.strictEqual(ok, 1);
   });
 
@@ -162,7 +162,7 @@ describe('TypeLibrary', function() {
       },
       compile() {}
     });
-    library.get({type: 'custom', v1: 1, v2: 2});
+    library._create({type: 'custom', v1: 1, v2: 2});
     assert.deepStrictEqual(ok, {v1: 1, v2: 2});
   });
 
@@ -178,10 +178,10 @@ describe('TypeLibrary', function() {
         return n;
       }
     });
-    const t1 = library.get({type: 'CustomType1'});
-    const t2 = library.get({type: 'CustomType2', default: 21});
-    const t3 = library.get({type: 'CustomType3', default: 31});
-    const t4 = library.get({type: 'CustomType2'});
+    const t1 = library._create({type: 'CustomType1'});
+    const t2 = library._create({type: 'CustomType2', default: 21});
+    const t3 = library._create({type: 'CustomType3', default: 31});
+    const t4 = library._create({type: 'CustomType2'});
     assert.strictEqual(t1.typeName, 'string');
     assert.strictEqual(t2.typeName, 'any');
     assert.strictEqual(t3.typeName, 'any');
