@@ -1,33 +1,33 @@
 /* eslint-disable */
 const assert = require('assert');
-const {TypeLibrary, Base64Type} = require('..');
+const {Valgen, Base64Factory} = require('..');
 
-describe('Base64Type', function() {
+describe('Base64Factory', function() {
 
   let library;
   beforeEach(function() {
-    library = new TypeLibrary({defaults: {throwOnError: true}});
-    library.define('file', new Base64Type());
+    library = new Valgen({throwOnError: true});
+    library.define('file', new Base64Factory());
   });
 
   it('should not set "enum" attribute', function() {
-    const t = library._create({
+    const t = library.getType({
       type: 'file',
       name: 'typ1',
       enum: [1, 2, '3']
     });
-    assert.deepStrictEqual(t.enum, undefined);
+    assert.deepStrictEqual(t.get('enum'), undefined);
   });
 
   it('should set "default" attribute', function() {
-    const t = library._create({
+    const t = library.getType({
       type: 'file',
       name: 'typ1',
       default: 'RmlsZSBjb250ZW50',
       other: 1234
     });
-    assert.strictEqual(t.default, 'RmlsZSBjb250ZW50');
-    assert.strictEqual(t.other, undefined);
+    assert.strictEqual(t.get('default'), 'RmlsZSBjb250ZW50');
+    assert.strictEqual(t.get('other'), undefined);
   });
 
   it('should generate validator', function() {

@@ -1,100 +1,92 @@
 /* eslint-disable */
 const assert = require('assert');
-const {TypeLibrary} = require('..');
+const {Valgen} = require('..');
 
-describe('StringType', function() {
+describe('StringFactory', function() {
 
   let library;
   beforeEach(function() {
-    library = new TypeLibrary({defaults: {throwOnError: true}});
+    library = new Valgen({throwOnError: true});
   });
 
-  it('should create StringType instance', function() {
-    let t = library._create({
-      type: 'string',
-      name: 'typ1',
-      enum: [1, 2, '3']
+  it('should create StringFactory instance', function() {
+    let t = library.getType({
+      type: 'string'
     });
-    assert.strictEqual(t.name, 'typ1');
     assert.strictEqual(t.typeName, 'string');
   });
 
   it('should set "default" attribute as string', function() {
-    const t = library._create({
+    const t = library.getType({
       type: 'string',
-      name: 'typ1',
       default: 1
     });
-    assert.strictEqual(t.default, '1');
+    assert.strictEqual(t.get('default'), '1');
   });
 
   it('should set "enum" attribute as string', function() {
-    const t = library._create({
+    const t = library.getType({
       type: 'string',
-      name: 'typ1',
       enum: [1, 2, '3']
     });
-    assert.deepStrictEqual(t.enum, ['1', '2', '3']);
+    assert.deepStrictEqual(t.get('enum'), ['1', '2', '3']);
   });
 
   it('should throw if "enum" value is not an array', function() {
     assert.throws(() =>
-        library._create({
+        library.getType({
           type: 'string',
-          name: 'typ1',
           enum: 'abcd'
-        }), /Schema error at typ1\.enum\. "abcd" is not an array value/);
+        }), /"abcd" is not an array value/);
   });
 
   it('should set "minLength" attribute', function() {
-    const t = library._create({
+    const t = library.getType({
       type: 'string',
-      name: 'typ1',
       minLength: 0
     });
-    assert.strictEqual(t.minLength, 0);
+    assert.strictEqual(t.get('minLength'), 0);
   });
 
   it('should throw if "minLength" value is not valid', function() {
     assert.throws(() =>
-        library._create({
+        library.getType({
           type: 'string',
-          name: 'typ1',
           minLength: 'abcd'
-        }), /Schema error at typ1\.minLength\. "abcd" is not a valid integer value/);
+        }), /"abcd" is not a valid integer value/);
   });
 
   it('should set "maxLength" attribute', function() {
-    const t = library._create({
+    const t = library.getType({
       type: 'string',
-      name: 'typ1',
       maxLength: 0
     });
-    assert.strictEqual(t.maxLength, 0);
+    assert.strictEqual(t.get('maxLength'), 0);
   });
 
   it('should throw if "maxLength" value is not valid', function() {
     assert.throws(() =>
-        library._create({
+        library.getType({
           type: 'string',
-          name: 'typ1',
           maxLength: 'abcd'
-        }), /Schema error at typ1\.maxLength\. "abcd" is not a valid integer value/);
+        }), /"abcd" is not a valid integer value/);
   });
 
   it('should create mixin types', function() {
-    let t = library._create({
+    let t = library.getType({
       type: [{
         type: 'string',
         default: '1'
       }, {
         type: 'string',
-        pattern: 'abc'
+        pattern: 'abc',
+        maxLength: 10
       }],
       pattern: 'abcd'
     });
-    assert.strictEqual(t.default, '1');
-    assert.deepStrictEqual(t.pattern, [/abcd/]);
+    assert.strictEqual(t.get('default'), '1');
+    assert.strictEqual(t.get('maxLength'), 10);
+    assert.deepStrictEqual(t.get('pattern'), 'abcd');
   });
 
   it('should generate validator', function() {
@@ -103,10 +95,7 @@ describe('StringType', function() {
   });
 
   it('should validator accept strings and numbers in non-strict mode', function() {
-    const t = library._create({
-      name: 'typ1',
-      type: 'string'
-    });
+    const t = library.getType({type: 'string'});
     const validate = t.generate({throwOnError: true});
     assert.deepStrictEqual(validate(''), {valid: true, value: ''});
     assert.deepStrictEqual(validate(0), {valid: true, value: 0});
@@ -173,7 +162,7 @@ describe('StringType', function() {
   it('should validate patterns', function() {
     const validate = library.generate({
       type: 'string',
-      pattern: ['[abcd]+', '[1234]']
+      pattern: ['[abcd1234]+']
     });
     validate(1234);
     validate('ab');
@@ -212,7 +201,7 @@ describe('StringType', function() {
   });
 
   it('should extend', function() {
-    library.add('Type1', {
+    library.addSchema('Type1', {
       type: 'string',
       default: '12345'
     });

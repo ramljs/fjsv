@@ -1,17 +1,17 @@
 /* eslint-disable */
 const assert = require('assert');
-const {TypeLibrary, DateType} = require('..');
+const {Valgen, DateFactory} = require('..');
 
-describe('DateType', function() {
+describe('DateFactory', function() {
 
   let library;
   beforeEach(function() {
-    library = new TypeLibrary({defaults: {throwOnError: true}});
-    library.define('date', new DateType());
+    library = new Valgen({throwOnError: true});
+    library.define('date', new DateFactory());
   });
 
-  it('should create DateType instance', function() {
-    let t = library._create({
+  it('should create DateFactory instance', function() {
+    let t = library.getType({
       type: 'date',
       name: 'typ1'
     });
@@ -20,19 +20,20 @@ describe('DateType', function() {
   });
 
   it('should set "default" attribute', function() {
-    const t = library._create({
+    let t = library.getType({
       type: 'date',
       name: 'typ1',
       default: '2001-02-03T08:30:15'
     });
-    assert.strictEqual(t.default, '2001-02-03T08:30:15');
+    assert.strictEqual(t.get('default'), '2001-02-03T08:30:15');
+
     const d = new Date();
-    t.default = d;
-    assert.deepStrictEqual(t.default, d);
-    t.default = null;
-    assert.strictEqual(t.default, null);
-    t.default = undefined;
-    assert.strictEqual(t.default, undefined);
+    t = library.getType({
+      type: 'date',
+      name: 'typ1',
+      default: d
+    });
+    assert.deepStrictEqual(t.get('default'), d);
   });
 
   it('should throw if "default" value is not valid', function() {
@@ -45,28 +46,28 @@ describe('DateType', function() {
   });
 
   it('should not set "enum" attribute', function() {
-    const t = library._create({
+    const t = library.getType({
       type: 'date',
       name: 'typ1',
       enum: [1, 2, '3'],
       other: 123
     });
-    assert.deepStrictEqual(t.enum, undefined);
-    assert.deepStrictEqual(t.other, undefined);
+    assert.deepStrictEqual(t.get('enum'), undefined);
+    assert.deepStrictEqual(t.get('other'), undefined);
   });
 
   it('should set "format" attribute', function() {
-    const t = library._create({
+    const t = library.getType({
       type: 'date',
       name: 'typ1',
       format: 'time'
     });
-    assert.strictEqual(t.format, 'time');
+    assert.strictEqual(t.get('format'), 'time');
   });
 
   it('should throw if "format" value is not valid', function() {
     assert.throws(() =>
-        library._create({
+        library.getType({
           type: 'date',
           name: 'typ1',
           format: 'abcd'
@@ -318,13 +319,16 @@ describe('DateType', function() {
     assert.strictEqual(validate('2011-01-02T10:30:15Z').value, '2011-01-02T10:30:15Z');
     const d1 = new Date('2019-09-30T19:34:40.668Z');
     assert.strictEqual(validate(d1).value, '2019-09-30T19:34:40.668Z');
-    validate = library.generate({type: 'date', format: 'timestamp'}, {fastDateValidation: true});
+    validate = library.generate({
+      type: 'date',
+      format: 'timestamp'
+    }, {fastDateValidation: true});
     validate('2011-01-02');
   });
 
   it('should overwrite format names', function() {
-    const library = new TypeLibrary({defaults: {throwOnError: true}});
-    library.define('date', new DateType({
+    const library = new Valgen({defaults: {throwOnError: true}});
+    library.define('date', new DateFactory({
       dateFormats: {
         'date-only': 'date',
         'datetime-only': 'datetime',

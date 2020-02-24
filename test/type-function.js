@@ -1,42 +1,38 @@
 /* eslint-disable */
 const assert = require('assert');
-const {TypeLibrary, FunctionType} = require('..');
+const {Valgen, FunctionFactory} = require('..');
 
-describe('FunctionType', function() {
+describe('FunctionFactory', function() {
 
   let library;
   beforeEach(function() {
-    library = new TypeLibrary({defaults: {throwOnError: true}});
-    library.define('function', new FunctionType());
+    library = new Valgen({throwOnError: true});
+    library.define('function', new FunctionFactory());
   });
 
   it('should set "default" attribute as function', function() {
     const fn = () => 1;
-    const t = library._create({
+    const t = library.getType({
       type: 'function',
       default: fn
     });
-    assert.strictEqual(t.default, fn);
-    t.default = null;
-    assert.strictEqual(t.default, null);
-    t.default = undefined;
-    assert.strictEqual(t.default, undefined);
+    assert.strictEqual(t.get('default'), fn);
   });
 
   it('should not set "enum" attribute', function() {
-    const t = library._create({
+    const t = library.getType({
       type: 'function',
       name: 'typ1',
       enum: [1, 2, '3'],
       other: 123
     });
-    assert.deepStrictEqual(t.enum, undefined);
-    assert.deepStrictEqual(t.other, undefined);
+    assert.deepStrictEqual(t.get('enum'), undefined);
+    assert.deepStrictEqual(t.get('other'), undefined);
   });
 
   it('should throw if "default" value is not valid', function() {
     assert.throws(() =>
-        library._create({
+        library.getType({
           type: 'function',
           name: 'typ1',
           default: 'abcd'

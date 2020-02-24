@@ -1,8 +1,8 @@
 /* eslint-disable */
 const assert = require('assert');
-const {TypeLibrary} = require('..');
+const {Valgen} = require('..');
 
-describe('ObjectType', function() {
+describe('ObjectFactory', function() {
 
   let library;
   const obj1 = {a: 1, b: '2', c: 'c', d: [1, '2', 3.3], e: 1};
@@ -15,68 +15,68 @@ describe('ObjectType', function() {
   };
 
   beforeEach(function() {
-    library = new TypeLibrary({defaults: {throwOnError: true}});
+    library = new Valgen({throwOnError: true});
   });
 
-  it('should create ObjectType instance', function() {
-    let t = library._create({
+  it('should create ObjectFactory instance', function() {
+    let t = library.getType({
       type: 'object',
       name: 'typ1',
       other: 123
     });
     assert.strictEqual(t.name, 'typ1');
     assert.strictEqual(t.typeName, 'object');
-    assert.strictEqual(t.other, undefined);
+    assert.strictEqual(t.get('other'), undefined);
   });
 
   it('should create object type if there is {} after type name', function() {
-    const t = library._create({
+    const t = library.getType({
       type: 'string{}'
     });
     assert.deepStrictEqual(t.typeName, 'object');
-    assert.deepStrictEqual(t.additionalProperties, 'string');
+    assert.deepStrictEqual(t.get('additionalProperties'), 'string');
   });
 
   it('should set "discriminator" attribute', function() {
-    const t = library._create({
+    const t = library.getType({
       type: 'object',
       name: 'typ1',
       discriminator: 'kind'
     });
-    assert.deepStrictEqual(t.discriminator, 'kind');
+    assert.deepStrictEqual(t.get('discriminator'), 'kind');
   });
 
   it('should set "discriminatorValue" attribute', function() {
-    const t = library._create({
+    const t = library.getType({
       type: 'object',
       name: 'typ1',
       discriminator: 'kind',
       discriminatorValue: 'abc'
     });
-    assert.deepStrictEqual(t.discriminatorValue, 'abc');
+    assert.deepStrictEqual(t.get('discriminatorValue'), 'abc');
   });
 
   it('should set "additionalProperties" attribute', function() {
-    const t = library._create({
+    const t = library.getType({
       type: 'object',
       name: 'typ1',
       additionalProperties: false
     });
-    assert.deepStrictEqual(t.additionalProperties, false);
+    assert.deepStrictEqual(t.get('additionalProperties'), false);
   });
 
   it('should set "minProperties" attribute', function() {
-    const t = library._create({
+    const t = library.getType({
       type: 'object',
       name: 'typ1',
       minProperties: 0
     });
-    assert.deepStrictEqual(t.minProperties, 0);
+    assert.deepStrictEqual(t.get('minProperties'), 0);
   });
 
   it('should throw if "minProperties" value is not valid', function() {
     assert.throws(() =>
-        library._create({
+        library.getType({
           type: 'object',
           name: 'typ1',
           minProperties: 'abcd'
@@ -84,17 +84,17 @@ describe('ObjectType', function() {
   });
 
   it('should set "maxProperties" attribute', function() {
-    const t = library._create({
+    const t = library.getType({
       type: 'object',
       name: 'typ1',
       maxProperties: 0
     });
-    assert.deepStrictEqual(t.maxProperties, 0);
+    assert.deepStrictEqual(t.get('maxProperties'), 0);
   });
 
   it('should throw if "maxProperties" value is not valid', function() {
     assert.throws(() =>
-        library._create({
+        library.getType({
           type: 'object',
           name: 'typ1',
           maxProperties: 'abcd'
@@ -102,17 +102,17 @@ describe('ObjectType', function() {
   });
 
   it('should set "isTypeOf" attribute', function() {
-    const t = library._create({
+    const t = library.getType({
       type: 'object',
       name: 'typ1',
       isTypeOf: () => true
     });
-    assert.deepStrictEqual(typeof t.isTypeOf, 'function');
+    assert.deepStrictEqual(typeof t.get('isTypeOf'), 'function');
   });
 
   it('should throw if "isTypeOf" value is not a function', function() {
     assert.throws(() =>
-        library._create({
+        library.getType({
           type: 'object',
           name: 'typ1',
           isTypeOf: 'abcd'
@@ -120,13 +120,13 @@ describe('ObjectType', function() {
   });
 
   it('should set "properties" attribute', function() {
-    library.add('PersonName', {
+    library.addSchema('PersonName', {
       type: 'string'
     });
-    library.add('PersonAge', {
+    library.addSchema('PersonAge', {
       type: 'number'
     });
-    const t = library._create({
+    const t = library.getType({
       type: 'object',
       name: 'typ1',
       properties: {
@@ -136,44 +136,17 @@ describe('ObjectType', function() {
         }
       }
     });
-    assert.strictEqual(t.properties.p1.dataType.name, 'PersonName');
-    assert.strictEqual(t.properties.p1.dataType.typeName, 'string');
+
+    assert.strictEqual(t.get('properties.p1').propertyName, 'p1');
+    assert.strictEqual(t.get('properties.p1'), t.properties.p1);
+    assert.strictEqual(t.properties.p1.propertyName, 'p1');
+    assert.strictEqual(t.properties.p1.typeName, 'string');
     assert.strictEqual(t.properties.p1.required, true);
-    assert.strictEqual(t.properties.p2.dataType.typeName, 'number');
-  });
-
-  it('should use AnyType instance as property.type', function() {
-    const t = library._create({
-      type: 'object',
-      name: 'typ1',
-      properties: {
-        p1: {
-          type: library._create('string')
-        },
-        p2: library._create('number')
-      }
-    });
-    assert.strictEqual(t.properties.p1.dataType.typeName, 'string');
-    assert.strictEqual(t.properties.p2.dataType.typeName, 'number');
-  });
-
-  it('should set array of properties', function() {
-    const t = library._create({
-      type: 'object',
-      name: 'typ1',
-      properties: [
-        {name: 'p1', type: 'string'},
-        {name: 'p2', type: 'number'}
-      ]
-    });
-    assert.deepStrictEqual(t.properties.p1.name, 'p1');
-    assert.deepStrictEqual(t.properties.p1.dataType.typeName, 'string');
-    assert.deepStrictEqual(t.properties.p2.name, 'p2');
-    assert.deepStrictEqual(t.properties.p2.dataType.typeName, 'number');
+    assert.strictEqual(t.properties.p2.typeName, 'number');
   });
 
   it('should use ? to set properties required attribute to false', function() {
-    const t = library._create({
+    const t = library.getType({
       type: 'object',
       name: 'typ1',
       properties: {
@@ -186,7 +159,7 @@ describe('ObjectType', function() {
   });
 
   it('should use ! to set properties required attribute to false', function() {
-    const t = library._create({
+    const t = library.getType({
       type: 'object',
       name: 'typ1',
       properties: {
@@ -197,16 +170,39 @@ describe('ObjectType', function() {
   });
 
   it('should use propertiesRequired default value', function() {
-    library.defaults.propertiesRequired = true;
-    const t = library._create({
+    let t = library.getType({
       type: 'object',
       name: 'typ1',
       properties: {
-        'p1': 'string'
+        'id': 'string'
       }
     });
-    assert.deepStrictEqual(t.properties.p1.required, true);
-    library.defaults.propertiesRequired = undefined;
+    let validate = t.generate();
+    assert.throws(() => validate({}), /Error at "id"\. Value required/);
+
+    library.setOption('object.required', true);
+    t = library.getType({
+      type: 'object',
+      name: 'typ1',
+      properties: {
+        'id': 'string'
+      }
+    });
+    validate = t.generate();
+    assert.throws(() => validate({}), /Error at "id"\. Value required/);
+
+    library.setOption('object.required', false);
+    t = library.getType({
+      type: 'object',
+      name: 'typ1',
+      properties: {
+        'id': 'string'
+      }
+    });
+    validate = t.generate();
+    validate({});
+
+    library.setOption('object.required', undefined);
   });
 
   it('should generate validator', function() {
@@ -232,11 +228,7 @@ describe('ObjectType', function() {
             validate({...obj1, f: 'f'}),
         /Additional property "f" is not allowed/
     );
-    library = new TypeLibrary({
-      defaults: {
-        throwOnError: true, additionalProperties: false
-      }
-    });
+    library.setOption('object.additionalProperties', false);
     validate = library.generate({
       properties: properties1
     });
@@ -244,6 +236,7 @@ describe('ObjectType', function() {
             validate({...obj1, f: 'f'}),
         /Additional property "f" is not allowed/
     );
+    library.setOption('object.additionalProperties', undefined);
   });
 
   it('should allow additional properties if additionalProperties=true', function() {
@@ -253,17 +246,16 @@ describe('ObjectType', function() {
     }, {coerceTypes: true});
     assert.strictEqual(
         validate({...obj1, f: 'f'}).value.f, 'f');
-    library = new TypeLibrary({
-      defaults: {
-        throwOnError: true, additionalProperties: true
-      }
-    });
+
+    library.setOption('object.additionalProperties', true);
     validate = library.generate({
       properties: properties1,
       additionalProperties: true
     }, {coerceTypes: true});
     assert.strictEqual(
         validate({...obj1, f: 'f'}).value.f, 'f');
+
+    library.setOption('object.additionalProperties', undefined);
   });
 
   it('should use a type name for additionalProperties', function() {
@@ -355,7 +347,7 @@ describe('ObjectType', function() {
         }
       }
     };
-    library.lookupSchema = (n) => types[n];
+    library.schemaLookup = (n) => types[n];
 
     const validate = library.generate('Employee');
     assert.throws(() =>
@@ -370,132 +362,6 @@ describe('ObjectType', function() {
           employeeId: 1
         }).value,
         {kind: 'Employee', name: 'name', employeeId: 1});
-  });
-
-  it('should find right object in union using discriminator', function() {
-    const types = {
-      Person: {
-        type: 'object',
-        discriminator: 'kind',
-        properties: {
-          name: 'string',
-          kind: 'string'
-        }
-      },
-      Employee: {
-        type: 'Person',
-        discriminatorValue: 'employee',
-        properties: {
-          employeeId: 'string'
-        }
-      },
-      User: {
-        type: 'Person',
-        discriminatorValue: 'user',
-        properties: {
-          userId: 'string'
-        }
-      }
-    };
-    library.lookupSchema = (n) => types[n];
-
-    const validate = library.generate({
-      type: 'Employee',
-      additionalProperties: false,
-      coerceTypes: true
-    });
-    assert.throws(() =>
-            validate({kind: 'user', name: 'name'}),
-        /Value is not a type of "employee"/);
-    assert.throws(() => validate({name: 'name'}),
-        /Value is not a type of "employee"/);
-    assert.deepStrictEqual(
-        validate({
-          kind: 'employee',
-          name: 'name',
-          employeeId: 1
-        }).value,
-        {kind: 'employee', name: 'name', employeeId: 1});
-  });
-
-  it('should find right type using isTypeOf method', function() {
-    const types = {
-      Employee: {
-        properties: {
-          name: 'string',
-          employeeId: 'string'
-        }
-      },
-      User: {
-        properties: {
-          name: 'string',
-          userId: 'string'
-        }
-      }
-    };
-    library.lookupSchema = (n) => types[n];
-    let ok = 0;
-    const validate = library.generate({
-      type: 'Employee|User',
-      isTypeOf: (v, t) => {
-        ok = true;
-        if (t.properties.userId)
-          return !!v.userId;
-        if (t.properties.employeeId)
-          return !!v.employeeId;
-      }
-    });
-
-    assert.deepStrictEqual(
-        validate({
-          name: 'name',
-          employeeId: 1
-        }).value,
-        {name: 'name', employeeId: 1});
-    assert(ok, 'isTypeOf is not triggered');
-
-    ok = 0;
-    assert.deepStrictEqual(
-        validate({
-          name: 'name',
-          userId: 1
-        }).value,
-        {name: 'name', userId: 1});
-    assert(ok, 'isTypeOf is not triggered');
-  });
-
-  it('should find right object using best match', function() {
-    const types = {
-      Person: {
-        type: 'object',
-        properties: {
-          name: 'string'
-        }
-      },
-      Employee: {
-        properties: {
-          employeeId: 'string',
-          id: 'number'
-        }
-      },
-      User: {
-        properties: {
-          userId: 'string',
-          id: 'string'
-        }
-      }
-    };
-    library.lookupSchema = (n) => types[n];
-
-    const validate = library.generate({
-      type: '[Person, Employee|User]'
-    }, {coerceTypes: true});
-    assert.deepStrictEqual(
-        validate({userId: '1', name: 'name', id: 1}).value,
-        {userId: '1', name: 'name', id: '1'});
-    assert.deepStrictEqual(
-        validate({employeeId: '1', name: 'name', id: '1'}).value,
-        {employeeId: '1', name: 'name', id: 1});
   });
 
   it('should remove additional properties if removeAdditional=true', function() {
@@ -562,25 +428,47 @@ describe('ObjectType', function() {
   });
 
   it('should allow recursive properties', function() {
-    library.add({
+    library.addSchema({
       name: 'Node',
       properties: {
         id: 'number',
-        parent: 'Node',
-        items: 'Node[]'
+        parent: {type: 'Node', required: false}
       }
     });
-    const t = library._create('Node');
-    assert.strictEqual(t.properties.items.dataType.typeName, 'array');
-    assert.strictEqual(t.properties.items.dataType.items, t);
-    assert.strictEqual(t.properties.parent.dataType.properties.items.dataType.items, t);
-    const validate = t.generate();
-    validate({
+    const t = library.getType('Node');
+    const validate = t.generate({coerceTypes: true});
+    const o = {
       id: 1,
       parent: {
         id: 2
       }
+    };
+    assert.deepStrictEqual(validate(o).value, o);
+  });
+
+  it('should allow circular referencing in properties', function() {
+    library.addSchema({
+      name: 'Node',
+      type: 'Element',
+      properties: {
+        id: 'number'
+      }
     });
+    library.addSchema({
+      name: 'Element',
+      properties: {
+        tag: {type: 'Node', required: false}
+      }
+    });
+    const t = library.getType('Node');
+    const validate = t.generate();
+    const o = {
+      id: 1,
+      parent: {
+        id: 2
+      }
+    };
+    assert.deepStrictEqual(validate(o).value, o);
   });
 
   it('should resolve promises if resolvePromises=true', async function() {
@@ -599,6 +487,137 @@ describe('ObjectType', function() {
             b: 1
           }, c: 2
         });
+  });
+
+  it('should find validate object using discriminator', function() {
+    const types = {
+      Person: {
+        type: 'object',
+        discriminator: 'kind',
+        properties: {
+          name: 'string',
+          kind: 'string'
+        }
+      },
+      Employee: {
+        type: 'Person',
+        discriminatorValue: 'employee',
+        properties: {
+          employeeId: 'string'
+        }
+      }
+    };
+    library.schemaLookup = (n) => types[n];
+
+    const validate = library.generate({
+      type: 'Employee',
+      additionalProperties: false,
+      coerceTypes: true
+    });
+    assert.throws(() =>
+            validate({kind: 'user', name: 'name'}),
+        /Value is not a type of "employee"/);
+    assert.throws(() => validate({name: 'name'}),
+        /Value is not a type of "employee"/);
+    assert.deepStrictEqual(
+        validate({
+          kind: 'employee',
+          name: 'name',
+          employeeId: 1
+        }).value,
+        {kind: 'employee', name: 'name', employeeId: 1});
+  });
+
+  it('should find right union type using discriminator', function() {
+    const types = {
+      Person: {
+        type: 'object',
+        discriminator: 'kind',
+        properties: {
+          name: 'string',
+          kind: 'string'
+        }
+      },
+      Employee: {
+        type: 'Person',
+        discriminatorValue: 'employee',
+        properties: {
+          employeeId: 'string'
+        }
+      },
+      User: {
+        type: 'Person',
+        discriminatorValue: 'user',
+        properties: {
+          name: 'string',
+          userId: 'string'
+        }
+      }
+    };
+    library.schemaLookup = (n) => types[n];
+
+    const validate = library.generate({
+      type: 'Employee|User',
+      additionalProperties: false
+    }, {coerceTypes: true});
+    assert.throws(() => validate({name: 'name'}),
+        /Value does not match any of expected types/);
+    assert.throws(() =>
+            validate({kind: 'user', name: 'name'}),
+        /Error at "userId". Value required./);
+    assert.deepEqual(
+        validate({
+          kind: 'employee',
+          name: 'name',
+          employeeId: '1'
+        }).value,
+        {kind: 'employee', name: 'name', employeeId: 1});
+  });
+
+  it('should find right type using isTypeOf method', function() {
+    const types = {
+      Employee: {
+        properties: {
+          name: 'string',
+          employeeId: 'string'
+        }
+      },
+      User: {
+        properties: {
+          name: 'string',
+          userId: 'string'
+        }
+      }
+    };
+    library.schemaLookup = (n) => types[n];
+    let ok = 0;
+    const validate = library.generate({
+      type: 'Employee|User',
+      isTypeOf: (v, t) => {
+        ok = true;
+        if (t.get('properties.userId'))
+          return !!v.userId;
+        if (t.get('properties.employeeId'))
+          return !!v.employeeId;
+      }
+    });
+
+    assert.deepStrictEqual(
+        validate({
+          name: 'name',
+          employeeId: 1
+        }).value,
+        {name: 'name', employeeId: 1});
+    assert(ok, 'isTypeOf is not triggered');
+
+    ok = 0;
+    assert.deepStrictEqual(
+        validate({
+          name: 'name',
+          userId: 1
+        }).value,
+        {name: 'name', userId: 1});
+    assert(ok, 'isTypeOf is not triggered');
   });
 
 });

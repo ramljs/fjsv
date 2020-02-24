@@ -1,63 +1,45 @@
 /* eslint-disable */
 const assert = require('assert');
-const {TypeLibrary} = require('..');
+const {Valgen} = require('..');
 
-describe('BooleanType', function() {
+describe('BooleanFactory', function() {
 
   let library;
   beforeEach(function() {
-    library = new TypeLibrary({defaults: {throwOnError: true}});
+    library = new Valgen({throwOnError: true});
   });
 
-  it('should create BooleanType instance', function() {
-    let t = library._create({
+  it('should create BooleanFactory instance', function() {
+    let t = library.getType({
       type: 'boolean',
       name: 'typ1',
       other: 123
     });
     assert.strictEqual(t.name, 'typ1');
     assert.strictEqual(t.typeName, 'boolean');
-    assert.strictEqual(t.other, undefined);
+    assert.strictEqual(t.get('other'), undefined);
   });
 
   it('should set "default" attribute as boolean', function() {
-    const t = library._create({
+    const t = library.getType({
       type: 'boolean',
       name: 'typ1',
       default: 1
     });
-    assert.strictEqual(t.default, true);
-  });
-
-  it('should set "enum" attribute as boolean', function() {
-    const t = library._create({
-      type: 'boolean',
-      name: 'typ1',
-      enum: [1, 0]
-    });
-    assert.deepStrictEqual(t.enum, [true, false]);
-  });
-
-  it('should throw if "enum" value is not an array', function() {
-    assert.throws(() =>
-        library._create({
-          type: 'boolean',
-          name: 'typ1',
-          enum: 'abcd'
-        }), /Schema error at typ1\.enum\. "abcd" is not an array value/);
+    assert.strictEqual(t.get('default'), true);
   });
 
   it('should set "strictFormat" attribute as boolean', function() {
-    const t = library._create({
+    const t = library.getType({
       type: 'boolean',
       name: 'typ1',
       strictFormat: 1
     });
-    assert.strictEqual(t.strictFormat, true);
+    assert.strictEqual(t.get('strictFormat'), true);
   });
 
   it('should create mixin types', function() {
-    let t = library._create({
+    let t = library.getType({
       type: [{
         type: 'boolean'
       }, {
@@ -65,7 +47,7 @@ describe('BooleanType', function() {
         default: true
       }]
     });
-    assert.strictEqual(t.default, true);
+    assert.strictEqual(t.get('default'), true);
   });
 
   it('should generate validator', function() {

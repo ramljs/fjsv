@@ -1,22 +1,22 @@
 /* eslint-disable */
 const assert = require('assert');
-const {TypeLibrary, NilType} = require('..');
+const {Valgen, NilFactory} = require('..');
 
-describe('NilType', function() {
+describe('NilFactory', function() {
 
   let library;
   beforeEach(function() {
-    library = new TypeLibrary({defaults: {throwOnError: true}});
-    library.define('nil', new NilType());
+    library = new Valgen({throwOnError: true});
+    library.define('nil', new NilFactory());
   });
 
   it('should not set "default" attribute', function() {
-    const t = library._create({
+    const t = library.getType({
       type: 'nil',
       name: 'typ1',
       default: 1
     });
-    assert.strictEqual(t.default, undefined);
+    assert.strictEqual(t.get('default'), undefined);
   });
 
   it('should generate validator', function() {

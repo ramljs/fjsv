@@ -1,21 +1,25 @@
-import {TypeLibrary, ICompileOptions, TypeFactory, ValidateFunction} from "./TypeLibrary";
+import {Valgen, IGenerateOptions, TypeFactory, ValidateFunction} from "./Valgen";
 
 export declare const Failed: unique symbol;
 
 export class DataType {
-    readonly library: TypeLibrary;
+    readonly library: Valgen;
     readonly typeName: string;
     readonly factory: TypeFactory;
+    readonly predecessors?: DataType[];
+    id: number;
     name?: string;
+    schema: { [index: string]: any };
 
-    extend(instance?: object): DataType;
+    constructor(library: Valgen, typeName: string, factory: TypeFactory);
 
-    clone(): DataType;
+    create(instance: any, schema: any): DataType;
 
-    generate(options?: ICompileOptions): ValidateFunction;
+    generate(options?: IGenerateOptions): ValidateFunction;
 
     get(attr: string): any;
 
-    set(attribute: string, value: any);
+    set(key: string, value: any);
 
+    [index: string]: any;
 }

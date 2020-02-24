@@ -1,16 +1,16 @@
 /* eslint-disable */
 const assert = require('assert');
-const {TypeLibrary} = require('..');
+const {Valgen} = require('..');
 
-describe('ArrayType', function() {
+describe('ArrayFactory', function() {
 
   let library;
   beforeEach(function() {
-    library = new TypeLibrary({defaults: {throwOnError: true}});
+    library = new Valgen({throwOnError: true});
   });
 
   it('should create array type if there is [] after type name', function() {
-    const t = library._create({
+    const t = library.getType({
       type: 'string[]'
     });
     assert.deepStrictEqual(t.typeName, 'array');
@@ -18,7 +18,7 @@ describe('ArrayType', function() {
   });
 
   it('should set "items" attribute', function() {
-    const t = library._create({
+    const t = library.getType({
       name: 'typ1',
       items: 'string'
     });
@@ -26,29 +26,29 @@ describe('ArrayType', function() {
   });
 
   it('should ignore "enum" attribute', function() {
-    const t = library._create({
+    const t = library.getType({
       type: 'array',
       name: 'typ1',
       enum: [1, 2],
       other: 123,
       items: null
     });
-    assert.deepStrictEqual(t.enum, undefined);
-    assert.deepStrictEqual(t.items, null);
+    assert.deepStrictEqual(t.get('enum'), undefined);
+    assert.deepStrictEqual(t.items, undefined);
   });
 
   it('should set "minItems" attribute', function() {
-    const t = library._create({
+    const t = library.getType({
       type: 'array',
       name: 'typ1',
       minItems: 0
     });
-    assert.strictEqual(t.minItems, 0);
+    assert.strictEqual(t.get('minItems'), 0);
   });
 
   it('should throw if "minItems" value is not valid', function() {
     assert.throws(() =>
-        library._create({
+        library.getType({
           type: 'array',
           name: 'typ1',
           minItems: 'abcd'
@@ -56,12 +56,12 @@ describe('ArrayType', function() {
   });
 
   it('should set "maxItems" attribute', function() {
-    const t = library._create({
+    const t = library.getType({
       type: 'array',
       name: 'typ1',
       maxItems: 0
     });
-    assert.strictEqual(t.maxItems, 0);
+    assert.strictEqual(t.get('maxItems'), 0);
   });
 
   it('should throw if "maxItems" value is not valid', function() {
@@ -74,12 +74,12 @@ describe('ArrayType', function() {
   });
 
   it('should set "uniqueItems" attribute', function() {
-    const t = library._create({
+    const t = library.getType({
       type: 'array',
       name: 'typ1',
       uniqueItems: 1
     });
-    assert.strictEqual(t.uniqueItems, true);
+    assert.strictEqual(t.get('uniqueItems'), true);
   });
 
   it('should generate validator', function() {

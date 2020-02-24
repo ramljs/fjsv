@@ -1,29 +1,29 @@
 /* eslint-disable */
 const assert = require('assert');
-const {TypeLibrary} = require('..');
+const {Valgen} = require('..');
 
-describe('AnyType', function() {
+describe('AnyFactory', function() {
 
   let library;
   beforeEach(function() {
-    library = new TypeLibrary({defaults: {throwOnError: true}});
+    library = new Valgen({defaults: {throwOnError: true}});
   });
 
-  it('should create AnyType instance', function() {
-    let t = library._create({
+  it('should create AnyFactory instance', function() {
+    let t = library.getType({
       type: 'any',
-      name: 'typ1',
       default: 0,
+      enum: [1, 2],
       blabla: 1
     });
     assert.strictEqual(t.typeName, 'any');
-    assert.strictEqual(t.name, 'typ1');
-    assert.strictEqual(t.default, 0);
-    assert.strictEqual(t.blabla, undefined);
+    assert.strictEqual(t.get('default'), 0);
+    assert.deepEqual(t.get('enum'), undefined);
+    assert.strictEqual(t.get('blabla'), undefined);
   });
 
   it('should create mixin types', function() {
-    let t = library._create({
+    let t = library.getType({
       type: [{
         type: 'any',
         default: 1
@@ -32,24 +32,18 @@ describe('AnyType', function() {
         default: 2
       }]
     });
-    assert.strictEqual(t.default, 2);
+    assert.strictEqual(t.get('default'), 2);
   });
 
   it('should not mix with other internals', function() {
     const tryType = (x) => {
-      try {
-        library._create({
-          name: 'Type1',
+      assert.throws(() => {
+        library.getType({
           type: ['any', x]
         });
-      } catch (e) {
-        assert.strictEqual(e.message,
-            `Schema error at Type1.type[1]. "any" type can't be mixed with "${x}" type.`);
-        return;
-      }
-      assert(0, 'Failed');
+      }, (e) => e.message.includes(`"any" type can't be mixed with "${x}" type`));
     };
-    ['string', 'object', 'number', 'boolean'].forEach(tryType);
+    ['string', 'number', 'boolean'].forEach(tryType);
   });
 
   it('should generate validator', function() {
@@ -58,14 +52,14 @@ describe('AnyType', function() {
   });
 
   it('should return cached validator for same options', function() {
-    library.add('typ1', {type: 'any'});
-    const typ1 = library._create('typ1');
+    library.addSchema('typ1', {type: 'any', default: 1});
+    const typ1 = library.getType('typ1');
     library.generate('typ1');
-    assert.strictEqual(Object.keys(typ1._cache).length, 1);
+    assert.strictEqual(Object.keys(typ1._fnCache).length, 1);
     library.generate('typ1');
-    assert.strictEqual(Object.keys(typ1._cache).length, 1);
+    assert.strictEqual(Object.keys(typ1._fnCache).length, 1);
     library.generate('typ1', {resolvePromises: true});
-    assert.strictEqual(Object.keys(typ1._cache).length, 2);
+    assert.strictEqual(Object.keys(typ1._fnCache).length, 2);
   });
 
   it('should return default value if given value is null', function() {
@@ -91,12 +85,12 @@ describe('AnyType', function() {
     assert.strictEqual(validate(null).value, 2);
   });
 
-  it('should throw if mixing recursive', function() {
-    library.add('Type1', {
+  it('should detect circular referencing', function() {
+    library.addSchema('Type1', {
       type: ['Type1']
     });
     assert.throws(() => library.generate('Type1'),
-        /Schema error at Type1\.type\. Circular reference detected/);
+        /Circular reference detected/);
   });
 
   it('should generate async validator resolvePromises=true', function() {

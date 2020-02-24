@@ -1,33 +1,29 @@
 /* eslint-disable */
 const assert = require('assert');
-const {TypeLibrary, IntegerType} = require('..');
+const {Valgen} = require('..');
 
-describe('IntegerType', function() {
+describe('IntegerFactory', function() {
 
   let library;
   beforeEach(function() {
-    library = new TypeLibrary({defaults: {throwOnError: true}});
-    library.define('integer', new IntegerType());
+    library = new Valgen({throwOnError: true});
   });
 
-  it('should create IntegerType instance', function() {
-    let t = library._create({
+  it('should create IntegerFactory instance', function() {
+    let t = library.getType({
       type: 'integer',
-      name: 'typ1',
       other: 123
     });
-    assert.strictEqual(t.name, 'typ1');
     assert.strictEqual(t.typeName, 'integer');
-    assert.strictEqual(t.other, undefined);
+    assert.strictEqual(t.get('other'), undefined);
   });
 
   it('should set "default" attribute as integer', function() {
-    const t = library._create({
+    const t = library.getType({
       type: 'integer',
-      name: 'typ1',
       default: '5.1'
     });
-    assert.strictEqual(t.default, 5);
+    assert.strictEqual(t.get('default'), 5);
   });
 
   it('should throw if "default" value is not valid', function() {
@@ -40,18 +36,11 @@ describe('IntegerType', function() {
   });
 
   it('should set "enum" attribute as string array', function() {
-    const t = library._create({
+    const t = library.getType({
       type: 'integer',
-      name: 'typ1',
-      enum: [1, 2, '3']
+      enum: [0, 1, 2, '3']
     });
-    assert.deepStrictEqual(t.enum, [1, 2, 3]);
-    t.enum = [1, 0];
-    assert.deepStrictEqual(t.enum, [1, 0]);
-    t.enum = null;
-    assert.strictEqual(t.enum, null);
-    t.enum = undefined;
-    assert.strictEqual(t.enum, undefined);
+    assert.deepStrictEqual(t.get('enum'), [0, 1, 2, 3]);
   });
 
   it('should throw if "enum" value is not array', function() {
@@ -64,18 +53,11 @@ describe('IntegerType', function() {
   });
 
   it('should set "format" attribute', function() {
-    const t = library._create({
+    const t = library.getType({
       type: 'integer',
-      name: 'typ1',
       format: 'int'
     });
-    assert.strictEqual(t.format, 'int');
-    t.format = 'int8';
-    assert.strictEqual(t.format, 'int8');
-    t.format = null;
-    assert.strictEqual(t.format, null);
-    t.format = undefined;
-    assert.strictEqual(t.format, undefined);
+    assert.strictEqual(t.get('format'), 'int');
   });
 
   it('should throw if "format" value is not valid', function() {
@@ -88,12 +70,12 @@ describe('IntegerType', function() {
   });
 
   it('should set "minimum" attribute', function() {
-    const t = library._create({
+    const t = library.getType({
       type: 'integer',
       name: 'typ1',
       minimum: 0.1
     });
-    assert.strictEqual(t.minimum, 0);
+    assert.strictEqual(t.get('minimum'), 0);
   });
 
   it('should throw if "minimum" value is not valid', function() {
@@ -106,12 +88,12 @@ describe('IntegerType', function() {
   });
 
   it('should set "maximum" attribute', function() {
-    const t = library._create({
+    const t = library.getType({
       type: 'integer',
       name: 'typ1',
       maximum: 10.1
     });
-    assert.strictEqual(t.maximum, 10);
+    assert.strictEqual(t.get('maximum'), 10);
   });
 
   it('should throw if "maximum" value is not valid', function() {
@@ -124,12 +106,12 @@ describe('IntegerType', function() {
   });
 
   it('should set "multipleOf" attribute', function() {
-    const t = library._create({
+    const t = library.getType({
       type: 'integer',
       name: 'typ1',
       multipleOf: 1.2
     });
-    assert.strictEqual(t.multipleOf, 1);
+    assert.strictEqual(t.get('multipleOf'), 1);
   });
 
   it('should throw if "multipleOf" value is not valid', function() {

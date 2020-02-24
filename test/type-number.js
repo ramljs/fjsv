@@ -1,149 +1,127 @@
 /* eslint-disable */
 const assert = require('assert');
-const {TypeLibrary} = require('..');
+const {Valgen} = require('..');
 
-describe('NumberType', function() {
+describe('NumberFactory', function() {
 
   let library;
   beforeEach(function() {
-    library = new TypeLibrary({defaults: {throwOnError: true}});
+    library = new Valgen({throwOnError: true});
   });
 
-  it('should create NumberType instance', function() {
-    let t = library._create({
+  it('should create NumberFactory instance', function() {
+    let t = library.getType({
       type: 'number',
-      name: 'typ1',
       other: 123
     });
-    assert.strictEqual(t.name, 'typ1');
     assert.strictEqual(t.typeName, 'number');
-    assert.strictEqual(t.other, undefined);
+    assert.strictEqual(t.get('other'), undefined);
   });
 
   it('should set "default" attribute as number', function() {
-    const t = library._create({
+    const t = library.getType({
       type: 'number',
       name: 'typ1',
       default: '1.2'
     });
-    assert.strictEqual(t.default, 1.2);
+    assert.strictEqual(t.get('default'), 1.2);
   });
 
   it('should throw if "default" value is not valid', function() {
     assert.throws(() =>
-        library._create({
+        library.getType({
           type: 'number',
           name: 'typ1',
           default: 'abcd'
-        }), /Schema error at typ1\.default\. "abcd" is not a valid number value/);
+        }), /"abcd" is not a valid number value/);
   });
 
   it('should set "enum" attribute as string array', function() {
-    const t = library._create({
+    const t = library.getType({
       type: 'number',
-      name: 'typ1',
       enum: [1, 2, '3']
     });
-    assert.deepStrictEqual(t.enum, [1, 2, 3]);
-  });
-
-  it('should set "enum" attribute as string array', function() {
-    const t = library._create({
-      type: 'number',
-      name: 'typ1',
-      enum: [1, 2, '3']
-    });
-    assert.deepStrictEqual(t.enum, [1, 2, 3]);
+    assert.deepStrictEqual(t.get('enum'), [1, 2, 3]);
   });
 
   it('should throw if "enum" value is not an array', function() {
     assert.throws(() =>
-        library._create({
+        library.getType({
           type: 'number',
-          name: 'typ1',
           enum: 'abcd'
-        }), /Schema error at typ1\.enum\. "abcd" is not an array value/);
+        }), /"abcd" is not an array value/);
   });
 
   it('should set "format" attribute', function() {
-    const t = library._create({
+    const t = library.getType({
       type: 'number',
-      name: 'typ1',
       format: 'int'
     });
-    assert.strictEqual(t.format, 'int');
+    assert.strictEqual(t.get('format'), 'int');
   });
 
   it('should throw if "format" value is not valid', function() {
     assert.throws(() =>
-        library._create({
+        library.getType({
           type: 'number',
-          name: 'typ1',
           format: 'abcd'
-        }), /Schema error at typ1\.format\. "abcd" is not a valid number format identifier/);
+        }), /"abcd" is not a valid number format identifier/);
   });
 
   it('should set "format" attribute', function() {
-    const t = library._create({
+    const t = library.getType({
       type: 'number',
-      name: 'typ1',
       strictFormat: 1
     });
-    assert.strictEqual(t.strictFormat, true);
+    assert.strictEqual(t.get('strictFormat'), true);
   });
 
   it('should set "minimum" attribute', function() {
-    const t = library._create({
+    const t = library.getType({
       type: 'number',
-      name: 'typ1',
       minimum: '0'
     });
-    assert.strictEqual(t.minimum, 0);
+    assert.strictEqual(t.get('minimum'), 0);
   });
 
   it('should throw if "minimum" value is not valid', function() {
     assert.throws(() =>
-        library._create({
+        library.getType({
           type: 'number',
-          name: 'typ1',
           minimum: 'abcd'
-        }), /Schema error at typ1\.minimum\. "abcd" is not a valid number value/);
+        }), /"abcd" is not a valid number value/);
   });
 
   it('should set "maximum" attribute', function() {
-    const t = library._create({
+    const t = library.getType({
       type: 'number',
-      name: 'typ1',
       maximum: '10.5'
     });
-    assert.strictEqual(t.maximum, 10.5);
+    assert.strictEqual(t.get('maximum'), 10.5);
   });
 
   it('should throw if "maximum" value is not valid', function() {
     assert.throws(() =>
-        library._create({
+        library.getType({
           type: 'number',
-          name: 'typ1',
           maximum: 'abcd'
-        }), /Schema error at typ1\.maximum\. "abcd" is not a valid number value/);
+        }), /"abcd" is not a valid number value/);
   });
 
   it('should set "multipleOf" attribute', function() {
-    const t = library._create({
+    const t = library.getType({
       type: 'number',
-      name: 'typ1',
       multipleOf: '1.2'
     });
-    assert.strictEqual(t.multipleOf, 1.2);
+    assert.strictEqual(t.get('multipleOf'), 1.2);
   });
 
   it('should throw if "multipleOf" value is not valid', function() {
     assert.throws(() =>
-        library._create({
+        library.getType({
           type: 'number',
-          name: 'typ1',
           multipleOf: 'abcd'
-        }), /Schema error at typ1\.multipleOf\. "abcd" is not a valid number value/);
+        }), /"abcd" is not a valid number value/);
   });
 
   it('should generate validator', function() {
