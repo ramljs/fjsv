@@ -19,7 +19,8 @@ describe('StringFactory', function() {
   it('should set "default" attribute as string', function() {
     const t = library.getType({
       type: 'string',
-      default: 1
+      default: 1,
+      enum: undefined
     });
     assert.strictEqual(t.get('default'), '1');
   });
