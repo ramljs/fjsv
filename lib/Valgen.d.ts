@@ -29,7 +29,8 @@ export interface IGenerateOptions {
     removeNull?: boolean;
     fastDateValidation?: boolean;
     fastObjectValidation?: boolean;
-    operation?: 'get' | 'create' | 'update' | 'patch' | 'delete';
+    // 'get' | 'create' | 'update' | 'patch' | 'delete'
+    operation?: string;
 }
 
 export type ValidateFunction = (value: any) => IValidationResult;
