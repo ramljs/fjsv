@@ -1,11 +1,13 @@
 import {DataType} from "./DataType";
 
-declare type TypeDef = string | object;
+declare type TypeSchemaDef = string | TypeSchema;
 
-declare type TypeLookupMethod = (typeName: string) => TypeDef;
+declare type TypeLookupMethod = (typeName: string) => TypeSchemaDef;
 
 export interface TypeSchema {
     type: string;
+
+    [key: string]: any;
 }
 
 export interface TypeFactory {
@@ -28,8 +30,6 @@ export interface IGenerateOptions {
     fastDateValidation?: boolean;
     fastObjectValidation?: boolean;
     operation?: 'get' | 'create' | 'update' | 'patch' | 'delete';
-
-    [index: string]: any;
 }
 
 export type ValidateFunction = (value: any) => IValidationResult;
@@ -55,32 +55,38 @@ export interface IValgenOptions {
 }
 
 export class Valgen implements IValgenOptions {
-    protected _cache: { [name: string]: object };
-    protected _lookupSchemas: { [name: string]: object };
-    protected _uses: { [name: string]: Valgen };
+    protected _instances: { [name: string]: DataType };
+    protected _lookupSchemas: { [name: string]: TypeSchema };
     protected _stacks: string[][];
+    private _idSeq: number;
     defaultType: string;
+    baseTypes: { [name: string]: DataType };
     schemaLookup?: TypeLookupMethod;
-    baseTypes: { [name: string]: object };
-    schemas: { [index: string]: TypeDef };
+    schemas: { [index: string]: TypeSchemaDef };
     throwOnError?: boolean;
 
     constructor(options?: IValgenOptions);
 
-    add(name: string, schema: object);
+    addSchema(name: string, schema: TypeSchemaDef);
 
     clearCache();
 
-    generate(schema: string | object, options?: IGenerateOptions): ValidateFunction;
+    generate(schema: TypeSchemaDef, options?: IGenerateOptions): ValidateFunction;
 
     define(name: string, factory: TypeFactory): DataType;
 
-    use(name: string, library: Valgen): void;
+    normalizeSchema(schema: TypeSchemaDef): TypeSchema;
 
-    protected getType(schemaOrName: string | object): DataType;
+    getType(name: TypeSchemaDef): DataType;
 
-    protected _normalizeSchema(schema: TypeDef): object;
+    setOption(key: string, value: any): void;
 
-    protected _parseTypeName(v: string): TypeDef;
+    protected _lookupForSchema(name: string): TypeSchemaDef;
+
+    protected _getBaseTypeName(schema: TypeSchemaDef): string;
+
+    protected _parseTypeName(v: string): TypeSchemaDef;
+
+    protected get _stack(): string[];
 
 }

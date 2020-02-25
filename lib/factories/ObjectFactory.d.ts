@@ -4,8 +4,6 @@ import {DataType} from '../DataType';
 
 export interface IObjectPropertySchema extends TypeSchema {
     required?: boolean;
-
-    [key: string]: any;
 }
 
 export interface IObjectTypeSchema extends TypeSchema {
