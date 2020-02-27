@@ -1,10 +1,12 @@
 import {AnyFactory} from './AnyFactory';
-import {TypeSchema} from '../Valgen';
+import {Valgen} from '../Valgen';
 
-export interface IBooleanTypeSchema extends TypeSchema {
-    default?: boolean;
+export namespace BooleanFactory {
+    export interface ITypeSchema extends Valgen.ITypeSchema {
+        default?: boolean;
+    }
 }
 
 export class BooleanFactory extends AnyFactory {
-    schema: IBooleanTypeSchema;
+    schema: BooleanFactory.ITypeSchema;
 }

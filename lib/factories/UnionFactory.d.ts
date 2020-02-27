@@ -1,11 +1,13 @@
 import {AnyFactory} from './AnyFactory';
-import {TypeSchema} from '../Valgen';
+import {Valgen} from '../Valgen';
 
-export interface IUnionTypeSchema extends TypeSchema {
-    anyOf?: Array<string | TypeSchema>;
+export namespace UnionFactory {
+    export interface ITypeSchema extends Valgen.ITypeSchema {
+        anyOf?: Array<string | Valgen.ITypeSchema>;
+    }
 }
 
 export class UnionFactory extends AnyFactory {
-    schema: IUnionTypeSchema;
+    schema: UnionFactory.ITypeSchema;
     anyOf?: AnyFactory[];
 }

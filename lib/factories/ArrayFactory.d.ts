@@ -1,13 +1,16 @@
 import {AnyFactory} from './AnyFactory';
-import {TypeSchema} from '../Valgen';
+import {Valgen} from '../Valgen';
 
-export interface IArrayTypeSchema extends TypeSchema {
-    default?: any[];
-    items?: string | TypeSchema;
-    minItems?: number;
-    maxItems?: number;
+export namespace ArrayFactory {
+    export interface ITypeSchema extends Valgen.ITypeSchema {
+        default?: any[];
+        items?: string | Valgen.ITypeSchema;
+        minItems?: number;
+        maxItems?: number;
+    }
 }
 
+
 export class ArrayFactory extends AnyFactory {
-    schema: IArrayTypeSchema;
+    schema: ArrayFactory.ITypeSchema;
 }

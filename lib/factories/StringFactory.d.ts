@@ -1,14 +1,16 @@
 import {AnyFactory} from './AnyFactory';
-import {TypeSchema} from '../Valgen';
+import {Valgen} from '../Valgen';
 
-export interface IStringTypeSchema extends TypeSchema {
-    default?: string;
-    enum?: string[];
-    pattern?: string;
-    minLength?: number;
-    maxLength?: number;
+export namespace StringFactory {
+    export interface ITypeSchema extends Valgen.ITypeSchema {
+        default?: string;
+        enum?: string[];
+        pattern?: string;
+        minLength?: number;
+        maxLength?: number;
+    }
 }
 
 export class StringFactory extends AnyFactory {
-    schema: IStringTypeSchema;
+    schema: StringFactory.ITypeSchema;
 }

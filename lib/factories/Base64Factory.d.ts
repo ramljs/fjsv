@@ -1,10 +1,12 @@
 import {AnyFactory} from './AnyFactory';
-import {TypeSchema} from '../Valgen';
+import {Valgen} from '../Valgen';
 
-export interface IBase64TypeSchema extends TypeSchema {
-    default?: string;
+export namespace Base64Factory {
+    export interface ITypeSchema extends Valgen.ITypeSchema {
+        default?: string;
+    }
 }
 
 export class Base64Factory extends AnyFactory {
-    schema: IBase64TypeSchema;
+    schema: Base64Factory.ITypeSchema;
 }

@@ -1,29 +1,30 @@
 import {AnyFactory} from './AnyFactory';
-import {TypeSchema} from '../Valgen';
+import {Valgen} from '../Valgen';
 
-declare interface IDateFormatMap {
-    date?: string,
-    datetime?: string,
-    timestamp?: string,
-    time?: string,
-    rfc2616?: string
+export namespace DateFactory {
+    export interface ITypeSchema extends Valgen.ITypeSchema {
+        default?: string;
+        format?: string;
+    }
+    export interface IDateFormatMap {
+        date?: string,
+        datetime?: string,
+        timestamp?: string,
+        time?: string,
+        rfc2616?: string
+    }
+    export interface IOptions {
+        dateFormats?: IDateFormatMap;
+        defaultFormat?: string;
+    }
 }
 
-export interface IDateTypeOptions {
-    dateFormats?: IDateFormatMap;
-    defaultFormat?: string;
-}
-
-export interface IDateTypeSchema extends TypeSchema {
-    default?: string;
-    format?: string;
-}
 
 export class DateFactory extends AnyFactory {
 
-    schema: IDateTypeSchema;
+    schema: DateFactory.ITypeSchema;
     defaultFormat?: string;
-    dateFormats: IDateFormatMap;
+    dateFormats: DateFactory.IDateFormatMap;
 
     TIMESTAMP_PATTERN: RegExp;
     TIMESTAMP_STRICT_PATTERN: RegExp;
@@ -34,5 +35,5 @@ export class DateFactory extends AnyFactory {
     TIME_PATTERN: RegExp;
     TIME_STRICT_PATTERN: RegExp;
 
-    constructor(options?: IDateTypeOptions);
+    constructor(options?: DateFactory.IOptions);
 }

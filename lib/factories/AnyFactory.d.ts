@@ -1,27 +1,28 @@
-import {IGenerateOptions, TypeFactory, TypeSchema, ValidateFunction} from "../Valgen";
+import {Valgen} from "../Valgen";
 import {DataType} from "../DataType";
 
-export interface IFunctionData {
-    code: string;
-    variables?: {
-        [index: string]: any;
-    };
+export namespace AnyFactory {
+    export interface FunctionData {
+        code: string;
+        variables?: {
+            [index: string]: any;
+        };
+    }
+    export interface TypeSchema extends Valgen.ITypeSchema {
+        default?: any;
+    }
 }
 
-export interface IAnyTypeSchema extends TypeSchema {
-    default?: any;
-}
+export class AnyFactory implements Valgen.ITypeFactory {
 
-export class AnyFactory implements TypeFactory {
-
-    schema: IAnyTypeSchema;
+    schema: AnyFactory.TypeSchema;
     options: any;
 
-    generate(type: DataType, options?: IGenerateOptions, orgOptions?: IGenerateOptions): ValidateFunction;
+    generate(type: DataType, options?: Valgen.IGenerateOptions, orgOptions?: Valgen.IGenerateOptions): Valgen.ValidateFunction;
 
     normalizeAttribute: (attr: string, value: any) => any;
 
-    normalizeCompileOptions(options?: IGenerateOptions): IGenerateOptions;
+    normalizeCompileOptions(options?: Valgen.IGenerateOptions): Valgen.IGenerateOptions;
 
-    protected _generateValidationCode(dataType: DataType, options: IGenerateOptions, orgOptions?: IGenerateOptions): IFunctionData;
+    protected _generateValidationCode(dataType: DataType, options: Valgen.IGenerateOptions, orgOptions?: Valgen.IGenerateOptions): AnyFactory.FunctionData;
 }

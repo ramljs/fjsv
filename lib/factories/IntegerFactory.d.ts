@@ -1,13 +1,14 @@
-import {NumberFactory, IntegerFormat, INumberTypeOptions} from './NumberFactory';
+import {NumberFactory} from './NumberFactory';
 
-
-export interface IIntegerTypeOptions extends INumberTypeOptions {
-    defaultFormat?: IntegerFormat;
+export namespace IntegerFactory {
+    export interface IOptions extends NumberFactory.IOptions {
+        defaultFormat?: NumberFactory.IntegerFormatType;
+    }
 }
 
 export class IntegerFactory extends NumberFactory {
 
-    defaultFormat?: IntegerFormat;
+    defaultFormat?: NumberFactory.IntegerFormatType;
 
-    constructor(options?: IIntegerTypeOptions);
+    constructor(options?: IntegerFactory.IOptions);
 }

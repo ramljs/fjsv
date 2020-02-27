@@ -1,10 +1,12 @@
 import {AnyFactory} from './AnyFactory';
-import {TypeSchema} from '../Valgen';
+import {Valgen} from '../Valgen';
 
-export interface IFunctionTypeSchema extends TypeSchema {
-    default?: Function;
+export namespace FunctionFactory {
+    export interface ITypeSchema extends Valgen.ITypeSchema {
+        default?: Function;
+    }
 }
 
 export class FunctionFactory extends AnyFactory {
-    schema: IFunctionTypeSchema;
+    schema: FunctionFactory.ITypeSchema;
 }
