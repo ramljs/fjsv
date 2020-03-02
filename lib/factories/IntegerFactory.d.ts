@@ -2,13 +2,13 @@ import {NumberFactory} from './NumberFactory';
 
 export namespace IntegerFactory {
     export interface IOptions extends NumberFactory.IOptions {
-        defaultFormat?: NumberFactory.IntegerFormatType;
+        format?: NumberFactory.IntegerFormatType;
     }
 }
 
 export class IntegerFactory extends NumberFactory {
 
-    defaultFormat?: NumberFactory.IntegerFormatType;
+    format?: NumberFactory.IntegerFormatType;
 
     constructor(options?: IntegerFactory.IOptions);
 }

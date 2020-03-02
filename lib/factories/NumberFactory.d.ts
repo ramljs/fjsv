@@ -17,7 +17,7 @@ export namespace NumberFactory {
     }
 
     export interface IOptions {
-        defaultFormat?: NumberFormatType;
+        format?: NumberFormatType;
     }
 
 }
@@ -29,7 +29,7 @@ export const MaxValues: { [format: string]: number };
 
 export class NumberFactory extends AnyFactory {
     schema: NumberFactory.ITypeSchema;
-    defaultFormat?: NumberFactory.NumberFormatType;
+    format?: NumberFactory.NumberFormatType;
 
     constructor(options?: NumberFactory.IOptions);
 

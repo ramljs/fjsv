@@ -15,7 +15,7 @@ export namespace DateFactory {
     }
     export interface IOptions {
         dateFormats?: IDateFormatMap;
-        defaultFormat?: string;
+        format?: string;
     }
 }
 
@@ -23,7 +23,7 @@ export namespace DateFactory {
 export class DateFactory extends AnyFactory {
 
     schema: DateFactory.ITypeSchema;
-    defaultFormat?: string;
+    format?: string;
     dateFormats: DateFactory.IDateFormatMap;
 
     TIMESTAMP_PATTERN: RegExp;
