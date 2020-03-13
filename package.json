@@ -1,7 +1,7 @@
 {
   "name": "valgen",
   "description": "Fast type validation generator for JavaScript",
-  "version": "3.1.3",
+  "version": "3.1.4",
   "author": "Panates",
   "contributors": [
     "Eray Hanoglu <e.hanoglu@panates.com>",
