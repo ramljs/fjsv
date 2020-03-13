@@ -1,4 +1,3 @@
-/* eslint-disable */
 const assert = require('assert');
 const {Valgen, Base64Factory} = require('..');
 

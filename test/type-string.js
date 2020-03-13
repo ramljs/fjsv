@@ -1,4 +1,3 @@
-/* eslint-disable */
 const assert = require('assert');
 const {Valgen} = require('..');
 
@@ -101,7 +100,7 @@ describe('StringFactory', function() {
     assert.deepStrictEqual(validate(''), {valid: true, value: ''});
     assert.deepStrictEqual(validate(0), {valid: true, value: 0});
     assert.deepStrictEqual(validate(1.1), {valid: true, value: 1.1});
-    assert.throws(() => validate(false), /Value must be a string/);
+    assert.deepStrictEqual(validate(false), {valid: true, value: false});
     assert.throws(() => validate([]), /Value must be a string/);
     assert.throws(() => validate({}), /Value must be a string/);
   });
@@ -177,6 +176,7 @@ describe('StringFactory', function() {
     assert.deepStrictEqual(validate('0'), {valid: true, value: '0'});
     assert.deepStrictEqual(validate(0), {valid: true, value: '0'});
     assert.deepStrictEqual(validate(1.1), {valid: true, value: '1.1'});
+    assert.deepStrictEqual(validate(false), {valid: true, value: 'false'});
   });
 
   it('should coerce value to default if null', function() {
