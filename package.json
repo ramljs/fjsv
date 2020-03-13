@@ -27,8 +27,8 @@
   "dependencies": {
     "object-hash": "^2.0.3",
     "putil-merge": "^3.6.0",
-    "putil-promisify": "^1.6.0",
-    "putil-varhelpers": "^0.0.4"
+    "putil-promisify": "^1.7.1",
+    "putil-varhelpers": "^0.0.5"
   },
   "devDependencies": {
     "eslint": "^6.8.0",
