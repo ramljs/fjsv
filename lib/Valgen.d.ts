@@ -11,10 +11,7 @@ export namespace Valgen {
     }
 
     export interface ITypeFactory {
-        create?: (instance: DataType) => void;
-        generate: (base: DataType, options?: IGenerateOptions, orgOptions?: IGenerateOptions) => ValidateFunction;
-        normalizeCompileOptions?: (options?: IGenerateOptions) => IGenerateOptions;
-        normalizeAttribute: (attr: string, value: any, schema?: any) => any;
+        generate: (base: DataType, options?: IGenerateOptions) => ValidateFunction;
     }
 
     export interface IGenerateOptions {

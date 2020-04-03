@@ -307,6 +307,7 @@ describe('DateFactory', function() {
   });
 
   it('should validate in fast-mode', function() {
+    library.setOption('date.fast', true);
     let validate = library.generate({type: 'date', format: 'timestamp'},
         {coerceTypes: true, fastDateValidation: true});
     assert.strictEqual(validate('2011-01-02').value, '2011-01-02T00:00:00Z');
@@ -323,6 +324,7 @@ describe('DateFactory', function() {
       format: 'timestamp'
     }, {fastDateValidation: true});
     validate('2011-01-02');
+    library.setOption('date.fast', undefined);
   });
 
   it('should overwrite format names', function() {

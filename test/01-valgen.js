@@ -130,19 +130,6 @@ describe('Valgen', function() {
         validator.define('custom', {}), /Factory must contain a "generate" function/);
   });
 
-  it('should call "create" function of custom type factory', function() {
-    const validator = vg();
-    let ok = 0;
-    validator.define('custom', {
-      create() {
-        ok = 1;
-      },
-      generate() {}
-    });
-    validator.getType({type: 'custom'});
-    assert.strictEqual(ok, 1);
-  });
-
   it('should call lookup callback for custom types', function() {
     const validator = vg({
       schemaLookup: (n) => {
