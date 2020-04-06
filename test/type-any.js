@@ -5,7 +5,7 @@ describe('AnyFactory', function() {
 
   let library;
   beforeEach(function() {
-    library = new Valgen({defaults: {throwOnError: true}});
+    library = new Valgen({throwOnError: true});
   });
 
   it('should create AnyFactory instance', function() {
@@ -45,7 +45,7 @@ describe('AnyFactory', function() {
     ['string', 'number', 'boolean'].forEach(tryType);
   });
 
-  it('should generate validator', function() {
+  it('should validate', function() {
     const validate = library.generate('any');
     assert.strictEqual(typeof validate, 'function');
   });

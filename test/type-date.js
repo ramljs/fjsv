@@ -307,9 +307,8 @@ describe('DateFactory', function() {
   });
 
   it('should validate in fast-mode', function() {
-    library.setOption('date.fast', true);
-    let validate = library.generate({type: 'date', format: 'timestamp'},
-        {coerceTypes: true, fastDateValidation: true});
+    let validate = library.generate({type: 'date', format: 'timestamp', fast: true},
+        {coerceTypes: true});
     assert.strictEqual(validate('2011-01-02').value, '2011-01-02T00:00:00Z');
     assert.strictEqual(validate('2011-01-02T10:30').value, '2011-01-02T10:30:00Z');
     assert.strictEqual(validate('2011-01-02T10:30:15').value, '2011-01-02T10:30:15Z');
@@ -321,10 +320,10 @@ describe('DateFactory', function() {
     assert.strictEqual(validate(d1).value, '2019-09-30T19:34:40.668Z');
     validate = library.generate({
       type: 'date',
-      format: 'timestamp'
-    }, {fastDateValidation: true});
+      format: 'timestamp',
+      fast: true
+    });
     validate('2011-01-02');
-    library.setOption('date.fast', undefined);
   });
 
   it('should overwrite format names', function() {

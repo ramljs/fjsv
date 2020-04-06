@@ -24,10 +24,7 @@ export namespace Valgen {
         maxObjectErrors?: number;
         removeAdditional?: boolean | 'all';
         removeNull?: boolean;
-        fastDateValidation?: boolean;
-        fastObjectValidation?: boolean;
-        // 'get' | 'create' | 'update' | 'patch' | 'delete'
-        operation?: string;
+        operation?: string; // 'get' | 'create' | 'update' | 'patch' | 'delete'
     }
 
     export type ValidateFunction = (value: any) => IValidationResult;

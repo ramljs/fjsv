@@ -5,6 +5,7 @@ export namespace DateFactory {
     export interface ITypeSchema extends Valgen.ITypeSchema {
         default?: string;
         format?: string;
+        fast?: boolean;
     }
     export interface IDateFormatMap {
         date?: string,
