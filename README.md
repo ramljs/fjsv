@@ -1,11 +1,11 @@
-# Valgen
+# VALGEN
 
 [![NPM Version][npm-image]][npm-url]
 [![NPM Downloads][downloads-image]][downloads-url]
 [![CircleCI][circleci-image]][circleci-url]
 [![Test Coverage][coveralls-image]][coveralls-url]
 
-Fast type validation generator.
+Fast runtime type validator, converter and io (encoding/decoding) library.
 
 ## Installation
 

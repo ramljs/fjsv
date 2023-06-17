@@ -6,6 +6,7 @@ function clearPackageJson() {
   delete json.private;
   delete json.scripts;
   delete json.devDependencies;
+  delete json['auto-changelog'];
   fs.writeFileSync(path.resolve(__dirname, '../build/package.json'), JSON.stringify(json, undefined, 2));
 }
 
