@@ -42,7 +42,7 @@ export function isDate(options?: IsDateOptions) {
 
 
 export interface IsDateStringOptions extends ValidationOptions {
-  format?: string;
+  format?: string | string[];
 }
 
 /**
@@ -51,19 +51,18 @@ export interface IsDateStringOptions extends ValidationOptions {
  * @validator isDateString
  */
 export function isDateString(options?: IsDateStringOptions) {
+  const inputFormat = options?.format;
+  const coerceFormat = Array.isArray(options?.format) ? options?.format[0] : options?.format;
   return validator<string, Date | number | string>('isDateString',
       function (input: unknown, context: Context): Nullish<string> {
-        if (input && typeof input !== 'string' && context.coerce) {
-          const d = dayjs(input as any);
-          if (d.isValid())
-            return options?.format ? d.format(options?.format) : d.toISOString()
-        }
-        if (typeof input === 'string') {
-          const d = dayjs(input, options?.format);
-          if (d.isValid())
+        if (typeof input === 'string' || input instanceof Date) {
+          const d = dayjs(input, inputFormat);
+          if (d.isValid()) {
+            if (context.coerce && options?.format || input instanceof Date)
+              return coerceFormat ? d.format(coerceFormat) : d.toISOString();
             return input;
+          }
         }
-
         context.failure({
               message: `{{label}} is not a valid date formatted${
                   options?.format ? " (" + options.format + ")" : ''
