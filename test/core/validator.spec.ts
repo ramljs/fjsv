@@ -32,7 +32,7 @@ describe("validator", function () {
       errors: [{
         rule: 'isNumber',
         value: 'x',
-        message: 'Value not a valid number',
+        message: 'Value is not a valid number',
       }]
     });
   });

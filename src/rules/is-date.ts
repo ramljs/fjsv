@@ -55,10 +55,14 @@ export function isDateString(options?: IsDateStringOptions) {
   const coerceFormat = Array.isArray(options?.format) ? options?.format[0] : options?.format;
   return validator<string, Date | number | string>('isDateString',
       function (input: unknown, context: Context): Nullish<string> {
-        if (typeof input === 'string' || input instanceof Date) {
+        if (input instanceof Date) {
+          const d = dayjs(input)
+          if (d.isValid())
+            return coerceFormat ? d.format(coerceFormat) : d.toISOString();
+        } else if (typeof input === 'string') {
           const d = dayjs(input, inputFormat);
           if (d.isValid()) {
-            if (context.coerce && options?.format || input instanceof Date)
+            if (context.coerce && options?.format)
               return coerceFormat ? d.format(coerceFormat) : d.toISOString();
             return input;
           }

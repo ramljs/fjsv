@@ -13,7 +13,7 @@ export type ObjectSchema =
 export interface IsObjectOptions<T> extends ValidationOptions {
   name?: string;
   ctor?: Type<T>,
-  additionalFields?: boolean | Validator<any, any>;
+  additionalFields?: boolean | Validator<any, any> | 'ignore';
   caseInSensitive?: boolean;
   detectCircular?: boolean;
 }
@@ -36,16 +36,8 @@ export function isObject<T extends object = object, I = object>(
   const additionalFields = options?.additionalFields ?? false;
   const caseInSensitive = !!options?.caseInSensitive;
   const detectCircular = !!options?.detectCircular;
-  if (options) {
-    delete options.name;
-    delete options.ctor;
-    delete options.additionalFields;
-    delete options.caseInSensitive;
-    delete options.detectCircular;
-  }
-
   const propertyRules: Record<any, Validator<any, any>> = {};
-  const propertyOptions: Record<any, RequiredSome<PropertyOptions, 'as'>> = {}
+  const propertyOptions: Record<any, RequiredSome<PropertyOptions, 'as'>> = {};
   Object.keys(schema).forEach(k => {
     const n = schema[k];
     const key = caseInSensitive ? k.toLowerCase() : k;
@@ -59,8 +51,7 @@ export function isObject<T extends object = object, I = object>(
       propertyOptions[key] = {as: k};
     } else
       throw new TypeError(`Invalid definition in validation schema (${k})`);
-  })
-  const schemaKeys = Object.keys(propertyRules);
+  });
 
   const _rule = validator<T, object>('isObject',
       function (
@@ -71,14 +62,7 @@ export function isObject<T extends object = object, I = object>(
           context.failure(`{{label}} must be an object`);
           return;
         }
-        const keyMap = [...Object.keys(input), ...schemaKeys]
-            .reduce((a, k) => {
-              if (caseInSensitive)
-                a[k.toLowerCase()] = k;
-              else a[k] = k;
-              return a;
-            }, {} as any);
-        const keys = Object.keys(keyMap);
+        const keys = [...Object.keys(input), ...Object.keys(schema)];
         const l = keys.length;
         let i = 0;
         let inputKey: string;
@@ -98,16 +82,20 @@ export function isObject<T extends object = object, I = object>(
 
         const rootName = context.root?.input.context;
         const location = context.input.location || '';
+        const processedSchemaKeys: Record<string, boolean> = {};
 
         // Iterate object keys and perform rules
         for (i = 0; i < l; i++) {
           inputKey = keys[i];
-          schemaKey = keyMap[inputKey];
+          schemaKey = caseInSensitive ? inputKey.toLowerCase() : inputKey;
           v = input[inputKey];
           _propRule = propertyRules[schemaKey] ||
               (isValidator(additionalFields) ? additionalFields : undefined)
 
           if (_propRule) {
+            if (processedSchemaKeys[schemaKey])
+              continue;
+            processedSchemaKeys[schemaKey] = true;
             const subCtx = context.extend(_propRule);
             if (ctorName) {
               if (rootName && rootName !== ctorName)
@@ -119,8 +107,12 @@ export function isObject<T extends object = object, I = object>(
             subCtx.input.location = location + (location ? '.' : '') + schemaKey;
             subCtx.input.property = schemaKey;
             v = _propRule[kValidatorFn](v, subCtx, _propRule);
-          } else if (v !== undefined && !additionalFields)
-            context.failure(`${ctorName || 'Object'} does not accept additional fields`);
+          } else if (v !== undefined) {
+            if (additionalFields === 'ignore')
+              continue;
+            if (!additionalFields)
+              context.failure(`${ctorName || 'Object'} has no field '${inputKey}' and does not accept additional fields`);
+          }
 
           if (v !== undefined)
             out[propertyOptions[schemaKey]?.as || schemaKey] = v;
