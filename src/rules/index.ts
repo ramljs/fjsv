@@ -1,5 +1,6 @@
 export * from './is-any.js';
 export * from './is-array.js';
+export * from './is-bigint.js';
 export * from './is-boolean.js';
 export * from './is-date.js';
 export * from './is-empty.js';
