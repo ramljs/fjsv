@@ -1,7 +1,7 @@
 {
   "name": "valgen",
   "description": "Fast runtime type validator, converter and io (encoding/decoding) library",
-  "version": "4.0.0-alpha.4",
+  "version": "4.0.0-alpha.5",
   "author": "Panates",
   "private": true,
   "contributors": [
@@ -13,7 +13,7 @@
     "url": "https://github.com/panates/valgen.git"
   },
   "dependencies": {
-    "dayjs": "^1.11.8",
+    "dayjs": "^2.0.0-alpha.4",
     "validator": "^13.9.0"
   },
   "devDependencies": {
