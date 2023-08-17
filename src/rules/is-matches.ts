@@ -15,16 +15,20 @@ export function isMatches(
   const regExp = format instanceof RegExp ? format : new RegExp(format);
   const formatName = options?.formatName;
   return validator<string, string>('matches',
-      function (input: unknown, context: Context): Nullish<string> {
+      function (
+          input: unknown,
+          context: Context,
+          _this
+      ): Nullish<string> {
         if (input == null)
           return;
         if (typeof input === 'string' && regExp.test(input))
           return input;
-        context.failure({
-          message: `{{label}} does not match ${formatName || 'requested'} format`,
-          format,
-          formatName
-        });
+        context.fail(_this,
+            `{{label}} does not match ${formatName || 'requested'} format`,
+            input,
+            {format, formatName}
+        );
       }, options
   )
 }

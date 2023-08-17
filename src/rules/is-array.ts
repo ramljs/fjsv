@@ -1,5 +1,5 @@
 import {
-  Context, kValidatorFn, Nullish,
+  Context, Nullish,
   ValidationOptions, Validator, validator,
 } from '../core/index.js';
 
@@ -13,29 +13,35 @@ export function isArray<T, I>(
     options?: ValidationOptions
 ) {
   return validator<T[], I[] | I>('isArray',
-      function (input: unknown, context: Context): Nullish<T[]> {
+      function (
+          input: unknown,
+          context: Context,
+          _this
+      ): Nullish<T[]> {
         if (input != null && context.coerce && !Array.isArray(input))
           input = [input];
         if (!Array.isArray(input)) {
-          context.failure(`{{label}} is not an array`);
+          context.fail(_this, `{{label}} is not an array`, input);
           return;
         }
         if (!itemValidator)
           return input as T[];
-        const location = context.input.location || '';
-        const itemContext = context.extend(itemValidator);
-        let i;
-        let v;
+        const location = context.location || '';
+        const itemContext = context.extend();
+        let i: number;
+        let v: any;
         const l = input.length;
         const out: any[] = [];
         for (i = 0; i < l; i++) {
           v = input[i];
-          itemContext.input.value = v;
-          itemContext.input.label = ((context.input.label || context.input.property) || 'Item') +
-              `[${i}]`;
-          itemContext.input.property = i;
-          itemContext.input.location = location + '[' + i + ']';
-          out.push(itemValidator[kValidatorFn](v, itemContext, itemValidator) as T);
+          itemContext.scope = input;
+          itemContext.location = location + '[' + i + ']';
+          itemContext.label = context.label
+              ? context.label + `[${i}]`
+              : `Item at (${i})`;
+          itemContext.index = i;
+          v = itemValidator(v, itemContext) as T;
+          out.push(v);
         }
         return out;
       }, options

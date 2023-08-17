@@ -10,7 +10,11 @@ const FALSE_PATTERN = /^false|f|0|no|n$/i;
  */
 export function isBoolean(options?: ValidationOptions) {
   return validator<boolean | undefined, unknown>('isBoolean',
-      function (input: unknown, context: Context): Nullish<boolean> {
+      function (
+          input: unknown,
+          context: Context,
+          _this
+      ): Nullish<boolean> {
         if (input != null && typeof input !== 'boolean' && context.coerce) {
           if (typeof input === 'string') {
             if (TRUE_PATTERN.test(input)) return true;
@@ -22,7 +26,7 @@ export function isBoolean(options?: ValidationOptions) {
         }
         if (typeof input === 'boolean')
           return input;
-        context.failure(`{{label}} is not a valid boolean`);
+        context.fail(_this, `{{label}} is not a valid boolean`, input);
       }, options
   );
 }

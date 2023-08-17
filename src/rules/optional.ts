@@ -1,6 +1,6 @@
 import { Nullish } from 'ts-gems';
 import {
-  Context, kValidatorFn,
+  Context,
   ValidationOptions, Validator, validator
 } from '../core/index.js';
 
@@ -16,7 +16,7 @@ export function optional<T, I>(
       function (input: Nullish<I>, context: Context): Nullish<T> {
         if (input == null)
           return input as any;
-        return nested[kValidatorFn](input as I, context, nested as any) as T;
+        return nested(input as I, context) as T;
       }, options
   )
 }
@@ -31,16 +31,15 @@ export function required<T, I>(
     options?: ValidationOptions
 ) {
   return validator<Nullish<T>, I>('required',
-      function (input: I, context: Context): Nullish<T> {
+      function (input: I, context: Context, _this): Nullish<T> {
         if (input == null) {
-          context.failure(`{{label}} is required`);
+          context.fail(_this, `{{label}} is required`, input);
           return;
         }
-        return nested[kValidatorFn](input, context, nested as any) as T;
+        return nested(input, context) as T;
       }, options
   )
 }
-
 
 
 /**
@@ -49,13 +48,13 @@ export function required<T, I>(
  */
 export function exists(options?: ValidationOptions) {
   return validator<any, unknown>('exists',
-      function (input: unknown, context: Context) {
+      function (input: unknown, context: Context, _this) {
         if (input !== undefined ||
-            (context.input.value && context.parent &&
-                Object.getOwnPropertyDescriptor(context.input.value, context.input.property as any))
+            (context.scope &&
+                Object.getOwnPropertyDescriptor(context.scope, input as any))
         )
           return input;
-        context.failure(`{{label}} must exist`);
+        context.fail(_this, `{{label}} must exist`, input);
       }, options
   );
 

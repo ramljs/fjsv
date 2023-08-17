@@ -17,7 +17,11 @@ export interface IsDateOptions extends ValidationOptions {
  */
 export function isDate(options?: IsDateOptions) {
   return validator<Date, Date | number | string>('isDate',
-      function (input: unknown, context: Context): Nullish<Date> {
+      function (
+          input: unknown,
+          context: Context,
+          _this
+      ): Nullish<Date> {
         if (input != null && !(input instanceof Date) && context.coerce) {
           if (typeof input === 'string') {
             const d = dayjs(input, options?.format);
@@ -28,13 +32,13 @@ export function isDate(options?: IsDateOptions) {
         }
         if (input && input instanceof Date && !isNaN(input.getTime()))
           return input;
-        context.failure({
-              message: `{{label}} is not a valid Date instance` +
-                  (context.coerce
-                      ? ` or a date formatted${options?.format ? " (" + options.format + ")" : ''} string`
-                      : ''),
-              format: options?.format
-            }
+        context.fail(_this,
+            `{{label}} is not a valid Date instance` +
+            (context.coerce
+                ? ` or a date formatted${options?.format ? " (" + options.format + ")" : ''} string`
+                : ''),
+            input,
+            {format: options?.format}
         );
       }, omitKeys(options || {}, ['format'])
   );
@@ -54,7 +58,11 @@ export function isDateString(options?: IsDateStringOptions) {
   const inputFormat = options?.format;
   const coerceFormat = Array.isArray(options?.format) ? options?.format[0] : options?.format;
   return validator<string, Date | number | string>('isDateString',
-      function (input: unknown, context: Context): Nullish<string> {
+      function (
+          input: unknown,
+          context: Context,
+          _this
+      ): Nullish<string> {
         if (input instanceof Date) {
           const d = dayjs(input)
           if (d.isValid())
@@ -67,12 +75,12 @@ export function isDateString(options?: IsDateStringOptions) {
             return input;
           }
         }
-        context.failure({
-              message: `{{label}} is not a valid date formatted${
-                  options?.format ? " (" + options.format + ")" : ''
-              } string`,
-              format: options?.format
-            }
+        context.fail(_this,
+            `{{label}} is not a valid date formatted${
+                options?.format ? " (" + options.format + ")" : ''
+            } string`,
+            input,
+            {format: options?.format}
         );
       }, omitKeys(options || {}, ['format'])
   );

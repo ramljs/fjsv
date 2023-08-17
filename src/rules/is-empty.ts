@@ -8,7 +8,11 @@ type IsEmptyInput = string | any[] | object | Set<any> | Map<any, any>;
  */
 export function isEmpty(options?: ValidationOptions) {
   return validator<IsEmptyInput, IsEmptyInput>('isEmpty',
-      function (input: unknown, context: Context) {
+      function (
+          input: unknown,
+          context: Context,
+          _this
+      ) {
         if (input != null) {
           if (typeof input === 'string') {
             if (!input)
@@ -27,11 +31,10 @@ export function isEmpty(options?: ValidationOptions) {
               return input;
           }
         }
-        context.failure(`{{label}} is not empty`);
+        context.fail(_this, `{{label}} is not empty`, input);
       }, options
   )
 }
-
 
 /**
  * Checks if value is a not empty. Value should be string, array, set, map or object
@@ -39,7 +42,11 @@ export function isEmpty(options?: ValidationOptions) {
  */
 export function isNotEmpty(options?: ValidationOptions) {
   return validator<IsEmptyInput, IsEmptyInput>('isNotEmpty',
-      function (input: unknown, context: Context) {
+      function (
+          input: unknown,
+          context: Context,
+          _this
+      ) {
         if (input != null) {
           if (typeof input === 'string') {
             if (input)
@@ -58,7 +65,7 @@ export function isNotEmpty(options?: ValidationOptions) {
               return input;
           }
         }
-        context.failure(`{{label}} is empty`);
+        context.fail(_this, `{{label}} is empty`, input);
       }, options
   )
 }

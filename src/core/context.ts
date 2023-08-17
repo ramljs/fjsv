@@ -1,38 +1,26 @@
+import { omitUndefined } from '../helpers/omit-undefined.js';
 import { kOptions } from './constants.js';
 import type { ErrorIssue, ExecutionOptions, OnFailFunction } from './types';
 import { ValidationError } from './validation-error.js';
-import type { Validator } from './validator';
+import type { Validator } from './validator.js';
 
 const VARIABLE_REPLACE_PATTERN = /{{([^}]*)}}/g;
 const OPTIONAL_VAR_PATTERN = /^([^?]+)(?:\||(.*))?$/;
 
-
-export namespace Context {
-
-  export interface InputDetails {
-    context?: string;
-    root?: string;
-    value?: any;
-    label?: string;
-    location?: string;
-    property?: string | number;
-
-    [key: string]: any;
-  }
-}
-
 export class Context implements ExecutionOptions {
-  rule: Validator<any>;
   errors: ErrorIssue[] = [];
   maxErrors?: number;
   onFail?: OnFailFunction;
   coerce?: boolean;
-  input: Context.InputDetails = {};
-  parent?: Context;
-  root?: Context;
+  root?: string;
+  location?: string;
+  scope?: object;
+  context?: string;
+  property?: string;
+  index?: number;
+  label?: string;
 
-  constructor(rule: Validator<any>, options?: ExecutionOptions) {
-    this.rule = rule;
+  constructor(options?: ExecutionOptions) {
     if (options?.maxErrors != null)
       this.maxErrors = options.maxErrors;
     if (typeof options?.onFail === 'function')
@@ -41,51 +29,63 @@ export class Context implements ExecutionOptions {
       this.coerce = options?.coerce;
   }
 
-  failure(message: Partial<ErrorIssue> | string | Error): void {
-    const issue: ErrorIssue =
-        (typeof message === 'object'
-                ? {...message, message: message.message}
-                : {message: '' + message}
-        ) as ErrorIssue;
-    issue.rule = this.rule.id;
-    Object.assign(issue, this.input);
-    if (this.onFail) {
+  fail(rule: Validator,
+       message: string | Error,
+       value: any,
+       details?: Record<string, any>
+  ): void {
+    const issue = omitUndefined<ErrorIssue>({
+      message: message instanceof Error ? message.message : String(message),
+      rule: rule.id,
+      root: this.root,
+      location: this.location,
+      context: this.context,
+      property: this.property,
+      index: this.index,
+      label: this.label,
+      value,
+      ...details
+    });
+    issue.value = value;
+
+    const onFail = this.onFail || rule[kOptions].onFail;
+    if (onFail) {
       const proto = Object.getPrototypeOf(this);
-      const x = this.onFail(issue, this, proto.onFail);
+      const superOnFail = proto.onFail !== onFail ? proto.onFail : undefined;
+      const x = onFail(issue, this, superOnFail);
       if (!x)
         return;
-      if (typeof x === 'object') {
-        delete x.id;
-        delete x.input;
+      if (typeof x === 'object')
         Object.assign(issue, x);
-      } else
+      else
         issue.message = String(x);
     }
-    issue.message = ('' + issue.message).replace(VARIABLE_REPLACE_PATTERN, (x, g: string) => {
-      const m = OPTIONAL_VAR_PATTERN.exec(g);
-      if (!m)
-        return x;
-      const k = m[1];
-      const v = this.input[k] ??
-          (m[1] === 'label' ? this.input.property : undefined);
-      if (v != null) return '`' + v + '`';
-      if (m[2])
-        return m[2];
-      return m[1] === 'label' ? 'Value' : x;
-    })
+    issue.message = ('' + issue.message)
+        .replace(VARIABLE_REPLACE_PATTERN, (x, g: string) => {
+          const m = OPTIONAL_VAR_PATTERN.exec(g);
+          if (!m)
+            return x;
+          const k = m[1];
+          let v = issue[k];
+          if (!v && m[1] === 'label' && (this.label || this.property))
+            v = '`' + (this.label || this.property) + '`'
+          if (v != null) return v;
+          if (m[2])
+            return m[2];
+          return m[1] === 'label' ? 'Value' : x;
+        })
 
     this.errors.push(issue);
     if (this.errors.length >= (this.maxErrors ?? Infinity))
       throw new ValidationError(this.errors);
   }
 
-  extend(rule: Validator<any, any>, options?: ExecutionOptions): Context {
-    const extended = new Context(rule, {onFail: undefined, ...rule[kOptions], ...options});
+  extend(options?: ExecutionOptions): Context {
+    const extended = new Context({onFail: undefined, ...options});
     Object.setPrototypeOf(extended, this);
     delete (extended as any).errors;
-    extended.parent = this;
-    extended.root = this.root || this;
     return extended;
   }
+
 
 }

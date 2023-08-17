@@ -7,7 +7,11 @@ import { Context, Nullish, ValidationOptions, validator } from '../core/index.js
  */
 export function isInteger(options?: ValidationOptions) {
   return validator<number, unknown>('isInteger',
-      function (input: unknown, context: Context): Nullish<number> {
+      function (
+          input: unknown,
+          context: Context,
+          _this
+      ): Nullish<number> {
         if (input != null && typeof input !== 'number' && context.coerce) {
           if (typeof input === 'string')
             input = parseFloat(input);
@@ -19,7 +23,7 @@ export function isInteger(options?: ValidationOptions) {
         }
         if (typeof input === 'number' && !isNaN(input) && Number.isInteger(input))
           return input;
-        context.failure(`{{label}} is not a valid integer number`);
+        context.fail(_this, `{{label}} is not a valid integer number`, input);
       }, options
   );
 }

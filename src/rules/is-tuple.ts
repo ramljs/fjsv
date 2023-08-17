@@ -1,7 +1,4 @@
-import {
-  Context, kValidatorFn,
-  ValidationOptions, Validator, validator
-} from '../core/index.js';
+import { Context, ValidationOptions, Validator, validator } from '../core/index.js';
 
 /**
  * Validates if value is "tuple" and applies validation for each item.
@@ -43,28 +40,31 @@ export function isTuple(
     options?: ValidationOptions
 ) {
   return validator<any>('isTuple',
-      function (input: unknown, context: Context) {
+      function (input: unknown, context: Context, _this) {
         if (input != null && context.coerce && !Array.isArray(input))
           input = [input];
         if (!Array.isArray(input)) {
-          context.failure(`{{label}} is not a valid tuple`);
+          context.fail(_this, `{{label}} is not a tuple`, input);
           return;
         }
-        const location = context.input.location || '';
+        const location = context.location || '';
         let itemRule: Validator<any>;
-        let i;
+        let i: number;
+        let v: any;
         const l = input.length;
         const out: any[] = [];
         const nl = items.length;
+        const itemContext = context.extend();
         for (i = 0; i < l && i < nl; i++) {
           itemRule = items[i];
-          const itemContext = context.extend(itemRule);
-          itemContext.input.value = input[i];
-          itemContext.input.label = ((context.input.label || context.input.property) || 'Item') +
+          itemContext.scope = input;
+          itemContext.label = context.label ? context.label + `[${i}]` : undefined;
+          itemContext.index = i;
+          itemContext.location = location + '[' + i + ']';
+          itemContext.label = (itemContext.label || itemContext.property || 'Value at ') +
               `[${i}]`;
-          itemContext.input.property = i;
-          itemContext.input.location = location + '[' + i + ']';
-          out.push(itemRule[kValidatorFn](input[i], itemContext, itemRule) ?? null);
+          v = itemRule(input[i], itemContext);
+          out.push(v);
         }
         return context.errors.length ? undefined : out;
       }, options

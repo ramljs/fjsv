@@ -8,7 +8,7 @@ import { Context, ValidationOptions, validator } from '../core/index.js';
  */
 export function isNumber(options?: ValidationOptions) {
   return validator<number, unknown>('isNumber',
-      function (input: unknown, context: Context): Nullish<number> {
+      function (input: unknown, context: Context, _this): Nullish<number> {
         if (input != null && typeof input !== 'number' && context.coerce) {
           if (typeof input === 'string')
             input = parseFloat(input);
@@ -20,7 +20,7 @@ export function isNumber(options?: ValidationOptions) {
         }
         if (typeof input === 'number' && !isNaN(input))
           return input;
-        context.failure(`{{label}} is not a valid number`);
+        context.fail(_this, `{{label}} is not a valid number`, input);
       }, options
   );
 }

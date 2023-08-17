@@ -12,10 +12,10 @@ export function isUUID(
     options?: ValidationOptions
 ) {
   return validator<string, string>('isUUID',
-      function (input: unknown, context: Context): Nullish<string> {
+      function (input: unknown, context: Context, _this): Nullish<string> {
         if (input != null && typeof input === 'string' && validatorJS.isUUID(input, version))
           return input;
-        context.failure(`{{label}} is not a valid UUID${version ? ' v' + version : ''}`);
+        context.fail(_this, `{{label}} is not a valid UUID${version ? ' v' + version : ''}`, input);
       }, options
   )
 }
@@ -30,10 +30,10 @@ export interface IsEmailOptions extends ValidationOptions, validatorJS.IsEmailOp
  */
 export function isEmail(options?: IsEmailOptions) {
   return validator<string, string>('isEmail',
-      function (input: unknown, context: Context): Nullish<string> {
+      function (input: unknown, context: Context, _this): Nullish<string> {
         if (typeof input === 'string' && validatorJS.isEmail(input, options))
           return input;
-        context.failure(`{{label}} is not a valid a EMail`);
+        context.fail(_this, `{{label}} is not a valid a EMail`, input);
       }, options
   );
 }
@@ -49,10 +49,10 @@ export interface IsMobilePhoneOptions extends ValidationOptions, validatorJS.IsM
  */
 export function isMobilePhone(options?: IsMobilePhoneOptions) {
   return validator<string, string>('isMobilePhone',
-      function (input: unknown, context: Context): Nullish<string> {
+      function (input: unknown, context: Context, _this): Nullish<string> {
         if (typeof input === 'string' && validatorJS.isMobilePhone(input, options?.locale, options))
           return input;
-        context.failure(`{{label}} is not a valid a Mobile Phone Number`);
+        context.fail(_this, `{{label}} is not a valid a Mobile Phone Number`, input);
       }, options
   );
 }
@@ -67,10 +67,10 @@ export function isIP(
     options?: ValidationOptions
 ) {
   return validator<string, string>('isIP',
-      function (input: unknown, context: Context): Nullish<string> {
+      function (input: unknown, context: Context, _this): Nullish<string> {
         if (input != null && typeof input === 'string' && validatorJS.isIP(input, version))
           return input;
-        context.failure(`{{label}} is not a valid IP${version ? ' v' + version : ''}`);
+        context.fail(_this, `{{label}} is not a valid IP${version ? ' v' + version : ''}`, input);
       }, options
   )
 }
@@ -84,10 +84,10 @@ export function isIPRange(
     options?: ValidationOptions
 ) {
   return validator<string, string>('isIPRange',
-      function (input: unknown, context: Context): Nullish<string> {
+      function (input: unknown, context: Context, _this): Nullish<string> {
         if (input != null && typeof input === 'string' && validatorJS.isIPRange(input, version))
           return input;
-        context.failure(`{{label}} is not a valid IP${version ? ' v' + version : ''} range`);
+        context.fail(_this, `{{label}} is not a valid IP${version ? ' v' + version : ''} range`, input);
       }, options
   )
 }
@@ -103,10 +103,10 @@ export function isMACAddress(
     options?: IsMACAddressOptions
 ) {
   return validator<string, string>('isMACAddress',
-      function (input: unknown, context: Context): Nullish<string> {
+      function (input: unknown, context: Context, _this): Nullish<string> {
         if (input != null && typeof input === 'string' && validatorJS.isMACAddress(input, options))
           return input;
-        context.failure(`{{label}} is not a valid MAC address`);
+        context.fail(_this, `{{label}} is not a valid MAC address`, input);
       }, options
   )
 }
@@ -117,10 +117,10 @@ export function isMACAddress(
  */
 export function isPort(options?: ValidationOptions) {
   return validator<string, string>('isPort',
-      function (input: unknown, context: Context): Nullish<string> {
+      function (input: unknown, context: Context, _this): Nullish<string> {
         if (input != null && typeof input === 'string' && validatorJS.isPort(input))
           return input;
-        context.failure(`{{label}} is not a valid port number`);
+        context.fail(_this, `{{label}} is not a valid port number`, input);
       }, options
   )
 }
@@ -136,10 +136,10 @@ export function isURL(
     options?: IsURLOptions
 ) {
   return validator<string, string>('isURL',
-      function (input: unknown, context: Context): Nullish<string> {
+      function (input: unknown, context: Context, _this): Nullish<string> {
         if (input != null && typeof input === 'string' && validatorJS.isURL(input, options))
           return input;
-        context.failure(`{{label}} is not a valid URL`);
+        context.fail(_this, `{{label}} is not a valid URL`, input);
       }, options
   )
 }
@@ -153,10 +153,10 @@ export interface Base64ValidatorOptions extends ValidationOptions, validatorJS.I
  */
 export function isBase64(options?: Base64ValidatorOptions) {
   return validator<string, string>('isBase64',
-      function (input: unknown, context: Context): Nullish<string> {
+      function (input: unknown, context: Context, _this): Nullish<string> {
         if (typeof input === 'string' && validatorJS.isBase64(input, options))
           return input;
-        context.failure(`{{label}} is not a valid a Base64 string`);
+        context.fail(_this, `{{label}} is not a valid a Base64 string`, input);
       }, options
   );
 }
@@ -168,10 +168,10 @@ export function isBase64(options?: Base64ValidatorOptions) {
  */
 export function isBIC(options?: ValidationOptions) {
   return validator<string, string>('isBIC',
-      function (input: unknown, context: Context): Nullish<string> {
+      function (input: unknown, context: Context, _this): Nullish<string> {
         if (typeof input === 'string' && validatorJS.isBIC(input))
           return input;
-        context.failure(`{{label}}is not a valid a BIC (Bank Identification Code) or SWIFT code`);
+        context.fail(_this, `{{label}}is not a valid a BIC (Bank Identification Code) or SWIFT code`, input);
       }, options
   );
 }
@@ -186,10 +186,10 @@ export interface CreditCardValidatorOptions extends ValidationOptions, validator
  */
 export function isCreditCard(options?: CreditCardValidatorOptions) {
   return validator<string, string>('isCreditCard',
-      function (input: unknown, context: Context): Nullish<string> {
+      function (input: unknown, context: Context, _this): Nullish<string> {
         if (typeof input === 'string' && validatorJS.isCreditCard(input, options))
           return input;
-        context.failure(`{{label}} is not a valid Credit Card number`);
+        context.fail(_this, `{{label}} is not a valid Credit Card number`, input);
       }, options
   );
 }
@@ -200,10 +200,10 @@ export function isCreditCard(options?: CreditCardValidatorOptions) {
  */
 export function isIBAN(options?: ValidationOptions) {
   return validator<string, string>('isIBAN',
-      function (input: unknown, context: Context): Nullish<string> {
+      function (input: unknown, context: Context, _this): Nullish<string> {
         if (typeof input === 'string' && validatorJS.isIBAN(input))
           return input;
-        context.failure(`{{label}} is not a valid IBAN (International Bank Account Number)`);
+        context.fail(_this, `{{label}} is not a valid IBAN (International Bank Account Number)`, input);
       }, options
   );
 }
@@ -215,10 +215,10 @@ export function isIBAN(options?: ValidationOptions) {
  */
 export function isPassportNumber(countryCode: string, options?: ValidationOptions) {
   return validator<string, string>('isPassportNumber',
-      function (input: unknown, context: Context): Nullish<string> {
+      function (input: unknown, context: Context, _this): Nullish<string> {
         if (typeof input === 'string' && validatorJS.isPassportNumber(input, countryCode))
           return input;
-        context.failure(`{{label}} is not a valid ${countryCode} PassportNumber)`);
+        context.fail(_this, `{{label}} is not a valid ${countryCode} PassportNumber)`, input);
       }, options
   );
 }
@@ -229,10 +229,10 @@ export function isPassportNumber(countryCode: string, options?: ValidationOption
  */
 export function isEAN(options?: ValidationOptions) {
   return validator<string, string>('isEAN',
-      function (input: unknown, context: Context): Nullish<string> {
+      function (input: unknown, context: Context, _this): Nullish<string> {
         if (typeof input === 'string' && validatorJS.isEAN(input))
           return input;
-        context.failure(`{{label}} is not a valid EAN (European Article Number)`);
+        context.fail(_this, `{{label}} is not a valid EAN (European Article Number)`, input);
       }, options
   );
 }
@@ -246,10 +246,10 @@ export interface IsFQDNOptions extends ValidationOptions, validatorJS.IsFQDNOpti
  */
 export function isFQDN(options?: IsFQDNOptions) {
   return validator<string, string>('isFQDN',
-      function (input: unknown, context: Context): Nullish<string> {
+      function (input: unknown, context: Context, _this): Nullish<string> {
         if (typeof input === 'string' && validatorJS.isFQDN(input, options))
           return input;
-        context.failure(`{{label}} is not valid FQDN`);
+        context.fail(_this, `{{label}} is not valid FQDN`, input);
       }, options
   );
 }
@@ -263,10 +263,10 @@ export interface IsISSNOptions extends ValidationOptions, validatorJS.IsISSNOpti
  */
 export function isISSN(options?: IsISSNOptions) {
   return validator<string, string>('isISSN',
-      function (input: unknown, context: Context): Nullish<string> {
+      function (input: unknown, context: Context, _this): Nullish<string> {
         if (typeof input === 'string' && validatorJS.isISSN(input, options))
           return input;
-        context.failure(`{{label}} is not a valid ISSN`);
+        context.fail(_this, `{{label}} is not a valid ISSN`, input);
       }, options
   );
 }
@@ -277,10 +277,10 @@ export function isISSN(options?: IsISSNOptions) {
  */
 export function isVAT(countryCode: string, options?: IsISSNOptions) {
   return validator<string, string>('isVAT',
-      function (input: unknown, context: Context): Nullish<string> {
+      function (input: unknown, context: Context, _this): Nullish<string> {
         if (typeof input === 'string' && validatorJS.isVAT(input, countryCode))
           return input;
-        context.failure(`{{label}} is not a valid VAT number`);
+        context.fail(_this, `{{label}} is not a valid VAT number`, input);
       }, options
   );
 }
@@ -291,10 +291,10 @@ export function isVAT(countryCode: string, options?: IsISSNOptions) {
  */
 export function isBtcAddress(options?: ValidationOptions) {
   return validator<string, string>('isBtcAddress',
-      function (input: unknown, context: Context): Nullish<string> {
+      function (input: unknown, context: Context, _this): Nullish<string> {
         if (typeof input === 'string' && validatorJS.isBtcAddress(input))
           return input;
-        context.failure(`{{label}} is not a valid a BTC address`);
+        context.fail(_this, `{{label}} is not a valid a BTC address`, input);
       }, options
   );
 }
@@ -306,10 +306,10 @@ export function isBtcAddress(options?: ValidationOptions) {
  */
 export function isETHAddress(options?: ValidationOptions) {
   return validator<string, string>('isETHAddress',
-      function (input: unknown, context: Context): Nullish<string> {
+      function (input: unknown, context: Context, _this): Nullish<string> {
         if (typeof input === 'string' && validatorJS.isEthereumAddress(input))
           return input;
-        context.failure(`{{label}} is not a valid a ETH (Ethereum) address`);
+        context.fail(_this, `{{label}} is not a valid a ETH (Ethereum) address`, input);
       }, options
   );
 }
@@ -325,10 +325,10 @@ export type HashAlgorithm = 'crc32' | 'crc32b' | 'md4' | 'md5' | 'ripemd128' |
  */
 export function isHash(algorithm: HashAlgorithm, options?: ValidationOptions) {
   return validator<string, string>('isHash',
-      function (input: unknown, context: Context): Nullish<string> {
+      function (input: unknown, context: Context, _this): Nullish<string> {
         if (typeof input === 'string' && validatorJS.isHash(input, algorithm))
           return input;
-        context.failure(`{{label}} is not a valid ${algorithm} hash`);
+        context.fail(_this, `{{label}} is not a valid ${algorithm} hash`, input);
       }, options
   );
 }
@@ -339,10 +339,10 @@ export function isHash(algorithm: HashAlgorithm, options?: ValidationOptions) {
  */
 export function isHexColor(options?: ValidationOptions) {
   return validator<string, string>('isHexColor',
-      function (input: unknown, context: Context): Nullish<string> {
+      function (input: unknown, context: Context, _this): Nullish<string> {
         if (typeof input === 'string' && validatorJS.isHexColor(input))
           return input;
-        context.failure(`{{label}} is not a valid Hex Color`);
+        context.fail(_this, `{{label}} is not a valid Hex Color`, input);
       }, options
   );
 }
@@ -354,10 +354,10 @@ export function isHexColor(options?: ValidationOptions) {
  */
 export function isJWT(options?: ValidationOptions) {
   return validator<string, string>('isJWT',
-      function (input: unknown, context: Context): Nullish<string> {
+      function (input: unknown, context: Context, _this): Nullish<string> {
         if (typeof input === 'string' && validatorJS.isJWT(input))
           return input;
-        context.failure(`{{label}} is not a valid JWT token`);
+        context.fail(_this, `{{label}} is not a valid JWT token`, input);
       }, options
   );
 }
@@ -369,10 +369,10 @@ export function isJWT(options?: ValidationOptions) {
  */
 export function isLowercase(options?: ValidationOptions) {
   return validator<string, string>('isLowercase',
-      function (input: unknown, context: Context): Nullish<string> {
+      function (input: unknown, context: Context, _this): Nullish<string> {
         if (typeof input === 'string' && validatorJS.isLowercase(input))
           return input;
-        context.failure(`{{label}} is not a lowercase string`);
+        context.fail(_this, `{{label}} is not a lowercase string`, input);
       }, options
   );
 }
@@ -383,10 +383,10 @@ export function isLowercase(options?: ValidationOptions) {
  */
 export function isUppercase(options?: ValidationOptions) {
   return validator<string, string>('isLowercase',
-      function (input: unknown, context: Context): Nullish<string> {
+      function (input: unknown, context: Context, _this): Nullish<string> {
         if (typeof input === 'string' && validatorJS.isUppercase(input))
           return input;
-        context.failure(`{{label}} is not an uppercase string`);
+        context.fail(_this, `{{label}} is not an uppercase string`, input);
       }, options
   );
 }

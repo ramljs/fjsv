@@ -1,5 +1,5 @@
 import {
-  Context, kValidatorFn, Nullish,
+  Context, Nullish,
   Validator, validator
 } from '../core/index.js';
 
@@ -14,12 +14,11 @@ export function pipe<T>(
   return validator<T, any>('pipe',
       function (input: unknown, context: Context): Nullish<T> {
         let i: number;
-        let c: Validator<any, any>;
+        let c: Validator;
         let v = input;
         for (i = 0; i < l; i++) {
           c = rules[i];
-          const subContext = context.extend(c);
-          v = c[kValidatorFn](v, subContext, c);
+          v = c(v, context);
           if (context.errors.length)
             return;
         }
@@ -43,8 +42,7 @@ export function allOf(
         const l = rules.length;
         for (i = 0; i < l; i++) {
           c = rules[i];
-          const subContext = context.extend(c);
-          c[kValidatorFn](input, subContext, c);
+          c(input, context);
         }
         return input;
       }

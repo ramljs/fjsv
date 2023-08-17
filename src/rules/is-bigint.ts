@@ -8,14 +8,18 @@ import { Context, ValidationOptions, validator } from '../core/index.js';
  */
 export function isBigint(options?: ValidationOptions) {
   return validator<bigint, unknown>('isBigint',
-      function (input: unknown, context: Context): Nullish<bigint> {
+      function (
+          input: unknown,
+          context: Context,
+          _this
+      ): Nullish<bigint> {
         if (input != null && typeof input !== 'bigint' && context.coerce) {
           if (typeof input === 'string' || typeof input === 'number')
             input = BigInt(input);
         }
         if (typeof input === 'bigint')
           return input;
-        context.failure(`{{label}} is not a valid BigInt`);
+        context.fail(_this, `{{label}} is not a valid BigInt`, input);
       }, options
   );
 }

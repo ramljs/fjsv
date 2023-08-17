@@ -16,7 +16,7 @@ export declare interface ObjectIdLike {
  */
 export function isObjectId(options?: ValidationOptions) {
   return validator<string | Uint8Array | ObjectIdLike, unknown>('isObjectId',
-      function (input: any, context: Context): Nullish<string | Uint8Array | ObjectIdLike> {
+      function (input: any, context: Context, _this): Nullish<string | Uint8Array | ObjectIdLike> {
         if (input != null &&
             (_isObjectIdValue(input) ||
                 (
@@ -25,9 +25,8 @@ export function isObjectId(options?: ValidationOptions) {
                     _isObjectIdValue(input.toHexString())
                 )
             )
-        )
-          return input;
-        context.failure(`{{label}} is not a valid ObjectId`);
+        ) return input;
+        context.fail(_this, `{{label}} is not a valid ObjectId`, input);
       }, options
   );
 }

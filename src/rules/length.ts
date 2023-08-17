@@ -12,7 +12,7 @@ type ExtractLengthInput = string | any[] | ArrayBuffer |
     { length: number } | { size: number };
 const extractLengthRule =
     validator<number, ExtractLengthInput>('extractLength',
-        function (input: any, context: Context): Nullish<number> {
+        function (input: any, context: Context, _this): Nullish<number> {
           if (typeof input === 'string')
             return input.length;
           if (Array.isArray(input))
@@ -23,7 +23,7 @@ const extractLengthRule =
             return input.length;
           if (input && typeof input === 'object' && typeof input.size === 'number')
             return input.size;
-          context.failure(`Unable to extract length of {{label}}`);
+          context.fail(_this, `Unable to extract length of {{label}}`, input);
         }
     )
 

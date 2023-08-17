@@ -1,5 +1,5 @@
 import {
-  Context, isValidator, kValidatorFn, Nullish,
+  Context, isValidator, Nullish,
   Validator, validator
 } from '../core/index.js';
 
@@ -13,7 +13,7 @@ export function forwardRef<T, I>(
   return validator<T, I>('forwardRef',
       function (input: I, context: Context): Nullish<T> {
         const nested = fn(context);
-        return nested[kValidatorFn](input, context, nested as any);
+        return nested(input, context);
       }
   )
 }
@@ -38,7 +38,7 @@ export function iif(check: Validator<any>, _then: any, _else?: any) {
           // ignored
         }
         if (isValidator(c))
-          return c[kValidatorFn](input, context, c)
+          return c(input, context)
         return c;
       }
   )

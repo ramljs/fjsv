@@ -1,5 +1,5 @@
 import {
-  Context, kValidatorFn, Nullish,
+  Context, Nullish,
   ValidationOptions, Validator, validator,
 } from '../core/index.js';
 
@@ -14,33 +14,35 @@ export function isRecord<TKeys extends string | number | symbol, TValues>(
     options?: ValidationOptions
 ) {
   return validator<Record<TKeys, TValues>>('isRecord',
-      function (input: object | undefined, context: Context): Nullish<Record<TKeys, TValues>> {
+      function (
+          input: object | undefined,
+          context: Context,
+          _this
+      ): Nullish<Record<TKeys, TValues>> {
         if (!(input && typeof input === 'object')) {
-          context.failure(`{{label}} is not an object`);
+          context.fail(_this, `{{label}} is not an object`, input);
           return;
         }
-        const location = context.input.location || '';
-        const keyContext = context.extend(keyRule);
-        const valueContext = context.extend(valueRule);
+        const keyContext = context.extend();
+        const valueContext = context.extend();
+        const location = context.location || '';
         const keys = Object.keys(input);
         const l = keys.length;
         let i: number;
-        let k;
-        let v;
+        let k: any;
+        let v: any;
         const out: any = {};
         for (i = 0; i < l; i++) {
           k = keys[i];
           v = input[k];
-
-          keyContext.input.value = k;
-          keyContext.input.property = '@' + k;
-          keyContext.input.location = location + (location ? '.@' : '@') + k;
-          k = keyRule[kValidatorFn](k, keyContext, keyRule);
-
-          valueContext.input.value = v;
-          valueContext.input.property = k;
-          valueContext.input.location = location + (location ? '.' : '') + k;
-          v = valueRule[kValidatorFn](v, valueContext, valueRule);
+          // Validate key
+          keyContext.property = '@' + k;
+          keyContext.location = location + (location ? '.@' : '@') + k;
+          k = keyRule(k, keyContext);
+          // Validate value
+          valueContext.property = k;
+          valueContext.location = location + (location ? '.' : '') + k;
+          v = valueRule(v, valueContext);
           out[k] = v;
         }
         return context.errors.length ? undefined : out;

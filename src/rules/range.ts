@@ -17,7 +17,7 @@ export function isGt(minValue: string, options?: ValidationOptions & {
 }): Validator<string, string>
 export function isGt(minValue: any, options?: ValidationOptions & { caseInsensitive?: boolean }): Validator<any, any> {
   return validator<RangeInput, RangeInput>('isGt',
-      function (input: RangeInput, context: Context): Nullish<RangeInput> {
+      function (input: RangeInput, context: Context, _this): Nullish<RangeInput> {
         if ((typeof minValue === 'number' || typeof minValue === 'bigint') &&
             (typeof input === 'number' || typeof input === 'bigint') &&
             input > minValue
@@ -29,9 +29,11 @@ export function isGt(minValue: any, options?: ValidationOptions & { caseInsensit
                 (options?.caseInsensitive && input.toLowerCase() > minValue.toLowerCase())
             )
         ) return input;
-        context.failure(`{{label}} must be greater than ${
-            (typeof minValue === 'string' ? `"${minValue}"` : minValue)
-        }`);
+        context.fail(_this,
+            `{{label}} must be greater than ${
+                (typeof minValue === 'string' ? `"${minValue}"` : minValue)
+            }`,
+            input);
       }, options
   )
 }
@@ -50,7 +52,7 @@ export function isGte(minValue: string, options?: ValidationOptions & {
 }): Validator<string, string>
 export function isGte(minValue: any, options?: ValidationOptions & { caseInsensitive?: boolean }): Validator<any, any> {
   return validator<RangeInput, RangeInput>('isGte',
-      function (input: unknown, context: Context): Nullish<RangeInput> {
+      function (input: unknown, context: Context, _this): Nullish<RangeInput> {
         if ((typeof minValue === 'number' || typeof minValue === 'bigint') &&
             (typeof input === 'number' || typeof input === 'bigint') &&
             input >= minValue
@@ -62,9 +64,11 @@ export function isGte(minValue: any, options?: ValidationOptions & { caseInsensi
                 (options?.caseInsensitive && input.toLowerCase() >= minValue.toLowerCase())
             )
         ) return input;
-        context.failure(`{{label}} must be greater than or equal to ${
-            (typeof minValue === 'string' ? `"${minValue}"` : minValue)
-        }`);
+        context.fail(_this,
+            `{{label}} must be greater than or equal to ${
+                (typeof minValue === 'string' ? `"${minValue}"` : minValue)
+            }`,
+            input);
       }, options
   )
 }
@@ -83,7 +87,7 @@ export function isLt(maxValue: string, options?: ValidationOptions & {
 }): Validator<string, string>
 export function isLt(maxValue: any, options?: ValidationOptions & { caseInsensitive?: boolean }): Validator<any, any> {
   return validator<RangeInput, RangeInput>('isLt',
-      function (input: unknown, context: Context): Nullish<RangeInput> {
+      function (input: unknown, context: Context, _this): Nullish<RangeInput> {
         if ((typeof maxValue === 'number' || typeof maxValue === 'bigint') &&
             (typeof input === 'number' || typeof input === 'bigint') &&
             input < maxValue
@@ -95,9 +99,11 @@ export function isLt(maxValue: any, options?: ValidationOptions & { caseInsensit
                 (options?.caseInsensitive && input.toLowerCase() < maxValue.toLowerCase())
             )
         ) return input;
-        context.failure(`{{label}} must be lover than ${
-            (typeof maxValue === 'string' ? `"${maxValue}"` : maxValue)
-        }`);
+        context.fail(_this,
+            `{{label}} must be lover than ${
+                (typeof maxValue === 'string' ? `"${maxValue}"` : maxValue)
+            }`,
+            input);
       }, options
   )
 }
@@ -116,7 +122,7 @@ export function isLte(maxValue: string, options?: ValidationOptions & {
 }): Validator<string, string>
 export function isLte(maxValue: any, options?: ValidationOptions & { caseInsensitive?: boolean }): Validator<any, any> {
   return validator<RangeInput, RangeInput>('isLt',
-      function (input: unknown, context: Context): Nullish<RangeInput> {
+      function (input: unknown, context: Context, _this): Nullish<RangeInput> {
         if ((typeof maxValue === 'number' || typeof maxValue === 'bigint') &&
             (typeof input === 'number' || typeof input === 'bigint') &&
             input <= maxValue
@@ -128,9 +134,11 @@ export function isLte(maxValue: any, options?: ValidationOptions & { caseInsensi
                 (options?.caseInsensitive && input.toLowerCase() <= maxValue.toLowerCase())
             )
         ) return input;
-        context.failure(`{{label}} must be lover than or equal to ${
-            (typeof maxValue === 'string' ? `"${maxValue}"` : maxValue)
-        }`);
+        context.fail(_this,
+            `{{label}} must be lover than or equal to ${
+                (typeof maxValue === 'string' ? `"${maxValue}"` : maxValue)
+            }`,
+            input);
       }, options
   )
 }
@@ -146,7 +154,7 @@ export function range<T extends RangeInput>(
     options?: ValidationOptions
 ) {
   return validator<T>('range',
-      function (input: RangeInput, context: Context): Nullish<T> {
+      function (input: RangeInput, context: Context, _this): Nullish<T> {
         if ((typeof minValue === 'number' || typeof minValue === 'bigint') &&
             (typeof maxValue === 'number' || typeof maxValue === 'bigint') &&
             (typeof input === 'number' || typeof input === 'bigint') &&
@@ -158,7 +166,7 @@ export function range<T extends RangeInput>(
         if (typeof minValue === 'string' && typeof maxValue === 'string' &&
             typeof input === 'string' && input >= minValue && input <= maxValue)
           return input as T;
-        context.failure(`{{label}} must be between ${minValue} and ${maxValue}`);
+        context.fail(_this, `{{label}} must be between ${minValue} and ${maxValue}`, input);
       }, options
   )
 }

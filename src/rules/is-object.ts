@@ -1,6 +1,6 @@
 import { RequiredSome } from 'ts-gems';
 import {
-  Context, isValidator, kValidatorFn, Nullish, Type,
+  Context, isValidator, Nullish, Type,
   ValidationOptions, Validator, validator
 } from '../core/index.js';
 
@@ -13,7 +13,7 @@ export type ObjectSchema =
 export interface IsObjectOptions<T> extends ValidationOptions {
   name?: string;
   ctor?: Type<T>,
-  additionalFields?: boolean | Validator<any, any> | 'ignore';
+  additionalFields?: boolean | Validator<any, any> | 'error';
   caseInSensitive?: boolean;
   detectCircular?: boolean;
 }
@@ -56,10 +56,11 @@ export function isObject<T extends object = object, I = object>(
   const _rule = validator<T, object>('isObject',
       function (
           input: object | undefined,
-          context: Context & { circMap?: Map<object, object> }
+          context: Context & { circMap?: Map<object, object> },
+          _this
       ): Nullish<T> {
         if (!(input && typeof input === 'object')) {
-          context.failure(`{{label}} must be an object`);
+          context.fail(_this, `{{label}} is not an object`, input);
           return;
         }
         const keys = [...Object.keys(input), ...Object.keys(schema)];
@@ -80,38 +81,38 @@ export function isObject<T extends object = object, I = object>(
           context.circMap.set(input, out);
         }
 
-        const rootName = context.root?.input.context;
-        const location = context.input.location || '';
-        const processedSchemaKeys: Record<string, boolean> = {};
+        if (context.root == null)
+          context.root = context.root || ctorName || '';
+        const location = context.location || '';
 
+        const processedSchemaKeys: Record<string, boolean> = {};
         // Iterate object keys and perform rules
         for (i = 0; i < l; i++) {
           inputKey = keys[i];
           schemaKey = caseInSensitive ? inputKey.toLowerCase() : inputKey;
           v = input[inputKey];
+
           _propRule = propertyRules[schemaKey] ||
               (isValidator(additionalFields) ? additionalFields : undefined)
-
           if (_propRule) {
             if (processedSchemaKeys[schemaKey])
               continue;
             processedSchemaKeys[schemaKey] = true;
-            const subCtx = context.extend(_propRule);
-            if (ctorName) {
-              if (rootName && rootName !== ctorName)
-                subCtx.input.root = rootName;
-              subCtx.input.context = ctorName;
-            }
-            subCtx.input.value = v;
-            subCtx.input.label = propertyOptions[schemaKey]?.label || schemaKey;
-            subCtx.input.location = location + (location ? '.' : '') + schemaKey;
-            subCtx.input.property = schemaKey;
-            v = _propRule[kValidatorFn](v, subCtx, _propRule);
+            const subCtx = context.extend();
+            subCtx.scope = input;
+            subCtx.context = ctorName;
+            subCtx.location = location + (location ? '.' : '') + schemaKey;
+            subCtx.property = schemaKey;
+            if (propertyOptions[schemaKey]?.label)
+              subCtx.label = propertyOptions[schemaKey]?.label;
+            v = _propRule(v, subCtx);
           } else if (v !== undefined) {
-            if (additionalFields === 'ignore')
-              continue;
             if (!additionalFields)
-              context.failure(`${ctorName || 'Object'} has no field '${inputKey}' and does not accept additional fields`);
+              continue;
+            if (additionalFields === 'error')
+              context.fail(_propRule,
+                  `${ctorName || 'Object'} has no field '${inputKey}' and does not accept additional fields`,
+                  v);
           }
 
           if (v !== undefined)

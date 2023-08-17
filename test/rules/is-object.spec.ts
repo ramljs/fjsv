@@ -31,9 +31,9 @@ describe("isObject", function () {
   it("should validate value is an object", function () {
     const objValidate = isObject({a: isString()});
     expect(objValidate({a: '1'})).toStrictEqual({a: '1'});
-    expect(() => objValidate(null)).toThrow('Value must be an object');
-    expect(() => objValidate(undefined)).toThrow('Value must be an object');
-    expect(() => objValidate(NaN as any)).toThrow('Value must be an object');
+    expect(() => objValidate(null)).toThrow('Value is not an object');
+    expect(() => objValidate(undefined)).toThrow('Value is not an object');
+    expect(() => objValidate(NaN as any)).toThrow('Value is not an object');
   });
 
   it("should coerce properties", function () {
@@ -52,7 +52,7 @@ describe("isObject", function () {
 
   it("should check required properties", function () {
     expect(() => personValidate({age: 22}))
-        .toThrow('`Full Name` is required');
+        .toThrow('Full Name is required');
     expect(personValidate.silent({age: 22}))
         .toMatchObject({
           errors: [
@@ -66,7 +66,7 @@ describe("isObject", function () {
           ]
         });
     expect(() => personValidate({name: 'John', address: {city: 'New York'}}))
-        .toThrow('`Country` is required');
+        .toThrow('Country is required');
     expect(personValidate.silent({name: 'John', address: {city: 'New York'}}))
         .toMatchObject({
           errors: [
@@ -76,7 +76,7 @@ describe("isObject", function () {
               label: 'Country',
               property: 'country',
               location: 'address.country',
-              message: '`Country` is required',
+              message: 'Country is required',
               value: undefined
             },
             {
@@ -85,7 +85,7 @@ describe("isObject", function () {
               label: 'Age',
               property: 'age',
               location: 'age',
-              message: '`Age` is required',
+              message: 'Age is required',
               value: undefined
             }
           ]

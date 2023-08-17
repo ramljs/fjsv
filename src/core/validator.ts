@@ -9,7 +9,7 @@ export type ValidateFunction<T, I = T, R extends Validator<T, I> = Validator<T, 
     (input: I, context: Context, _this: R) => Nullish<T>;
 
 
-export interface Validator<T, I = unknown, O extends ExecutionOptions = ExecutionOptions> {
+export interface Validator<T = any, I = any, O extends ExecutionOptions = ExecutionOptions> {
   (input: I, options?: O, context?: Context): T;
 
   silent(input: I, options?: O, context?: Context): { value?: T, errors?: ErrorIssue[] };
@@ -44,20 +44,22 @@ export function validator(arg0, arg1?, arg2?) {
     throw new TypeError('You must provide a rule function argument');
   id = id || fn.name || 'unnamed-rule';
   const name = fn.name || camelCase(id);
+
   const _rule = ({
-    [name](input: unknown, options?: ExecutionOptions, parent?: Context): any {
-      const ctx = parent ? parent.extend(_rule, options) : new Context(_rule, options);
-      let value;
+    [name](input: unknown, options?: ExecutionOptions | Context): any {
+      const ctx = options instanceof Context ? options : undefined;
+      const opts = (ctx ? undefined : options);
+      const context = ctx || new Context(opts);
+      let value: any;
       try {
-        ctx.input.value = input;
-        value = fn(input, ctx, _rule as any);
+        value = fn(input, context, _rule as any);
       } catch (e: any) {
-        if (!parent && e instanceof ValidationError)
+        if (e instanceof ValidationError)
           throw e;
-        ctx.failure(e);
+        context.fail(_rule, e, input);
       }
-      if (!parent && ctx.errors.length)
-        throw new ValidationError(ctx.errors);
+      if (!ctx && context.errors.length)
+        throw new ValidationError(context.errors);
       return value;
     }
   })[name] as Validator<any, any>;

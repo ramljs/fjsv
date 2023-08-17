@@ -6,10 +6,10 @@ import { Context, Nullish, ValidationOptions, validator } from '../core/index.js
  */
 export function isNull(options?: ValidationOptions) {
   return validator<null, unknown>('isNull',
-      function (input: unknown, context: Context) {
+      function (input: unknown, context: Context, _this) {
         if (input === null)
           return input;
-        context.failure(`{{label}} is not null`);
+        context.fail(_this, `{{label}} is not null`, input);
       }, options
   );
 }
@@ -21,10 +21,10 @@ export function isNull(options?: ValidationOptions) {
  */
 export function isDefined(options?: ValidationOptions) {
   return validator<any, unknown>('is-defined',
-      function (input: unknown, context: Context) {
+      function (input: unknown, context: Context, _this) {
         if (input !== undefined)
           return input;
-        context.failure(`{{label}} is not defined`);
+        context.fail(_this, `{{label}} is not defined`, input);
       }, options
   );
 }
@@ -36,10 +36,10 @@ export function isDefined(options?: ValidationOptions) {
  */
 export function isUndefined(options?: ValidationOptions) {
   return validator<any, unknown>('isUndefined',
-      function (input: unknown, context: Context): Nullish<any> {
+      function (input: unknown, context: Context, _this): Nullish<any> {
         if (input === undefined)
           return;
-        context.failure(`{{label}} defined`);
+        context.fail(_this, `{{label}} defined`, input);
       }, options
   );
 }

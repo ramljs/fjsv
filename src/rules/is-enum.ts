@@ -24,15 +24,20 @@ export function isEnum<T1, I1>(
       }, {});
 
   return validator<any>('isEnum',
-      function (input: any, context: Context) {
+      function (
+          input: any,
+          context: Context,
+          _this
+      ) {
         if (input != null && valObj[
             typeof input === 'string' && caseInSensitive ? input.toUpperCase() : input
             ])
           return input;
-        context.failure({
-          message: `Value must be one of enumeration member${enumName ? ` (${enumName})` : ''}`,
-          enum: enumName
-        });
+        context.fail(_this,
+            `Value must be one of enumeration member${enumName ? ` (${enumName})` : ''}`,
+            input,
+            {enum: enumName}
+        );
       }, options
   )
 }

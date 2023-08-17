@@ -7,7 +7,7 @@ import { Context, Nullish, ValidationOptions, validator } from '../core/index.js
  */
 export function isString(options?: ValidationOptions) {
   return validator<string, unknown>('isString',
-      function (input: any, context: Context): Nullish<string> {
+      function (input: any, context: Context, _this): Nullish<string> {
         if (input != null && typeof input !== 'string' && context.coerce) {
           if (typeof input === 'object') {
             if (typeof input.toJSON === 'function')
@@ -17,7 +17,7 @@ export function isString(options?: ValidationOptions) {
         }
         if (typeof input === 'string')
           return input;
-        context.failure(`{{label}} is not a string`);
+        context.fail(_this, `{{label}} is not a string`, input);
       }, options
   );
 }

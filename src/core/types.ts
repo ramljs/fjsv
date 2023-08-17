@@ -1,12 +1,15 @@
 import type { Context } from './context';
 
 export interface ErrorIssue {
-  rule: string;
   message: string;
+  rule: string;
   value: any;
   root?: string;
+  location?: string;
   context?: string;
   property?: string;
+  index?: number;
+  label?: string;
 
   [key: string]: any;
 }
