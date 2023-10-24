@@ -10,4 +10,11 @@ describe("isNull", function () {
     expect(() => isNull()(NaN as any)).toThrow('Value is not null');
   });
 
+  it("should coerce to null", function () {
+    expect(isNull()(0, {coerce: true})).toStrictEqual(null);
+    expect(isNull()(1, {coerce: true})).toStrictEqual(null);
+    expect(isNull()(undefined, {coerce: true})).toStrictEqual(null);
+    expect(isNull()(null, {coerce: true})).toStrictEqual(null);
+  });
+
 });
