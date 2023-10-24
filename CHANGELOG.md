@@ -1,3 +1,10 @@
+# v4.0.1
+[2023-10-24]
+
+### Changes
+
+* Added "coerce" option to isNull and isUndefined rules ([`8c02040`](https://github.com/panates/valgen/commit/8c02040264174e26c840fce351da8b69e664d626))
+
 # v4.0.0
 [2023-08-17]
 
