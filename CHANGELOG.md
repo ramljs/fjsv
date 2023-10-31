@@ -1,3 +1,10 @@
+# v4.1.0
+[2023-10-31]
+
+### Changes
+
+* Updated validation messages. ([`066fc4e`](https://github.com/panates/valgen/commit/066fc4e0f9fc7a0c0543572cf543c66084611135))
+
 # v4.0.1
 [2023-10-24]
 
