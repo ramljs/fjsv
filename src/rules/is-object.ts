@@ -60,7 +60,7 @@ export function isObject<T extends object = object, I = object>(
           _this
       ): Nullish<T> {
         if (!(input && typeof input === 'object')) {
-          context.fail(_this, `{{label}} is not an object`, input);
+          context.fail(_this, `{{label}} must be an object`, input);
           return;
         }
         const keys = [...Object.keys(input), ...Object.keys(schema)];

@@ -20,7 +20,7 @@ export function isNumber(options?: ValidationOptions) {
         }
         if (typeof input === 'number' && !isNaN(input))
           return input;
-        context.fail(_this, `{{label}} is not a valid number`, input);
+        context.fail(_this, `{{label}} must be a number`, input);
       }, options
   );
 }

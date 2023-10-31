@@ -4,8 +4,8 @@ describe("isRecord", function () {
 
   it("should validate value is an object", function () {
     const validate = isRecord(isString(), isAny());
-    expect(() => validate(null)).toThrow('is not an object')
-    expect(() => validate(undefined)).toThrow('is not an object');
+    expect(() => validate(null)).toThrow('must be an object')
+    expect(() => validate(undefined)).toThrow('must be an object');
   });
 
   it("should validates keys according to given codec", function () {

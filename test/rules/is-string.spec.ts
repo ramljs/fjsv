@@ -7,11 +7,11 @@ describe("isString", function () {
   it("should validate value is a string", function () {
     expect(isString()('1')).toStrictEqual('1');
     expect(isString()('')).toStrictEqual('');
-    expect(() => isString()(undefined)).toThrow('Value is not a string');
-    expect(() => isString()(null)).toThrow('Value is not a string');
-    expect(() => isString()(1)).toThrow('Value is not a string');
-    expect(() => isString()(true)).toThrow('Value is not a string');
-    expect(() => isString()(NaN)).toThrow('Value is not a string');
+    expect(() => isString()(undefined)).toThrow('Value must be a string');
+    expect(() => isString()(null)).toThrow('Value must be a string');
+    expect(() => isString()(1)).toThrow('Value must be a string');
+    expect(() => isString()(true)).toThrow('Value must be a string');
+    expect(() => isString()(NaN)).toThrow('Value must be a string');
   });
 
   it("should coerce to string", function () {

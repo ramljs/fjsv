@@ -26,7 +26,7 @@ export function isBoolean(options?: ValidationOptions) {
         }
         if (typeof input === 'boolean')
           return input;
-        context.fail(_this, `{{label}} is not a valid boolean`, input);
+        context.fail(_this, `{{label}} must be a boolean`, input);
       }, options
   );
 }

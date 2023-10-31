@@ -5,16 +5,16 @@ describe("isArray", function () {
   it("should validate value is an array", function () {
     expect(isArray()([true])).toStrictEqual([true]);
     expect(isArray()([1])).toStrictEqual([1]);
-    expect(() => isArray()(undefined)).toThrow('is not an array');
-    expect(() => isArray()(null)).toThrow('is not an array');
-    expect(() => isArray()(5 as any)).toThrow('is not an array');
-    expect(() => isArray()(NaN as any)).toThrow('is not an array');
+    expect(() => isArray()(undefined)).toThrow('must be an array');
+    expect(() => isArray()(null)).toThrow('must be an array');
+    expect(() => isArray()(5 as any)).toThrow('must be an array');
+    expect(() => isArray()(NaN as any)).toThrow('must be an array');
   });
 
   it("should validate items according to item rule", function () {
     expect(isArray(isInteger())([1, 2])).toStrictEqual([1, 2]);
     expect(() => isArray(isInteger())(['1', '2']))
-        .toThrow('Item at (0) is not a valid integer number');
+        .toThrow('Item at (0) must be an integer number');
   })
 
   it("should coerce value to array", function () {

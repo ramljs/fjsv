@@ -23,7 +23,7 @@ export function isInteger(options?: ValidationOptions) {
         }
         if (typeof input === 'number' && !isNaN(input) && Number.isInteger(input))
           return input;
-        context.fail(_this, `{{label}} is not a valid integer number`, input);
+        context.fail(_this, `{{label}} must be an integer number`, input);
       }, options
   );
 }

@@ -6,13 +6,13 @@ describe("isInteger", function () {
     expect(isInteger()(1)).toStrictEqual(1);
     expect(isInteger()(-1)).toStrictEqual(-1);
     expect(isInteger()(0)).toStrictEqual(0);
-    expect(() => isInteger()(undefined)).toThrow('Value is not a valid integer number');
-    expect(() => isInteger()(null)).toThrow('Value is not a valid integer number');
-    expect(() => isInteger()(BigInt(5))).toThrow('Value is not a valid integer number');
-    expect(() => isInteger()('1')).toThrow('Value is not a valid integer number');
-    expect(() => isInteger()('1.3')).toThrow('Value is not a valid integer number');
-    expect(() => isInteger()('x5')).toThrow('Value is not a valid integer number');
-    expect(() => isInteger()(NaN)).toThrow('Value is not a valid integer number');
+    expect(() => isInteger()(undefined)).toThrow('Value must be an integer number');
+    expect(() => isInteger()(null)).toThrow('Value must be an integer number');
+    expect(() => isInteger()(BigInt(5))).toThrow('Value must be an integer number');
+    expect(() => isInteger()('1')).toThrow('Value must be an integer number');
+    expect(() => isInteger()('1.3')).toThrow('Value must be an integer number');
+    expect(() => isInteger()('x5')).toThrow('Value must be an integer number');
+    expect(() => isInteger()(NaN)).toThrow('Value must be an integer number');
   });
 
   it("should coerce to integer", function () {

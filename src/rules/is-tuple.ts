@@ -44,7 +44,7 @@ export function isTuple(
         if (input != null && context.coerce && !Array.isArray(input))
           input = [input];
         if (!Array.isArray(input)) {
-          context.fail(_this, `{{label}} is not a tuple`, input);
+          context.fail(_this, `{{label}} must be a tuple`, input);
           return;
         }
         const location = context.location || '';

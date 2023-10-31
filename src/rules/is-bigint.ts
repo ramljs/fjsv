@@ -13,13 +13,12 @@ export function isBigint(options?: ValidationOptions) {
           context: Context,
           _this
       ): Nullish<bigint> {
-        if (input != null && typeof input !== 'bigint' && context.coerce) {
-          if (typeof input === 'string' || typeof input === 'number')
-            input = BigInt(input);
-        }
         if (typeof input === 'bigint')
           return input;
-        context.fail(_this, `{{label}} is not a valid BigInt`, input);
+        if ((typeof input === 'number' && !isNaN(input)) ||
+            (typeof input === 'string' && context.coerce))
+          return BigInt(input);
+        context.fail(_this, `{{label}} must be an integer number`, input);
       }, options
   );
 }

@@ -24,4 +24,5 @@ export interface ValidationOptions {
 export interface ExecutionOptions extends ValidationOptions {
   coerce?: boolean;
   maxErrors?: number;
+  label?: string;
 }

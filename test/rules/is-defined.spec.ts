@@ -5,7 +5,7 @@ describe("isDefined", function () {
     expect(isDefined()(0)).toStrictEqual(0);
     expect(isDefined()(null)).toStrictEqual(null);
     expect(isDefined()('')).toStrictEqual('');
-    expect(() => isDefined()(undefined)).toThrow('Value is not defined');
+    expect(() => isDefined()(undefined)).toThrow('Value must be defined');
   });
 
 });

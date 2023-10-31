@@ -4,9 +4,9 @@ describe("isDate", function () {
 
   it("should validate value is an instance of Date", function () {
     expect(isDate()(new Date(1))).toEqual(new Date(1));
-    expect(() => isDate()(undefined)).toThrow('Value is not a valid Date instance');
-    expect(() => isDate()(null)).toThrow('Value is not a valid Date instance');
-    expect(() => isDate()(new Date('invalid'))).toThrow('Value is not a valid Date instance');
+    expect(() => isDate()(undefined)).toThrow('Value must be a Date instance');
+    expect(() => isDate()(null)).toThrow('Value must be a Date instance');
+    expect(() => isDate()(new Date('invalid'))).toThrow('Value must be a Date instance');
   });
 
   it("should coerce to Date", function () {
@@ -26,9 +26,9 @@ describe("isDate", function () {
 
   it("should validate string format is valid", function () {
     expect(() => isDate()('invalid', {coerce: true}))
-        .toThrow('Value is not a valid Date instance or a date formatted string');
+        .toThrow('Value must be a Date instance or a date string');
     expect(() => isDate({format: 'DD.MM.YYYY'})('invalid', {coerce: true}))
-        .toThrow('Value is not a valid Date instance or a date formatted (DD.MM.YYYY) string');
+        .toThrow('Value must be a Date instance or a date string (DD.MM.YYYY)');
   });
 
   it("should validate string format", function () {

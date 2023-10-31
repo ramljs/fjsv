@@ -31,9 +31,9 @@ describe("isObject", function () {
   it("should validate value is an object", function () {
     const objValidate = isObject({a: isString()});
     expect(objValidate({a: '1'})).toStrictEqual({a: '1'});
-    expect(() => objValidate(null)).toThrow('Value is not an object');
-    expect(() => objValidate(undefined)).toThrow('Value is not an object');
-    expect(() => objValidate(NaN as any)).toThrow('Value is not an object');
+    expect(() => objValidate(null)).toThrow('Value must be an object');
+    expect(() => objValidate(undefined)).toThrow('Value must be an object');
+    expect(() => objValidate(NaN as any)).toThrow('Value must be an object');
   });
 
   it("should coerce properties", function () {

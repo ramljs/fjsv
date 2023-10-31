@@ -5,12 +5,12 @@ describe("isBoolean", function () {
   it("should validate value is a boolean", function () {
     expect(isBoolean()(true)).toStrictEqual(true);
     expect(isBoolean()(false)).toStrictEqual(false);
-    expect(() => isBoolean()(undefined)).toThrow('Value is not a valid boolean');
-    expect(() => isBoolean()(null)).toThrow('Value is not a valid boolean');
-    expect(() => isBoolean()(1)).toThrow('Value is not a valid boolean');
-    expect(() => isBoolean()('true')).toThrow('Value is not a valid boolean');
-    expect(() => isBoolean()(NaN)).toThrow('Value is not a valid boolean');
-    expect(() => isBoolean()(5 as any)).toThrow('Value is not a valid boolean');
+    expect(() => isBoolean()(undefined)).toThrow('Value must be a boolean');
+    expect(() => isBoolean()(null)).toThrow('Value must be a boolean');
+    expect(() => isBoolean()(1)).toThrow('Value must be a boolean');
+    expect(() => isBoolean()('true')).toThrow('Value must be a boolean');
+    expect(() => isBoolean()(NaN)).toThrow('Value must be a boolean');
+    expect(() => isBoolean()(5 as any)).toThrow('Value must be a boolean');
   });
 
   it("should coerce to boolean", function () {

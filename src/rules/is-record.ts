@@ -20,7 +20,7 @@ export function isRecord<TKeys extends string | number | symbol, TValues>(
           _this
       ): Nullish<Record<TKeys, TValues>> {
         if (!(input && typeof input === 'object')) {
-          context.fail(_this, `{{label}} is not an object`, input);
+          context.fail(_this, `{{label}} must be an object`, input);
           return;
         }
         const keyContext = context.extend();

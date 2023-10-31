@@ -21,7 +21,7 @@ export function isArray<T, I>(
         if (input != null && context.coerce && !Array.isArray(input))
           input = [input];
         if (!Array.isArray(input)) {
-          context.fail(_this, `{{label}} is not an array`, input);
+          context.fail(_this, `{{label}} must be an array`, input);
           return;
         }
         if (!itemValidator)

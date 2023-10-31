@@ -33,9 +33,9 @@ export function isDate(options?: IsDateOptions) {
         if (input && input instanceof Date && !isNaN(input.getTime()))
           return input;
         context.fail(_this,
-            `{{label}} is not a valid Date instance` +
+            `{{label}} must be a Date instance` +
             (context.coerce
-                ? ` or a date formatted${options?.format ? " (" + options.format + ")" : ''} string`
+                ? ` or a date string${options?.format ? " (" + options.format + ")" : ''}`
                 : ''),
             input,
             {format: options?.format}

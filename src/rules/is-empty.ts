@@ -13,25 +13,25 @@ export function isEmpty(options?: ValidationOptions) {
           context: Context,
           _this
       ) {
-        if (input != null) {
-          if (typeof input === 'string') {
-            if (!input)
-              return input;
-          } else if (Array.isArray(input)) {
-            if (!input.length)
-              return input;
-          } else if (input instanceof Set) {
-            if (!input.size)
-              return input;
-          } else if (input instanceof Map) {
-            if (!input.size)
-              return input;
-          } else if (typeof input === 'object') {
-            if (!Object.keys(input).length)
-              return input;
-          }
+        if (input == null)
+          return input;
+        if (typeof input === 'string') {
+          if (!input)
+            return input;
+        } else if (Array.isArray(input)) {
+          if (!input.length)
+            return input;
+        } else if (input instanceof Set) {
+          if (!input.size)
+            return input;
+        } else if (input instanceof Map) {
+          if (!input.size)
+            return input;
+        } else if (typeof input === 'object') {
+          if (!Object.keys(input).length)
+            return input;
         }
-        context.fail(_this, `{{label}} is not empty`, input);
+        context.fail(_this, `{{label}} must be empty`, input);
       }, options
   )
 }
@@ -65,7 +65,7 @@ export function isNotEmpty(options?: ValidationOptions) {
               return input;
           }
         }
-        context.fail(_this, `{{label}} is empty`, input);
+        context.fail(_this, `{{label}} mustn't be empty`, input);
       }, options
   )
 }

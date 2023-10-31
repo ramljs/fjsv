@@ -26,7 +26,7 @@ export function isObjectId(options?: ValidationOptions) {
                 )
             )
         ) return input;
-        context.fail(_this, `{{label}} is not a valid ObjectId`, input);
+        context.fail(_this, `{{label}} must be an ObjectId`, input);
       }, options
   );
 }

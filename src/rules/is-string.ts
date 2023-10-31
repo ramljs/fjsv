@@ -17,7 +17,7 @@ export function isString(options?: ValidationOptions) {
         }
         if (typeof input === 'string')
           return input;
-        context.fail(_this, `{{label}} is not a string`, input);
+        context.fail(_this, `{{label}} must be a string`, input);
       }, options
   );
 }

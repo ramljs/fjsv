@@ -27,6 +27,8 @@ export class Context implements ExecutionOptions {
       this.onFail = options.onFail;
     if (options?.coerce != null)
       this.coerce = options?.coerce;
+    if (options?.label != null)
+      this.label = options?.label;
   }
 
   fail(rule: Validator,
