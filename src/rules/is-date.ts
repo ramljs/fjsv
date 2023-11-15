@@ -91,7 +91,7 @@ export function isDateString(options?: IsDateStringOptions) {
                 if (trim === 'time' || !m[4]) return s;
                 s += 'T' + m[4];
                 if (trim === 'timezone') return s;
-                if (m[9]) s += '-' + m[9];
+                if (m[9]) s += m[9];
                 return s;
               }
             }
