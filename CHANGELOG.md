@@ -1,3 +1,10 @@
+# v4.2.2
+[2023-11-15]
+
+### Changes
+
+* Changed "trim" option ([`b5eff4f`](https://github.com/panates/valgen/commit/b5eff4ffd61eb78ea244dfe2c66ca86275b9578c))
+
 # v4.2.1
 [2023-11-15]
 
