@@ -84,11 +84,11 @@ describe("isDateString", function () {
     let d: any = new Date('2020-01-10T08:30:15.123Z');
     expect(isDateString()(d, {coerce: true})).toEqual('2020-01-10T08:30:15.123Z');
     d = new Date('2020-01-10T08:30:15.123');
-    expect(isDateString({trim: 'timezone'})(d, {coerce: true})).toEqual('2020-01-10T08:30:15.123');
-    expect(isDateString({trim: 'time'})(d, {coerce: true})).toEqual('2020-01-10');
+    expect(isDateString({trim: 'time'})(d, {coerce: true})).toEqual('2020-01-10T08:30:15.123');
+    expect(isDateString({trim: 'date'})(d, {coerce: true})).toEqual('2020-01-10');
     d = '2020-01-10T08:30:15.123+03:00';
-    expect(isDateString({trim: 'timezone'})(d, {coerce: true})).toEqual('2020-01-10T08:30:15.123');
-    expect(isDateString({trim: 'time'})(d, {coerce: true})).toEqual('2020-01-10');
+    expect(isDateString({trim: 'time'})(d, {coerce: true})).toEqual('2020-01-10T08:30:15.123');
+    expect(isDateString({trim: 'date'})(d, {coerce: true})).toEqual('2020-01-10');
   });
 
 });

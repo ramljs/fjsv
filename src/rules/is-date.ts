@@ -54,7 +54,7 @@ export function isDate(options?: IsDateOptions) {
 
 export interface IsDateStringOptions extends ValidationOptions {
   precision?: 'year' | 'month' | 'date' | 'time'
-  trim?: 'time' | 'timezone';
+  trim?: 'date' | 'time';
 }
 
 /**
@@ -88,9 +88,9 @@ export function isDateString(options?: IsDateStringOptions) {
                 let s = m[1];
                 if (m[2]) s += '-' + m[2]; else return s;
                 if (m[3]) s += '-' + m[3]; else return s;
-                if (trim === 'time' || !m[4]) return s;
+                if (trim === 'date' || !m[4]) return s;
                 s += 'T' + m[4];
-                if (trim === 'timezone') return s;
+                if (trim === 'time') return s;
                 if (m[9]) s += m[9];
                 return s;
               }
@@ -100,13 +100,9 @@ export function isDateString(options?: IsDateStringOptions) {
         } else if (input != null) {
           const d = dayjs(input);
           if (d.isValid()) {
-            if (!context.coerce)
-              return input;
-            if (trim === 'timezone')
-              return d.millisecond() ? d.format('YYYY-MM-DDTHH:mm:ss.SSS') : d.format('YYYY-MM-DDTHH:mm:ss')
-            if (trim === 'time')
+            if (trim === 'date')
               return d.format('YYYY-MM-DD')
-            return d.toISOString();
+            return d.millisecond() ? d.format('YYYY-MM-DDTHH:mm:ss.SSS') : d.format('YYYY-MM-DDTHH:mm:ss')
           }
         }
 
