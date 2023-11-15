@@ -2,12 +2,14 @@ import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 import { Nullish } from 'ts-gems';
 import { Context, ValidationOptions, validator } from '../core/index.js';
-import { omitKeys } from '../helpers/object.utils.js';
 
 dayjs.extend(customParseFormat);
+/* eslint-disable-next-line max-len */ // noinspection RegExpUnnecessaryNonCapturingGroup
+const DATE_PATTERN = /^(\d{4})(?:-(0[0-9]|1[0-2]))?(?:-([0-2][0-9]|3[0-1]))?(?:[T ](([0-1][0-9]|2[0-4]):([0-5][0-9])(?::([0-5][0-9]))?(?:\.(\d{0,3}))?)?((?:[+-](0[0-9]|1[0-2])(?::(\d{2}))?)|Z)?)?$/;
+
 
 export interface IsDateOptions extends ValidationOptions {
-  format?: string | string[];
+  precision?: 'year' | 'month' | 'date' | 'time'
 }
 
 /**
@@ -16,6 +18,7 @@ export interface IsDateOptions extends ValidationOptions {
  * @validator isDate
  */
 export function isDate(options?: IsDateOptions) {
+  const precision = options?.precision;
   return validator<Date, Date | number | string>('isDate',
       function (
           input: unknown,
@@ -23,30 +26,35 @@ export function isDate(options?: IsDateOptions) {
           _this
       ): Nullish<Date> {
         if (input != null && !(input instanceof Date) && context.coerce) {
-          if (typeof input === 'string') {
-            const d = dayjs(input, options?.format);
+          if (typeof input === 'string' && context.coerce) {
+            const d = dayjs(input);
             if (d.isValid())
               input = d.toDate();
           } else if (typeof input === 'number')
             input = new Date(input);
         }
-        if (input && input instanceof Date && !isNaN(input.getTime()))
+        if (input && input instanceof Date && !isNaN(input.getTime())) {
+          if (precision === 'year') {
+            input.setHours(0, 0, 0, 0);
+            input.setMonth(0, 1);
+          }
+          if (precision === 'month') {
+            input.setHours(0, 0, 0, 0);
+            input.setDate(1);
+          }
+          if (precision === 'date')
+            input.setHours(0, 0, 0, 0);
           return input;
-        context.fail(_this,
-            `{{label}} must be a Date instance` +
-            (context.coerce
-                ? ` or a date string${options?.format ? " (" + options.format + ")" : ''}`
-                : ''),
-            input,
-            {format: options?.format}
-        );
-      }, omitKeys(options || {}, ['format'])
+        }
+        context.fail(_this, `{{label}} must be a Date instance or a date string`, input);
+      }, options
   );
 }
 
 
 export interface IsDateStringOptions extends ValidationOptions {
-  format?: string | string[];
+  precision?: 'year' | 'month' | 'date' | 'time'
+  trim?: 'time' | 'timezone';
 }
 
 /**
@@ -55,33 +63,59 @@ export interface IsDateStringOptions extends ValidationOptions {
  * @validator isDateString
  */
 export function isDateString(options?: IsDateStringOptions) {
-  const inputFormat = options?.format;
-  const coerceFormat = Array.isArray(options?.format) ? options?.format[0] : options?.format;
+  const precision = options?.precision;
+  const trim = options?.trim;
   return validator<string, Date | number | string>('isDateString',
       function (
-          input: unknown,
+          input: any,
           context: Context,
           _this
       ): Nullish<string> {
-        if (input instanceof Date) {
-          const d = dayjs(input)
-          if (d.isValid())
-            return coerceFormat ? d.format(coerceFormat) : d.toISOString();
-        } else if (typeof input === 'string') {
-          const d = dayjs(input, inputFormat);
+        if (typeof input === 'string') {
+          const d = dayjs(input);
           if (d.isValid()) {
-            if (context.coerce && options?.format)
-              return coerceFormat ? d.format(coerceFormat) : d.toISOString();
-            return input;
+            const m = DATE_PATTERN.exec(input);
+            if (m) {
+              if (
+                  !precision ||
+                  precision === 'year' ||
+                  (precision === 'month' && m[2]) ||
+                  (precision === 'date' && m[2] && m[3]) ||
+                  (precision === 'time' && m[2] && m[3] && m[4])
+              ) {
+                if (!context.coerce)
+                  return input;
+                let s = m[1];
+                if (m[2]) s += '-' + m[2]; else return s;
+                if (m[3]) s += '-' + m[3]; else return s;
+                if (trim === 'time' || !m[4]) return s;
+                s += 'T' + m[4];
+                if (trim === 'timezone') return s;
+                if (m[9]) s += '-' + m[9];
+                return s;
+              }
+            }
+
+          }
+        } else if (input != null) {
+          const d = dayjs(input);
+          if (d.isValid()) {
+            if (!context.coerce)
+              return input;
+            if (trim === 'timezone')
+              return d.millisecond() ? d.format('YYYY-MM-DDTHH:mm:ss.SSS') : d.format('YYYY-MM-DDTHH:mm:ss')
+            if (trim === 'time')
+              return d.format('YYYY-MM-DD')
+            return d.toISOString();
           }
         }
+
         context.fail(_this,
-            `{{label}} is not a valid date formatted${
-                options?.format ? " (" + options.format + ")" : ''
-            } string`,
+            `{{label}} is not a valid date string`,
             input,
-            {format: options?.format}
+            {...options}
         );
-      }, omitKeys(options || {}, ['format'])
+
+      }, options
   );
 }
