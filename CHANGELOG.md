@@ -1,3 +1,10 @@
+# v4.2.1
+[2023-11-15]
+
+### Changes
+
+* Fixed generating invalid date string ([`6407ac6`](https://github.com/panates/valgen/commit/6407ac6bd17bf84a8d031efe9b3998d58c5b7f8b))
+
 # v4.2.0
 [2023-11-15]
 
