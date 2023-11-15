@@ -1,3 +1,11 @@
+# v4.2.0
+[2023-11-15]
+
+### Changes
+
+* Removed "format" option and added "precision" option to isDate validator ([`2e332a6`](https://github.com/panates/valgen/commit/2e332a6fb9907e0b50f98a6dbcbbdfb3764af867))
+* Added test for "label" option ([`162f41a`](https://github.com/panates/valgen/commit/162f41ac36762a146718c3efc4784bb33f48c955))
+
 # v4.1.0
 [2023-10-31]
 
