@@ -1,3 +1,10 @@
+# v4.2.4
+[2023-11-20]
+
+### Changes
+
+* Added json parsing feature to isObject validator ([`0cd128a`](https://github.com/panates/valgen/commit/0cd128ab8bae6e834230004c4b7bf857ce67b76f))
+
 # v4.2.3
 [2023-11-20]
 
