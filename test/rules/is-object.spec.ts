@@ -36,6 +36,11 @@ describe("isObject", function () {
     expect(() => objValidate(NaN as any)).toThrow('Value must be an object');
   });
 
+  it("should parse json if coerce=true", function () {
+    expect(personValidate('{"name": "John", "age": "22"}', {coerce: true}))
+        .toEqual({fullName: 'John', age: 22});
+  });
+
   it("should coerce properties", function () {
     expect(personValidate({name: 'John', age: '22'}, {coerce: true}))
         .toEqual({fullName: 'John', age: 22});

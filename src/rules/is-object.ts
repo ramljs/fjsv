@@ -27,7 +27,7 @@ export interface ObjectValidator<T extends object = object, I = object> extends 
  * Converts properties according to schema rules if coerce option is set to 'true'.
  * @validator isObject
  */
-export function isObject<T extends object = object, I = object>(
+export function isObject<T extends object = object, I = object | string>(
     schema: ObjectSchema,
     options?: IsObjectOptions<T>
 ): ObjectValidator<T, I> {
@@ -55,10 +55,12 @@ export function isObject<T extends object = object, I = object>(
 
   const _rule = validator<T, object>('isObject',
       function (
-          input: object | undefined,
+          input: any,
           context: Context & { circMap?: Map<object, object> },
           _this
       ): Nullish<T> {
+        if (typeof input === 'string' && context.coerce)
+          input = JSON.parse(input);
         if (!(input && typeof input === 'object')) {
           context.fail(_this, `{{label}} must be an object`, input);
           return;
