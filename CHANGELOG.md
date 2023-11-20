@@ -1,3 +1,10 @@
+# v4.2.3
+[2023-11-20]
+
+### Changes
+
+* Optimized error messages ([`21e29dc`](https://github.com/panates/valgen/commit/21e29dc2eff846fbeccb7737ffe41496bca583c5))
+
 # v4.2.2
 [2023-11-15]
 
