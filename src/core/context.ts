@@ -69,8 +69,8 @@ export class Context implements ExecutionOptions {
             return x;
           const k = m[1];
           let v = issue[k];
-          if (!v && m[1] === 'label' && (this.label || this.property))
-            v = '`' + (this.label || this.property) + '`'
+          if (!v && m[1] === 'label' && (this.location || this.property))
+            v = '`' + (this.location || this.property) + '`'
           if (v != null) return v;
           if (m[2])
             return m[2];

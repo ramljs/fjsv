@@ -14,7 +14,7 @@ describe("isArray", function () {
   it("should validate items according to item rule", function () {
     expect(isArray(isInteger())([1, 2])).toStrictEqual([1, 2]);
     expect(() => isArray(isInteger())(['1', '2']))
-        .toThrow('Item at (0) must be an integer number');
+        .toThrow('`<Array>[0]` must be an integer number');
   })
 
   it("should coerce value to array", function () {

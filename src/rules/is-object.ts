@@ -84,7 +84,6 @@ export function isObject<T extends object = object, I = object>(
         if (context.root == null)
           context.root = context.root || ctorName || '';
         const location = context.location || '';
-
         const processedSchemaKeys: Record<string, boolean> = {};
         // Iterate object keys and perform rules
         for (i = 0; i < l; i++) {
