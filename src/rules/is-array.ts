@@ -36,8 +36,8 @@ export function isArray<T, I>(
           v = input[i];
           itemContext.scope = input;
           // itemContext.location = location + '[' + i + ']';
-          itemContext.location = context.label
-              ? context.label + `[${i}]`
+          itemContext.location = context.location
+              ? context.location + `[${i}]`
               : `<Array>[${i}]`;
           itemContext.index = i;
           v = itemValidator(v, itemContext) as T;
