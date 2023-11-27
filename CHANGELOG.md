@@ -1,3 +1,10 @@
+# v4.2.5
+[2023-11-27]
+
+### Changes
+
+* Fixed isArray error location property. ([`b42ca30`](https://github.com/panates/valgen/commit/b42ca300c9c5a68685a70a9cff895e9ad97eb650))
+
 # v4.2.4
 [2023-11-20]
 
