@@ -1,3 +1,11 @@
+# v4.3.0
+[2023-12-02]
+
+### Changes
+
+* Updated dependencies ([`4ff01f0`](https://github.com/panates/valgen/commit/4ff01f0f52c7efeab0c3e154946ba32d1cf04e86))
+* Added [preValidation] and [postValidation] to isObject rule ([`2f8351d`](https://github.com/panates/valgen/commit/2f8351d10fd1a9cc78577c52b37681319f3d28b2))
+
 # v4.2.5
 [2023-11-27]
 
