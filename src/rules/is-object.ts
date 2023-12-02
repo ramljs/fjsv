@@ -61,10 +61,15 @@ export function isObject<T extends object = object, I = object | string>(
       ): Nullish<T> {
         if (typeof input === 'string' && context.coerce)
           input = JSON.parse(input);
+
+        if (input && typeof input === 'object' && ctor && ctor.prototype[isObject.preValidation])
+          input = ctor.prototype[isObject.preValidation](input, context);
+
         if (!(input && typeof input === 'object')) {
           context.fail(_this, `{{label}} must be an object`, input);
           return;
         }
+
         const keys = [...Object.keys(input), ...Object.keys(schema)];
         const l = keys.length;
         let i = 0;
@@ -119,10 +124,21 @@ export function isObject<T extends object = object, I = object | string>(
           if (v !== undefined)
             out[propertyOptions[schemaKey]?.as || schemaKey] = v;
         }
-        return context.errors.length ? undefined : out;
+        if (context.errors.length)
+          return undefined;
+
+        if (ctor && ctor.prototype[isObject.postValidation])
+          return ctor.prototype[isObject.postValidation](out, context);
+
+        return out;
       }, options
   ) as unknown as ObjectValidator<T, I>;
 
   _rule.schema = schema;
   return _rule;
+}
+
+export namespace isObject {
+  export const postValidation = Symbol('postValidation');
+  export const preValidation = Symbol('preValidation');
 }

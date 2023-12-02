@@ -114,4 +114,23 @@ describe("isObject", function () {
     expect(circularCodec(obj)).toEqual(obj);
   });
 
+
+  it("should call [preValidation] function", function () {
+    Person.prototype[isObject.preValidation] = (input) => {
+      return {...input, age: input.age + 1};
+    }
+    expect(personValidate({name: 'julia', age: 18}))
+        .toEqual({fullName: 'julia', age: 19});
+    Person.prototype[isObject.preValidation] = undefined;
+  });
+
+  it("should call [postValidation] function", function () {
+    Person.prototype[isObject.postValidation] = (input) => {
+      return {...input, horoscope: 'virgo'};
+    }
+    expect(personValidate({name: 'julia', age: 18}))
+        .toEqual({fullName: 'julia', age: 18, horoscope: 'virgo'});
+    Person.prototype[isObject.postValidation] = undefined;
+  });
+
 });
