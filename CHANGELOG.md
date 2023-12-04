@@ -1,3 +1,10 @@
+# v4.3.1
+[2023-12-04]
+
+### Changes
+
+* Made preValidation and postValidation static ([`71fa530`](https://github.com/panates/valgen/commit/71fa53050428fc937dcdda24cb9a43baf0f2d384))
+
 # v4.3.0
 [2023-12-02]
 
