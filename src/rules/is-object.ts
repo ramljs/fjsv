@@ -59,11 +59,11 @@ export function isObject<T extends object = object, I = object | string>(
           context: Context & { circMap?: Map<object, object> },
           _this
       ): Nullish<T> {
+        if (ctor && ctor[isObject.preValidation])
+          input = ctor[isObject.preValidation](input, context);
+
         if (typeof input === 'string' && context.coerce)
           input = JSON.parse(input);
-
-        if (input && typeof input === 'object' && ctor && ctor.prototype[isObject.preValidation])
-          input = ctor.prototype[isObject.preValidation](input, context);
 
         if (!(input && typeof input === 'object')) {
           context.fail(_this, `{{label}} must be an object`, input);
@@ -127,8 +127,10 @@ export function isObject<T extends object = object, I = object | string>(
         if (context.errors.length)
           return undefined;
 
-        if (ctor && ctor.prototype[isObject.postValidation])
-          return ctor.prototype[isObject.postValidation](out, context);
+        if (ctor && ctor[isObject.postValidation]) {
+          ctor[isObject.postValidation](out, context);
+          return out;
+        }
 
         return out;
       }, options

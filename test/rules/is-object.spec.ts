@@ -116,21 +116,21 @@ describe("isObject", function () {
 
 
   it("should call [preValidation] function", function () {
-    Person.prototype[isObject.preValidation] = (input) => {
+    Person[isObject.preValidation] = function (input) {
       return {...input, age: input.age + 1};
     }
     expect(personValidate({name: 'julia', age: 18}))
         .toEqual({fullName: 'julia', age: 19});
-    Person.prototype[isObject.preValidation] = undefined;
+    Person[isObject.preValidation] = undefined;
   });
 
   it("should call [postValidation] function", function () {
-    Person.prototype[isObject.postValidation] = (input) => {
-      return {...input, horoscope: 'virgo'};
+    Person[isObject.postValidation] = function (input: Person) {
+      input.age = input.age + 2;
     }
     expect(personValidate({name: 'julia', age: 18}))
-        .toEqual({fullName: 'julia', age: 18, horoscope: 'virgo'});
-    Person.prototype[isObject.postValidation] = undefined;
+        .toEqual({fullName: 'julia', age: 20});
+    Person[isObject.postValidation] = undefined;
   });
 
 });
