@@ -1,3 +1,11 @@
+# v4.3.2
+[2023-12-08]
+
+### Changes
+
+* Updated dependenices ([`a539d1b`](https://github.com/panates/valgen/commit/a539d1b6d2d3629174e3d14efee58aacb4e6730a))
+* Pass "_this" parameter to preValidation and postValidation methods ([`bdb6a97`](https://github.com/panates/valgen/commit/bdb6a97ed50b538fad97ed1fb2161f8665647214))
+
 # v4.3.1
 [2023-12-04]
 
