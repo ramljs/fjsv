@@ -60,7 +60,7 @@ export function isObject<T extends object = object, I = object | string>(
           _this
       ): Nullish<T> {
         if (ctor && ctor[isObject.preValidation])
-          input = ctor[isObject.preValidation](input, context);
+          input = ctor[isObject.preValidation](input, context, _this);
 
         if (typeof input === 'string' && context.coerce)
           input = JSON.parse(input);
@@ -128,7 +128,7 @@ export function isObject<T extends object = object, I = object | string>(
           return undefined;
 
         if (ctor && ctor[isObject.postValidation]) {
-          ctor[isObject.postValidation](out, context);
+          ctor[isObject.postValidation](out, context, _this);
           return out;
         }
 
