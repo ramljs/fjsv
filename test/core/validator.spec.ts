@@ -25,9 +25,9 @@ describe("validator", function () {
   });
 
   it("should .silent() return result object", function () {
-    let r = isNumber().silent(1);
+    let r = isNumber.silent(1);
     expect(r).toStrictEqual({value: 1});
-    r = isNumber().silent('x');
+    r = isNumber.silent('x');
     expect(r).toStrictEqual({
       errors: [{
         rule: 'isNumber',
@@ -38,7 +38,7 @@ describe("validator", function () {
   });
 
   it("should set label", function () {
-    expect(() => isInteger()(undefined, {label: 'Field1'})).toThrow('Field1 must be an integer number');
+    expect(() => isInteger(undefined, {label: 'Field1'})).toThrow('Field1 must be an integer number');
   });
 
 });

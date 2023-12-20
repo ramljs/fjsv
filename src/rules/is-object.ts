@@ -4,41 +4,25 @@ import {
   ValidationOptions, Validator, validator
 } from '../core/index.js';
 
-export type PropertyOptions = { label?: string, as?: string };
-export type ObjectSchema =
-    Record<string | number,
-        Validator<any, any> | [Validator<any, any>, PropertyOptions]
-    >;
-
-export interface IsObjectOptions<T> extends ValidationOptions {
-  name?: string;
-  ctor?: Type<T>,
-  additionalFields?: boolean | Validator<any, any> | 'error';
-  caseInSensitive?: boolean;
-  detectCircular?: boolean;
-}
-
-export interface ObjectValidator<T extends object = object, I = object> extends Validator<T, I> {
-  schema: ObjectSchema;
-}
-
 /**
  * Validates object according to schema
  * Converts properties according to schema rules if coerce option is set to 'true'.
  * @validator isObject
  */
 export function isObject<T extends object = object, I = object | string>(
-    schema: ObjectSchema,
-    options?: IsObjectOptions<T>
-): ObjectValidator<T, I> {
+    schema?: isObject.Schema,
+    options?: isObject.Options<T>
+): isObject.ObjectValidator<T, I> {
   const ctor = options?.ctor;
   const ctorName = options?.name || ctor?.name;
-  const additionalFields = options?.additionalFields ?? false;
+  const additionalFields = options?.additionalFields ?? !schema;
   const caseInSensitive = !!options?.caseInSensitive;
   const detectCircular = !!options?.detectCircular;
-  const propertyRules: Record<any, Validator<any, any>> = {};
-  const propertyOptions: Record<any, RequiredSome<PropertyOptions, 'as'>> = {};
-  Object.keys(schema).forEach(k => {
+  const propertyRules: Record<any, Validator> = {};
+  const propertyOptions: Record<any, RequiredSome<isObject.PropertyOptions, 'as'>> = {};
+  schema = schema || {};
+  const schemaKeys = Object.keys(schema);
+  for (const k of schemaKeys) {
     const n = schema[k];
     const key = caseInSensitive ? k.toLowerCase() : k;
     if (Array.isArray(n)) {
@@ -51,7 +35,7 @@ export function isObject<T extends object = object, I = object | string>(
       propertyOptions[key] = {as: k};
     } else
       throw new TypeError(`Invalid definition in validation schema (${k})`);
-  });
+  }
 
   const _rule = validator<T, object>('isObject',
       function (
@@ -70,7 +54,7 @@ export function isObject<T extends object = object, I = object | string>(
           return;
         }
 
-        const keys = [...Object.keys(input), ...Object.keys(schema)];
+        const keys = [...Object.keys(input), ...schemaKeys];
         const l = keys.length;
         let i = 0;
         let inputKey: string;
@@ -134,7 +118,7 @@ export function isObject<T extends object = object, I = object | string>(
 
         return out;
       }, options
-  ) as unknown as ObjectValidator<T, I>;
+  ) as unknown as isObject.ObjectValidator<T, I>;
 
   _rule.schema = schema;
   return _rule;
@@ -143,4 +127,23 @@ export function isObject<T extends object = object, I = object | string>(
 export namespace isObject {
   export const postValidation = Symbol('postValidation');
   export const preValidation = Symbol('preValidation');
+
+  export type PropertyOptions = { label?: string, as?: string };
+  export type Schema =
+      Record<string | number,
+          Validator<any, any> | [Validator<any, any>, PropertyOptions]
+      >;
+
+  export interface Options<T> extends ValidationOptions {
+    name?: string;
+    ctor?: Type<T>,
+    additionalFields?: boolean | Validator | 'error';
+    caseInSensitive?: boolean;
+    detectCircular?: boolean;
+  }
+
+  export interface ObjectValidator<T extends object = object, I = object> extends Validator<T, I> {
+    schema: Schema;
+  }
+
 }

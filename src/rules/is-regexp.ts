@@ -1,6 +1,6 @@
 import { Context, Nullish, ValidationOptions, validator } from '../core/index.js';
 
-export interface IsMatchesOptions extends ValidationOptions {
+export interface IsRegExpOptions extends ValidationOptions {
   formatName?: string;
 }
 
@@ -8,9 +8,9 @@ export interface IsMatchesOptions extends ValidationOptions {
  * Coerces given value to "UUID" format or returns undefined if nullish
  * @validator uuid
  */
-export function isMatches(
+export function isRegExp(
     format: string | RegExp,
-    options?: IsMatchesOptions
+    options?: IsRegExpOptions
 ) {
   const regExp = format instanceof RegExp ? format : new RegExp(format);
   const formatName = options?.formatName;

@@ -1,7 +1,4 @@
-import {
-  Context, isValidator, Nullish,
-  Validator, validator
-} from '../core/index.js';
+import { Context, isValidator, Nullish, Validator, validator } from './index.js';
 
 /**
  * Forwards codec process to a sub codec. Useful for circular checks

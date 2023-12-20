@@ -11,12 +11,12 @@ describe("isObjectId", function () {
   }
 
   it("should validate value is an ObjectId", function () {
-    expect(isObjectId()(idString)).toStrictEqual(idString);
-    expect(isObjectId()(idArray)).toStrictEqual(idArray);
-    expect(isObjectId()(idObject)).toStrictEqual(idObject);
-    expect(() => isObjectId()(undefined)).toThrow('Value must be an ObjectId');
-    expect(() => isObjectId()(null)).toThrow('Value must be an ObjectId');
-    expect(() => isObjectId()(NaN as any)).toThrow('Value must be an ObjectId');
+    expect(isObjectId(idString)).toStrictEqual(idString);
+    expect(isObjectId(idArray)).toStrictEqual(idArray);
+    expect(isObjectId(idObject)).toStrictEqual(idObject);
+    expect(() => isObjectId(undefined)).toThrow('Value must be an ObjectId');
+    expect(() => isObjectId(null)).toThrow('Value must be an ObjectId');
+    expect(() => isObjectId(NaN as any)).toThrow('Value must be an ObjectId');
   });
 
 });

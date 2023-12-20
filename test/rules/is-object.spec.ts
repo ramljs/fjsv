@@ -1,8 +1,4 @@
-import {
-  forwardRef, isNumber, isObject, isString,
-  ObjectSchema,
-  optional, required,
-} from 'valgen';
+import { factories, forwardRef, isNumber, isString } from 'valgen';
 
 class Address {
   city?: string;
@@ -15,21 +11,21 @@ class Person {
   address?: Address
 }
 
-const addressDef: ObjectSchema = {
-  city: [optional(isString()), {label: 'City'}],
-  country: [required(isString()), {label: 'Country'}]
+const addressDef: factories.isObject.Schema = {
+  city: [factories.optional(isString), {label: 'City'}],
+  country: [factories.required(isString), {label: 'Country'}]
 }
-const personDef: ObjectSchema = {
-  name: [required(isString()), {label: 'Full Name', as: 'fullName'}],
-  age: [required(isNumber()), {label: 'Age'}],
-  address: optional(isObject(addressDef, {ctor: Address}))
+const personDef: factories.isObject.Schema = {
+  name: [factories.required(isString), {label: 'Full Name', as: 'fullName'}],
+  age: [factories.required(isNumber), {label: 'Age'}],
+  address: factories.optional(factories.isObject(addressDef, {ctor: Address}))
 };
-const personValidate = isObject(personDef, {ctor: Person});
+const personValidate = factories.isObject(personDef, {ctor: Person});
 
 describe("isObject", function () {
 
   it("should validate value is an object", function () {
-    const objValidate = isObject({a: isString()});
+    const objValidate = factories.isObject({a: isString});
     expect(objValidate({a: '1'})).toStrictEqual({a: '1'});
     expect(() => objValidate(null)).toThrow('Value must be an object');
     expect(() => objValidate(undefined)).toThrow('Value must be an object');
@@ -98,9 +94,9 @@ describe("isObject", function () {
   });
 
   it("should detect circular dependencies", function () {
-    const circularCodec = isObject({
-      id: isNumber(),
-      child: optional(forwardRef(() => circularCodec))
+    const circularCodec = factories.isObject({
+      id: isNumber,
+      child: factories.optional(forwardRef(() => circularCodec))
     }, {detectCircular: true});
     const child1: any = {id: 2};
     const child2: any = {id: 3};
@@ -116,21 +112,21 @@ describe("isObject", function () {
 
 
   it("should call [preValidation] function", function () {
-    Person[isObject.preValidation] = function (input) {
+    Person[factories.isObject.preValidation] = function (input) {
       return {...input, age: input.age + 1};
     }
     expect(personValidate({name: 'julia', age: 18}))
         .toEqual({fullName: 'julia', age: 19});
-    Person[isObject.preValidation] = undefined;
+    Person[factories.isObject.preValidation] = undefined;
   });
 
   it("should call [postValidation] function", function () {
-    Person[isObject.postValidation] = function (input: Person) {
+    Person[factories.isObject.postValidation] = function (input: Person) {
       input.age = input.age + 2;
     }
     expect(personValidate({name: 'julia', age: 18}))
         .toEqual({fullName: 'julia', age: 20});
-    Person[isObject.postValidation] = undefined;
+    Person[factories.isObject.postValidation] = undefined;
   });
 
 });

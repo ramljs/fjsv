@@ -1,14 +1,14 @@
-import { isEnum } from 'valgen';
+import { factories } from 'valgen';
 
 describe("isEnum", function () {
 
   it("should validate value", function () {
-    expect(isEnum('a')('a')).toStrictEqual('a');
-    expect(isEnum(['a', 'b'])('a')).toStrictEqual('a');
-    expect(isEnum(['a', 'b'])('b')).toStrictEqual('b');
-    expect(() => isEnum(['a', 'b'])('c')).toThrow('must be one of');
-    expect(() => isEnum(['a', 'b'])(undefined)).toThrow('must be one of');
-    expect(() => isEnum(['a', 'b'])(null)).toThrow('must be one of');
+    expect(factories.isEnum('a')('a')).toStrictEqual('a');
+    expect(factories.isEnum(['a', 'b'])('a')).toStrictEqual('a');
+    expect(factories.isEnum(['a', 'b'])('b')).toStrictEqual('b');
+    expect(() => factories.isEnum(['a', 'b'])('c')).toThrow('must be one of');
+    expect(() => factories.isEnum(['a', 'b'])(undefined)).toThrow('must be one of');
+    expect(() => factories.isEnum(['a', 'b'])(null)).toThrow('must be one of');
   });
 
 });
