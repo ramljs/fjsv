@@ -1,3 +1,10 @@
+# v5.0.0
+[2023-12-20]
+
+### Changes
+
+* Moved all validator factories into "factories" namespace, ([`e93dddd`](https://github.com/panates/valgen/commit/e93dddd7aa3aa3bcdfbf9fa1615f9504fbff7e6f))
+
 # v4.3.2
 [2023-12-08]
 
