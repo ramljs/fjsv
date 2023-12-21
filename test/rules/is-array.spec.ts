@@ -1,4 +1,4 @@
-import { factories, isArray, isBoolean, isInteger, isString } from 'valgen';
+import { isArray, isBoolean, isInteger, isString, vg } from 'valgen';
 
 describe("isArray", function () {
 
@@ -12,15 +12,15 @@ describe("isArray", function () {
   });
 
   it("should validate items according to item rule", function () {
-    expect(factories.isArray(isInteger)([1, 2])).toStrictEqual([1, 2]);
-    expect(() => factories.isArray(isInteger)(['1', '2']))
+    expect(vg.isArray(isInteger)([1, 2])).toStrictEqual([1, 2]);
+    expect(() => vg.isArray(isInteger)(['1', '2']))
         .toThrow('`<Array>[0]` must be an integer number');
   })
 
   it("should coerce value to array", function () {
     // expect(isArray()('x', {coerce: true})).toStrictEqual(['x']);
-    expect(factories.isArray(isBoolean)([1], {coerce: true})).toStrictEqual([true]);
-    expect(factories.isArray(isString)([false, '1'], {coerce: true})).toStrictEqual(['false', '1']);
+    expect(vg.isArray(isBoolean)([1], {coerce: true})).toStrictEqual([true]);
+    expect(vg.isArray(isString)([false, '1'], {coerce: true})).toStrictEqual(['false', '1']);
   });
 
 });

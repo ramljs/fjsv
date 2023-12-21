@@ -1,4 +1,4 @@
-import {factories, isDate, isDateString } from 'valgen';
+import { isDate, isDateString, vg } from 'valgen';
 
 describe("isDate", function () {
 
@@ -19,9 +19,9 @@ describe("isDate", function () {
 
   it("should apply precision", function () {
     const d: any = new Date('2020-05-10T08:30:15.123Z');
-    expect(factories.isDate({precision: 'date'})(d)).toEqual(new Date('2020-05-10T00:00:00'));
-    expect(factories.isDate({precision: 'month'})(d)).toEqual(new Date('2020-05-01T00:00:00'));
-    expect(factories.isDate({precision: 'year'})(d)).toEqual(new Date('2020-01-01T00:00:00'));
+    expect(vg.isDate({precision: 'date'})(d)).toEqual(new Date('2020-05-10T00:00:00'));
+    expect(vg.isDate({precision: 'month'})(d)).toEqual(new Date('2020-05-01T00:00:00'));
+    expect(vg.isDate({precision: 'year'})(d)).toEqual(new Date('2020-01-01T00:00:00'));
   });
 
   it("should validate string format", function () {
@@ -51,43 +51,43 @@ describe("isDateString", function () {
   });
 
   it("should validate date string with time - precision = month", function () {
-    expect(factories.isDateString({precision: 'month'})('2020-01-10T08:30:15Z')).toEqual('2020-01-10T08:30:15Z');
-    expect(factories.isDateString({precision: 'month'})('2020-01-10T08:30:15')).toEqual('2020-01-10T08:30:15');
-    expect(factories.isDateString({precision: 'month'})('2020-01-10T08:30')).toEqual('2020-01-10T08:30');
-    expect(factories.isDateString({precision: 'month'})('2020-01-10 08:30')).toEqual('2020-01-10 08:30');
-    expect(factories.isDateString({precision: 'month'})('2020-01-10')).toEqual('2020-01-10');
-    expect(factories.isDateString({precision: 'month'})('2020-01')).toEqual('2020-01');
-    expect(() => factories.isDateString({precision: 'month'})('2020')).toThrow('Value is not a valid date string');
+    expect(vg.isDateString({precision: 'month'})('2020-01-10T08:30:15Z')).toEqual('2020-01-10T08:30:15Z');
+    expect(vg.isDateString({precision: 'month'})('2020-01-10T08:30:15')).toEqual('2020-01-10T08:30:15');
+    expect(vg.isDateString({precision: 'month'})('2020-01-10T08:30')).toEqual('2020-01-10T08:30');
+    expect(vg.isDateString({precision: 'month'})('2020-01-10 08:30')).toEqual('2020-01-10 08:30');
+    expect(vg.isDateString({precision: 'month'})('2020-01-10')).toEqual('2020-01-10');
+    expect(vg.isDateString({precision: 'month'})('2020-01')).toEqual('2020-01');
+    expect(() => vg.isDateString({precision: 'month'})('2020')).toThrow('Value is not a valid date string');
   });
 
   it("should validate date string with time - precision = date", function () {
-    expect(factories.isDateString({precision: 'date'})('2020-01-10T08:30:15Z')).toEqual('2020-01-10T08:30:15Z');
-    expect(factories.isDateString({precision: 'date'})('2020-01-10T08:30:15')).toEqual('2020-01-10T08:30:15');
-    expect(factories.isDateString({precision: 'date'})('2020-01-10T08:30')).toEqual('2020-01-10T08:30');
-    expect(factories.isDateString({precision: 'date'})('2020-01-10 08:30')).toEqual('2020-01-10 08:30');
-    expect(factories.isDateString({precision: 'date'})('2020-01-10')).toEqual('2020-01-10');
-    expect(() => factories.isDateString({precision: 'date'})('2020-01')).toThrow('Value is not a valid date string');
-    expect(() => factories.isDateString({precision: 'date'})('2020')).toThrow('Value is not a valid date string');
+    expect(vg.isDateString({precision: 'date'})('2020-01-10T08:30:15Z')).toEqual('2020-01-10T08:30:15Z');
+    expect(vg.isDateString({precision: 'date'})('2020-01-10T08:30:15')).toEqual('2020-01-10T08:30:15');
+    expect(vg.isDateString({precision: 'date'})('2020-01-10T08:30')).toEqual('2020-01-10T08:30');
+    expect(vg.isDateString({precision: 'date'})('2020-01-10 08:30')).toEqual('2020-01-10 08:30');
+    expect(vg.isDateString({precision: 'date'})('2020-01-10')).toEqual('2020-01-10');
+    expect(() => vg.isDateString({precision: 'date'})('2020-01')).toThrow('Value is not a valid date string');
+    expect(() => vg.isDateString({precision: 'date'})('2020')).toThrow('Value is not a valid date string');
   });
 
   it("should validate date string with time - precision = datetime", function () {
-    expect(factories.isDateString({precision: 'time'})('2020-01-10T08:30:15Z')).toEqual('2020-01-10T08:30:15Z');
-    expect(factories.isDateString({precision: 'time'})('2020-01-10T08:30:15')).toEqual('2020-01-10T08:30:15');
-    expect(factories.isDateString({precision: 'time'})('2020-01-10T08:30')).toEqual('2020-01-10T08:30');
-    expect(factories.isDateString({precision: 'time'})('2020-01-10 08:30')).toEqual('2020-01-10 08:30');
-    expect(() => factories.isDateString({precision: 'time'})('2020-01-10')).toThrow('Value is not a valid date string');
-    expect(() => factories.isDateString({precision: 'time'})('2020-01')).toThrow('Value is not a valid date string');
-    expect(() => factories.isDateString({precision: 'time'})('2020')).toThrow('Value is not a valid date string');
+    expect(vg.isDateString({precision: 'time'})('2020-01-10T08:30:15Z')).toEqual('2020-01-10T08:30:15Z');
+    expect(vg.isDateString({precision: 'time'})('2020-01-10T08:30:15')).toEqual('2020-01-10T08:30:15');
+    expect(vg.isDateString({precision: 'time'})('2020-01-10T08:30')).toEqual('2020-01-10T08:30');
+    expect(vg.isDateString({precision: 'time'})('2020-01-10 08:30')).toEqual('2020-01-10 08:30');
+    expect(() => vg.isDateString({precision: 'time'})('2020-01-10')).toThrow('Value is not a valid date string');
+    expect(() => vg.isDateString({precision: 'time'})('2020-01')).toThrow('Value is not a valid date string');
+    expect(() => vg.isDateString({precision: 'time'})('2020')).toThrow('Value is not a valid date string');
   });
 
   it("should coerce string and trim", function () {
     let d: any = new Date('2020-01-10T08:30:15.123');
     expect(isDateString(d, {coerce: true})).toEqual('2020-01-10T08:30:15.123');
-    expect(factories.isDateString({trim: 'time'})(d, {coerce: true})).toEqual('2020-01-10T08:30:15.123');
-    expect(factories.isDateString({trim: 'date'})(d, {coerce: true})).toEqual('2020-01-10');
+    expect(vg.isDateString({trim: 'time'})(d, {coerce: true})).toEqual('2020-01-10T08:30:15.123');
+    expect(vg.isDateString({trim: 'date'})(d, {coerce: true})).toEqual('2020-01-10');
     d = '2020-01-10T08:30:15.123+03:00';
-    expect(factories.isDateString({trim: 'time'})(d, {coerce: true})).toEqual('2020-01-10T08:30:15.123');
-    expect(factories.isDateString({trim: 'date'})(d, {coerce: true})).toEqual('2020-01-10');
+    expect(vg.isDateString({trim: 'time'})(d, {coerce: true})).toEqual('2020-01-10T08:30:15.123');
+    expect(vg.isDateString({trim: 'date'})(d, {coerce: true})).toEqual('2020-01-10');
   });
 
 });

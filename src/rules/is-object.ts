@@ -1,8 +1,28 @@
 import { RequiredSome } from 'ts-gems';
+import { postValidation, preValidation } from '../constants.js';
 import {
   Context, isValidator, Nullish, Type,
-  ValidationOptions, Validator, validator
+  ValidationOptions, Validator as Validator_, validator
 } from '../core/index.js';
+
+export namespace IsObject {
+  export interface Validator<T extends object = object, I = object> extends Validator_<T, I> {
+    schema: Schema;
+  }
+
+  export type PropertyOptions = { label?: string, as?: string };
+  export type Schema = Record<string | number, Validator_ | [Validator_, PropertyOptions]>;
+
+  export interface Options<T> extends ValidationOptions {
+    name?: string;
+    ctor?: Type<T>,
+    additionalFields?: boolean | Validator_ | 'error';
+    caseInSensitive?: boolean;
+    detectCircular?: boolean;
+  }
+
+}
+
 
 /**
  * Validates object according to schema
@@ -10,16 +30,16 @@ import {
  * @validator isObject
  */
 export function isObject<T extends object = object, I = object | string>(
-    schema?: isObject.Schema,
-    options?: isObject.Options<T>
-): isObject.ObjectValidator<T, I> {
+    schema?: IsObject.Schema,
+    options?: IsObject.Options<T>
+): IsObject.Validator<T, I> {
   const ctor = options?.ctor;
   const ctorName = options?.name || ctor?.name;
   const additionalFields = options?.additionalFields ?? !schema;
   const caseInSensitive = !!options?.caseInSensitive;
   const detectCircular = !!options?.detectCircular;
-  const propertyRules: Record<any, Validator> = {};
-  const propertyOptions: Record<any, RequiredSome<isObject.PropertyOptions, 'as'>> = {};
+  const propertyRules: Record<any, Validator_> = {};
+  const propertyOptions: Record<any, RequiredSome<IsObject.PropertyOptions, 'as'>> = {};
   schema = schema || {};
   const schemaKeys = Object.keys(schema);
   for (const k of schemaKeys) {
@@ -43,8 +63,8 @@ export function isObject<T extends object = object, I = object | string>(
           context: Context & { circMap?: Map<object, object> },
           _this
       ): Nullish<T> {
-        if (ctor && ctor[isObject.preValidation])
-          input = ctor[isObject.preValidation](input, context, _this);
+        if (ctor && ctor[preValidation])
+          input = ctor[preValidation](input, context, _this);
 
         if (typeof input === 'string' && context.coerce)
           input = JSON.parse(input);
@@ -60,7 +80,7 @@ export function isObject<T extends object = object, I = object | string>(
         let inputKey: string;
         let schemaKey: string;
         let v: any;
-        let _propRule: Validator<any, any> | undefined;
+        let _propRule: Validator_ | undefined;
 
         const out: any = {};
         if (ctor)
@@ -111,39 +131,15 @@ export function isObject<T extends object = object, I = object | string>(
         if (context.errors.length)
           return undefined;
 
-        if (ctor && ctor[isObject.postValidation]) {
-          ctor[isObject.postValidation](out, context, _this);
+        if (ctor && ctor[postValidation]) {
+          ctor[postValidation](out, context, _this);
           return out;
         }
 
         return out;
       }, options
-  ) as unknown as isObject.ObjectValidator<T, I>;
+  ) as unknown as IsObject.Validator<T, I>;
 
   _rule.schema = schema;
   return _rule;
-}
-
-export namespace isObject {
-  export const postValidation = Symbol('postValidation');
-  export const preValidation = Symbol('preValidation');
-
-  export type PropertyOptions = { label?: string, as?: string };
-  export type Schema =
-      Record<string | number,
-          Validator<any, any> | [Validator<any, any>, PropertyOptions]
-      >;
-
-  export interface Options<T> extends ValidationOptions {
-    name?: string;
-    ctor?: Type<T>,
-    additionalFields?: boolean | Validator | 'error';
-    caseInSensitive?: boolean;
-    detectCircular?: boolean;
-  }
-
-  export interface ObjectValidator<T extends object = object, I = object> extends Validator<T, I> {
-    schema: Schema;
-  }
-
 }

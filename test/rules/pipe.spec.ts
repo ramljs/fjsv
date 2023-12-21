@@ -1,16 +1,16 @@
 import {
-  factories, isBoolean, isNumber, isString,
-} from 'valgen';
+isBoolean, isNumber, isString,
+  vg, } from 'valgen';
 
 describe("pipe", function () {
 
   it("should pipe validations", function () {
-    expect(factories.pipe(isString, factories.isRegExp(/^[a-z]+$/),)('abc')).toStrictEqual('abc');
+    expect(vg.pipe(isString, vg.isRegExp(/^[a-z]+$/),)('abc')).toStrictEqual('abc');
     expect(() =>
-        factories.pipe(isString, factories.isRegExp(/^[a-z]+$/),)('123')
+        vg.pipe(isString, vg.isRegExp(/^[a-z]+$/),)('123')
     ).toThrow('Value does not match requested format');
-    expect(factories.pipe(isString, isNumber, isBoolean)(1 as any, {coerce: true})).toStrictEqual(true);
-    expect(factories.pipe(isString, isNumber, isString)(1 as any, {coerce: true})).toStrictEqual('1');
+    expect(vg.pipe(isString, isNumber, isBoolean)(1 as any, {coerce: true})).toStrictEqual(true);
+    expect(vg.pipe(isString, isNumber, isString)(1 as any, {coerce: true})).toStrictEqual('1');
   });
 
 })
@@ -18,7 +18,7 @@ describe("pipe", function () {
 
 describe("allOf", function () {
   it("should check all validation rules passes", function () {
-    const codec = factories.allOf(isNumber, factories.isGt(5), factories.isLt(10));
+    const codec = vg.allOf(isNumber, vg.isGt(5), vg.isLt(10));
     expect(() => codec(6)).not.toThrow();
     expect(() => codec('x')).toThrow('Value must be a number');
     expect(() => codec(5)).toThrow('must be greater than');

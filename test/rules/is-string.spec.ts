@@ -1,4 +1,4 @@
-import { factories, isString } from 'valgen';
+import { isString, vg } from 'valgen';
 
 /*
  *
@@ -30,8 +30,8 @@ describe("isString", function () {
  */
 describe("stringReplace", function () {
   it("should process String.replace", function () {
-    expect(factories.stringReplace(/-/g, '_')('a-b')).toStrictEqual('a_b');
-    expect(factories.stringReplace('-', '_')('a-b')).toStrictEqual('a_b');
+    expect(vg.stringReplace(/-/g, '_')('a-b')).toStrictEqual('a_b');
+    expect(vg.stringReplace('-', '_')('a-b')).toStrictEqual('a_b');
   });
 });
 
@@ -41,9 +41,9 @@ describe("stringReplace", function () {
  */
 describe("stringTrim", function () {
   it("should trim string value", function () {
-    expect(factories.trim()(' a ')).toStrictEqual('a');
-    expect(factories.trim()(' a')).toStrictEqual('a');
-    expect(factories.trim()('a ')).toStrictEqual('a');
+    expect(vg.trim()(' a ')).toStrictEqual('a');
+    expect(vg.trim()(' a')).toStrictEqual('a');
+    expect(vg.trim()('a ')).toStrictEqual('a');
   });
 });
 
@@ -52,8 +52,8 @@ describe("stringTrim", function () {
  */
 describe("stringTrim", function () {
   it("should trim string value", function () {
-    expect(factories.trimStart()(' a ')).toStrictEqual('a ');
-    expect(factories.trimStart()(' a')).toStrictEqual('a');
+    expect(vg.trimStart()(' a ')).toStrictEqual('a ');
+    expect(vg.trimStart()(' a')).toStrictEqual('a');
   });
 });
 
@@ -62,8 +62,8 @@ describe("stringTrim", function () {
  */
 describe("stringTrim", function () {
   it("should trim string value", function () {
-    expect(factories.trimEnd()(' a ')).toStrictEqual(' a');
-    expect(factories.trimEnd()('a ')).toStrictEqual('a');
+    expect(vg.trimEnd()(' a ')).toStrictEqual(' a');
+    expect(vg.trimEnd()('a ')).toStrictEqual('a');
   });
 });
 
@@ -72,6 +72,6 @@ describe("stringTrim", function () {
  */
 describe("stringSplit", function () {
   it("should process String.replace", function () {
-    expect(factories.stringSplit(',')('a,b')).toStrictEqual(['a', 'b']);
+    expect(vg.stringSplit(',')('a,b')).toStrictEqual(['a', 'b']);
   });
 });

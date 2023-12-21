@@ -1,53 +1,60 @@
-import * as factories from './rules/index.js';
+import * as vg from './rules/index.js';
 
-const isAny = factories.isAny();
-const isArray = factories.isArray();
-const isBigint = factories.isBigint();
-const isBoolean = factories.isBoolean();
-const isDate = factories.isDate();
-const isDateString = factories.isDateString();
-const isEmpty = factories.isEmpty();
-const isNotEmpty = factories.isNotEmpty();
-const isInteger = factories.isInteger();
-const isNull = factories.isNull();
-const isNullish = factories.isNullish();
-const isDefined = factories.isDefined();
-const isUndefined = factories.isUndefined();
-const isNumber = factories.isNumber();
-const isObject = factories.isObject();
-const isObjectId = factories.isObjectId();
-const isString = factories.isString();
-const isUUID = factories.isUUID();
-const isUUID1 = factories.isUUID(1);
-const isUUID2 = factories.isUUID(2);
-const isUUID3 = factories.isUUID(3);
-const isUUID4 = factories.isUUID(4);
-const isUUID5 = factories.isUUID(5);
-const isEmail = factories.isEmail();
-const isMobilePhone = factories.isMobilePhone();
-const isIP = factories.isIP();
-const isIPRange = factories.isIPRange();
-const isMACAddress = factories.isMACAddress();
-const isPort = factories.isPort();
-const isURL = factories.isURL();
-const isBase64 = factories.isBase64();
-const isBIC = factories.isBIC();
-const isCreditCard = factories.isCreditCard();
-const isIBAN = factories.isIBAN();
-const isEAN = factories.isEAN();
-const isFQDN = factories.isFQDN();
-const isISSN = factories.isISSN();
-const isBtcAddress = factories.isBtcAddress();
-const isETHAddress = factories.isETHAddress();
-const isHexColor = factories.isHexColor();
-const isJWT = factories.isJWT();
-const isLowercase = factories.isLowercase();
-const isUppercase = factories.isUppercase();
-
+export * from './constants.js';
 export * from './core/index.js';
+export { IsObject } from './rules/is-object.js';
+
+const isAny = vg.isAny();
+const isArray = vg.isArray();
+const isBigint = vg.isBigint();
+const isBoolean = vg.isBoolean();
+const isDate = vg.isDate();
+const isDateString = vg.isDateString();
+const isEmpty = vg.isEmpty();
+const isNotEmpty = vg.isNotEmpty();
+const isInteger = vg.isInteger();
+const isNull = vg.isNull();
+const isNullish = vg.isNullish();
+const isDefined = vg.isDefined();
+const isUndefined = vg.isUndefined();
+const isNumber = vg.isNumber();
+const isObject = vg.isObject();
+const isObjectId = vg.isObjectId();
+const isString = vg.isString();
+const isUUID = vg.isUUID();
+const isUUID1 = vg.isUUID(1);
+const isUUID2 = vg.isUUID(2);
+const isUUID3 = vg.isUUID(3);
+const isUUID4 = vg.isUUID(4);
+const isUUID5 = vg.isUUID(5);
+const isEmail = vg.isEmail();
+const isMobilePhone = vg.isMobilePhone();
+const isIP = vg.isIP();
+const isIPRange = vg.isIPRange();
+const isMACAddress = vg.isMACAddress();
+const isPort = vg.isPort();
+const isURL = vg.isURL();
+const isBase64 = vg.isBase64();
+const isBIC = vg.isBIC();
+const isCreditCard = vg.isCreditCard();
+const isIBAN = vg.isIBAN();
+const isEAN = vg.isEAN();
+const isFQDN = vg.isFQDN();
+const isISSN = vg.isISSN();
+const isBtcAddress = vg.isBtcAddress();
+const isETHAddress = vg.isETHAddress();
+const isHexColor = vg.isHexColor();
+const isJWT = vg.isJWT();
+const isLowercase = vg.isLowercase();
+const isUppercase = vg.isUppercase();
+const isAlpha = vg.isAlpha();
+const isAlphanumeric = vg.isAlphanumeric();
+const isAscii = vg.isAscii();
+const isDecimal = vg.isDecimal();
+const isHexadecimal = vg.isHexadecimal();
 
 export {
-  factories,
+  vg,
   isAny,
   isArray,
   isBigint,
@@ -90,5 +97,10 @@ export {
   isHexColor,
   isJWT,
   isLowercase,
-  isUppercase
+  isUppercase,
+  isAlpha,
+  isAlphanumeric,
+  isAscii,
+  isDecimal,
+  isHexadecimal
 }
