@@ -1,5 +1,13 @@
+# v5.0.1
+[2023-12-23]
+
+### Changes
+
+* Added new rules ([`ddcab7c`](https://github.com/panates/valgen/commit/ddcab7c54c287a9ec839c04302faa6b3bf5e554d))
+* Moved all validator factories into "factories" namespace, ([`2ac5abd`](https://github.com/panates/valgen/commit/2ac5abd7f2097de4ec769bcc55034636142ee598))
+
 # v5.0.0
-[2023-12-20]
+[2023-12-21]
 
 ### Changes
 
