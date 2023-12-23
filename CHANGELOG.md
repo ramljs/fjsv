@@ -1,3 +1,10 @@
+# v5.1.0
+[2023-12-23]
+
+### Changes
+
+* Moved from "dayjs" to "date-fns" ([`fd240af`](https://github.com/panates/valgen/commit/fd240afe3cdbb7485695d204aa25b9bf62ad315a))
+
 # v5.0.1
 [2023-12-23]
 
