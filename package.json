@@ -14,7 +14,7 @@
   },
   "dependencies": {
     "@types/validator": "^13.11.7",
-    "dayjs": "^2.0.0-alpha.4",
+    "date-fns": "^3.0.6",
     "ts-gems": "^3.1.0",
     "validator": "^13.11.0"
   },
