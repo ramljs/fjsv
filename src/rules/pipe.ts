@@ -8,7 +8,7 @@ import {
  * @validator pipe
  */
 export function pipe<T>(
-    ...rules: [...Validator<any, any>[], Validator<T, any>]
+    ...rules: [...Validator[], Validator<T, any>]
 ) {
   const l = rules.length;
   return validator<T, any>('pipe',
@@ -33,12 +33,12 @@ export function pipe<T>(
  * @validator allOf
  */
 export function allOf(
-    ...rules: Validator<any, any>[]
+    ...rules: Validator[]
 ) {
   return validator('allOf',
       function (input: any, context: Context): any {
         let i: number;
-        let c: Validator<any, any>;
+        let c: Validator;
         const l = rules.length;
         for (i = 0; i < l; i++) {
           c = rules[i];

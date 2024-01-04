@@ -15,7 +15,7 @@ export function isGt(minValue: Date, options?: ValidationOptions): Validator<Dat
 export function isGt(minValue: string, options?: ValidationOptions & {
   caseInsensitive?: boolean
 }): Validator<string, string>
-export function isGt(minValue: any, options?: ValidationOptions & { caseInsensitive?: boolean }): Validator<any, any> {
+export function isGt(minValue: any, options?: ValidationOptions & { caseInsensitive?: boolean }): Validator {
   return validator<RangeInput, RangeInput>('isGt',
       function (input: RangeInput, context: Context, _this): Nullish<RangeInput> {
         if ((typeof minValue === 'number' || typeof minValue === 'bigint') &&
@@ -50,7 +50,7 @@ export function isGte(minValue: Date, options?: ValidationOptions): Validator<Da
 export function isGte(minValue: string, options?: ValidationOptions & {
   caseInsensitive?: boolean
 }): Validator<string, string>
-export function isGte(minValue: any, options?: ValidationOptions & { caseInsensitive?: boolean }): Validator<any, any> {
+export function isGte(minValue: any, options?: ValidationOptions & { caseInsensitive?: boolean }): Validator {
   return validator<RangeInput, RangeInput>('isGte',
       function (input: unknown, context: Context, _this): Nullish<RangeInput> {
         if ((typeof minValue === 'number' || typeof minValue === 'bigint') &&
@@ -85,7 +85,7 @@ export function isLt(maxValue: Date, options?: ValidationOptions): Validator<Dat
 export function isLt(maxValue: string, options?: ValidationOptions & {
   caseInsensitive?: boolean
 }): Validator<string, string>
-export function isLt(maxValue: any, options?: ValidationOptions & { caseInsensitive?: boolean }): Validator<any, any> {
+export function isLt(maxValue: any, options?: ValidationOptions & { caseInsensitive?: boolean }): Validator {
   return validator<RangeInput, RangeInput>('isLt',
       function (input: unknown, context: Context, _this): Nullish<RangeInput> {
         if ((typeof maxValue === 'number' || typeof maxValue === 'bigint') &&
@@ -120,7 +120,7 @@ export function isLte(maxValue: Date, options?: ValidationOptions): Validator<Da
 export function isLte(maxValue: string, options?: ValidationOptions & {
   caseInsensitive?: boolean
 }): Validator<string, string>
-export function isLte(maxValue: any, options?: ValidationOptions & { caseInsensitive?: boolean }): Validator<any, any> {
+export function isLte(maxValue: any, options?: ValidationOptions & { caseInsensitive?: boolean }): Validator {
   return validator<RangeInput, RangeInput>('isLt',
       function (input: unknown, context: Context, _this): Nullish<RangeInput> {
         if ((typeof maxValue === 'number' || typeof maxValue === 'bigint') &&

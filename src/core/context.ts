@@ -20,15 +20,10 @@ export class Context implements ExecutionOptions {
   index?: number;
   label?: string;
 
+  [key: string]: any;
+
   constructor(options?: ExecutionOptions) {
-    if (options?.maxErrors != null)
-      this.maxErrors = options.maxErrors;
-    if (typeof options?.onFail === 'function')
-      this.onFail = options.onFail;
-    if (options?.coerce != null)
-      this.coerce = options?.coerce;
-    if (options?.label != null)
-      this.label = options?.label;
+    Object.assign(this, options);
   }
 
   fail(rule: Validator,

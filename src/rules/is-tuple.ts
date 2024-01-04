@@ -32,11 +32,11 @@ export function isTuple<T1, I1, T2, I2, T3, I3, T4, I4, T5, I5>(
 ): Validator<[T1, T2, T3, T4, T5], [I1, I2, I3, I4, I5]>
 export function isTuple<T1, I1, T2, I2, T3, I3, T4, I4, T5, I5, T6, I6>(
     items: [Validator<T1, I1>, Validator<T2, I2>, Validator<T3, I3>,
-      Validator<T4, I4>, Validator<T5, I5>, Validator<T6, I6>, ...Validator<any, any>[]],
+      Validator<T4, I4>, Validator<T5, I5>, Validator<T6, I6>, ...Validator[]],
     options?: ValidationOptions
 ): Validator<[T1, T2, T3, T4, T5, T6, ...any[]], [I1, I2, I3, I4, I5, I5, ...any[]]>
 export function isTuple(
-    items: Validator<any, any>[],
+    items: Validator[],
     options?: ValidationOptions
 ) {
   return validator<any>('isTuple',

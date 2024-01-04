@@ -62,7 +62,7 @@ export function validator(arg0, arg1?, arg2?) {
         throw new ValidationError(context.errors);
       return value;
     }
-  })[name] as Validator<any, any>;
+  })[name] as Validator;
 
   _rule.id = id;
   _rule[kValidatorFn] = fn;
@@ -80,6 +80,6 @@ export function validator(arg0, arg1?, arg2?) {
   return _rule;
 }
 
-export function isValidator(x: any): x is Validator<any, any> {
+export function isValidator(x: any): x is Validator {
   return !!(typeof x === 'function' && x.id && x[kValidatorFn]);
 }
