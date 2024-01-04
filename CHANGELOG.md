@@ -1,3 +1,10 @@
+# v5.2.0
+[2024-01-04]
+
+### Changes
+
+* Now validator options persist in context ([`418901f`](https://github.com/panates/valgen/commit/418901f74ee266d84e50ee82ba5a7221bd2be627))
+
 # v5.1.0
 [2023-12-23]
 
