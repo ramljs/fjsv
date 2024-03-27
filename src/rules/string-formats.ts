@@ -1,5 +1,5 @@
 import { Nullish } from 'ts-gems';
-import validatorJS from 'validator';
+import * as validatorJS from 'validator';
 import { Context, ValidationOptions, validator } from '../core/index.js';
 
 
