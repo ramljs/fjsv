@@ -1,3 +1,11 @@
+# v5.2.2
+[2024-03-29]
+
+### Changes
+
+* Updated dependencies ([`9d9af6f`](https://github.com/panates/valgen/commit/9d9af6fadeece926a8ec1bc93d14ffc7ace625d0))
+* Updated dependencies ([`636ce75`](https://github.com/panates/valgen/commit/636ce759e83e765661e7c5c8730c6b824076d344))
+
 # v5.2.1
 [2024-03-27]
 
