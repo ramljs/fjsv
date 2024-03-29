@@ -7,9 +7,7 @@ import {
  *
  * @validator pipe
  */
-export function pipe<T>(
-    ...rules: [...Validator[], Validator<T, any>]
-) {
+export function pipe<T>(...rules: Validator[]): Validator<T> {
   const l = rules.length;
   return validator<T, any>('pipe',
       function (input: unknown, context: Context): Nullish<T> {
@@ -32,9 +30,7 @@ export function pipe<T>(
  * Test given value against to all codecs and returns original input
  * @validator allOf
  */
-export function allOf(
-    ...rules: Validator[]
-) {
+export function allOf<T = any>(...rules: Validator[]): Validator<T> {
   return validator('allOf',
       function (input: any, context: Context): any {
         let i: number;
