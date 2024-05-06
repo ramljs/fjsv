@@ -1,3 +1,10 @@
+# v5.3.0
+[2024-05-06]
+
+### Changes
+
+* Added validation generation option to enable coercing by default. ([`5b012ee`](https://github.com/panates/valgen/commit/5b012ee21b89e601ebb7d9f624d93042862da8ca))
+
 # v5.2.2
 [2024-03-29]
 
