@@ -66,7 +66,8 @@ export function isObject<T extends object = object, I = object | string>(
         if (ctor && ctor[preValidation])
           input = ctor[preValidation](input, context, _this);
 
-        if (typeof input === 'string' && context.coerce)
+        const coerce = options?.coerce || context.coerce;
+        if (typeof input === 'string' && coerce)
           input = JSON.parse(input);
 
         if (!(input && typeof input === 'object')) {

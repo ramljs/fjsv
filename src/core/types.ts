@@ -19,6 +19,7 @@ export type OnFailFunction =
 
 export interface ValidationOptions {
   onFail?: OnFailFunction;
+  coerce?: boolean;
 }
 
 export interface ExecutionOptions extends ValidationOptions {

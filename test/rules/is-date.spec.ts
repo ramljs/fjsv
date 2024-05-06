@@ -4,9 +4,9 @@ describe("isDate", function () {
 
   it("should validate value is an instance of Date", function () {
     expect(isDate(new Date(1))).toEqual(new Date(1));
-    expect(() => isDate(undefined)).toThrow('Value must be a Date instance');
-    expect(() => isDate(null)).toThrow('Value must be a Date instance');
-    expect(() => isDate(new Date('invalid'))).toThrow('Value must be a Date instance');
+    expect(() => isDate(undefined)).toThrow('"undefined" is not a valid date value');
+    expect(() => isDate(null)).toThrow('"null" is not a valid date value');
+    expect(() => isDate(new Date('invalid'))).toThrow('"Invalid Date" is not a valid date value');
   });
 
   it("should coerce to Date", function () {
@@ -45,9 +45,9 @@ describe("isDateString", function () {
     expect(isDateString('2020-01-10')).toEqual('2020-01-10');
     expect(isDateString('2020-01')).toEqual('2020-01');
     expect(isDateString('2020')).toEqual('2020');
-    expect(() => isDateString(undefined)).toThrow('Value is not a valid date string');
-    expect(() => isDateString(null)).toThrow('Value is not a valid date string');
-    expect(() => isDateString('invalid')).toThrow('Value is not a valid date string');
+    expect(() => isDateString(undefined)).toThrow('"undefined" is not a valid date string');
+    expect(() => isDateString(null)).toThrow('"null" is not a valid date string');
+    expect(() => isDateString('invalid')).toThrow('"invalid" is not a valid date string');
   });
 
   it("should validate date string with time - precision = month", function () {
@@ -57,7 +57,7 @@ describe("isDateString", function () {
     expect(vg.isDateString({precision: 'month'})('2020-01-10 08:30')).toEqual('2020-01-10 08:30');
     expect(vg.isDateString({precision: 'month'})('2020-01-10')).toEqual('2020-01-10');
     expect(vg.isDateString({precision: 'month'})('2020-01')).toEqual('2020-01');
-    expect(() => vg.isDateString({precision: 'month'})('2020')).toThrow('Value is not a valid date string');
+    expect(() => vg.isDateString({precision: 'month'})('2020')).toThrow('"2020" is not a valid date string');
   });
 
   it("should validate date string with time - precision = date", function () {
@@ -66,8 +66,8 @@ describe("isDateString", function () {
     expect(vg.isDateString({precision: 'date'})('2020-01-10T08:30')).toEqual('2020-01-10T08:30');
     expect(vg.isDateString({precision: 'date'})('2020-01-10 08:30')).toEqual('2020-01-10 08:30');
     expect(vg.isDateString({precision: 'date'})('2020-01-10')).toEqual('2020-01-10');
-    expect(() => vg.isDateString({precision: 'date'})('2020-01')).toThrow('Value is not a valid date string');
-    expect(() => vg.isDateString({precision: 'date'})('2020')).toThrow('Value is not a valid date string');
+    expect(() => vg.isDateString({precision: 'date'})('2020-01')).toThrow('"2020-01" is not a valid date string');
+    expect(() => vg.isDateString({precision: 'date'})('2020')).toThrow('"2020" is not a valid date string');
   });
 
   it("should validate date string with time - precision = datetime", function () {
@@ -75,9 +75,9 @@ describe("isDateString", function () {
     expect(vg.isDateString({precision: 'time'})('2020-01-10T08:30:15')).toEqual('2020-01-10T08:30:15');
     expect(vg.isDateString({precision: 'time'})('2020-01-10T08:30')).toEqual('2020-01-10T08:30');
     expect(vg.isDateString({precision: 'time'})('2020-01-10 08:30')).toEqual('2020-01-10 08:30');
-    expect(() => vg.isDateString({precision: 'time'})('2020-01-10')).toThrow('Value is not a valid date string');
-    expect(() => vg.isDateString({precision: 'time'})('2020-01')).toThrow('Value is not a valid date string');
-    expect(() => vg.isDateString({precision: 'time'})('2020')).toThrow('Value is not a valid date string');
+    expect(() => vg.isDateString({precision: 'time'})('2020-01-10')).toThrow('"2020-01-10" is not a valid date string');
+    expect(() => vg.isDateString({precision: 'time'})('2020-01')).toThrow('"2020-01" is not a valid date string');
+    expect(() => vg.isDateString({precision: 'time'})('2020')).toThrow('"2020" is not a valid date string');
   });
 
   it("should coerce string and trim", function () {

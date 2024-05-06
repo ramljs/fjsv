@@ -12,7 +12,8 @@ export function isInteger(options?: ValidationOptions) {
           context: Context,
           _this
       ): Nullish<number> {
-        if (input != null && typeof input !== 'number' && context.coerce) {
+        const coerce = options?.coerce || context.coerce;
+        if (input != null && typeof input !== 'number' && coerce) {
           if (typeof input === 'string')
             input = parseFloat(input);
           if (typeof input === 'bigint') {
@@ -23,7 +24,9 @@ export function isInteger(options?: ValidationOptions) {
         }
         if (typeof input === 'number' && !isNaN(input) && Number.isInteger(input))
           return input;
-        context.fail(_this, `{{label}} must be an integer number`, input);
+        const t = typeof input === 'bigint' ? 'BigInt ' :
+            (typeof input === 'string' ? 'String ' : '');
+        context.fail(_this, `${t}"{{value}}" is not a valid integer value`, input);
       }, options
   );
 }

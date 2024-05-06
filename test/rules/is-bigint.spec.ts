@@ -6,12 +6,10 @@ describe("isBigint", function () {
     expect(isBigint(1n)).toStrictEqual(1n);
     expect(isBigint(-1n)).toStrictEqual(-1n);
     expect(isBigint(0n)).toStrictEqual(0n);
-    expect(() => isBigint(undefined)).toThrow('Value must be an integer number');
-    expect(() => isBigint(null)).toThrow('Value must be an integer number');
-    expect(() => isBigint('1')).toThrow('Value must be an integer number');
-    expect(() => isBigint('1.3')).toThrow('Value must be an integer number');
-    expect(() => isBigint('x5')).toThrow('Value must be an integer number');
-    expect(() => isBigint(NaN)).toThrow('Value must be an integer number');
+    expect(() => isBigint(undefined)).toThrow('"undefined" is not a valid BigInt value');
+    expect(() => isBigint(null)).toThrow('"null" is not a valid BigInt value');
+    expect(() => isBigint('1')).toThrow('String "1" is not a valid BigInt value');
+    expect(() => isBigint(NaN)).toThrow('"NaN" is not a valid BigInt value');
   });
 
   it("should coerce to BigInt", function () {

@@ -8,7 +8,8 @@ import { Context, Nullish, ValidationOptions, validator } from '../core/index.js
 export function isString(options?: ValidationOptions) {
   return validator<string, unknown>('isString',
       function (input: any, context: Context, _this): Nullish<string> {
-        if (input != null && typeof input !== 'string' && context.coerce) {
+        const coerce = options?.coerce || context.coerce;
+        if (input != null && typeof input !== 'string' && coerce) {
           if (typeof input === 'object') {
             if (typeof input.toJSON === 'function')
               input = input.toJSON();
@@ -21,7 +22,6 @@ export function isString(options?: ValidationOptions) {
       }, options
   );
 }
-
 
 /**
  * Process "String.replace" method

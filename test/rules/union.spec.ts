@@ -6,7 +6,7 @@ describe("union", function () {
     const c = vg.union([isNull, isNumber]);
     expect(c(6)).toStrictEqual(6);
     expect(c(null)).toStrictEqual(null);
-    expect(() => c('x' as any)).toThrow('didn\'t match any of required format');
+    expect(() => c('x' as any)).toThrow('Value didn\'t match any on union rules');
   });
 
 })

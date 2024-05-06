@@ -5,14 +5,14 @@ describe("isTuple", function () {
   it("should validate value is an array", function () {
     expect(vg.isTuple([isBoolean])([true])).toStrictEqual([true]);
     expect(vg.isTuple([isInteger])([1])).toStrictEqual([1]);
-    expect(() => vg.isTuple([isBoolean])(undefined)).toThrow('Value must be a tuple');
-    expect(() => vg.isTuple([isBoolean])(null)).toThrow('Value must be a tuple');
-    expect(() => vg.isTuple([isBoolean])(5 as any)).toThrow('Value must be a tuple');
-    expect(() => vg.isTuple([isBoolean])(NaN as any)).toThrow('Value must be a tuple');
+    expect(() => vg.isTuple([isBoolean])(undefined)).toThrow('"undefined" is not a valid tuple');
+    expect(() => vg.isTuple([isBoolean])(null)).toThrow('"null" is not a valid tuple');
+    expect(() => vg.isTuple([isBoolean])(5 as any)).toThrow('"5" is not a valid tuple');
+    expect(() => vg.isTuple([isBoolean])(NaN as any)).toThrow('"NaN" is not a valid tuple');
   });
 
   it("should validate items according to item rule", function () {
-    expect(() => vg.isTuple([isInteger])(['1'])).toThrow('Value at [0] must be an integer number');
+    expect(() => vg.isTuple([isInteger])(['1'])).toThrow('String "1" is not a valid integer value');
   });
 
   it("should coerce value to tuple", function () {

@@ -18,10 +18,11 @@ export function isArray<T, I>(
           context: Context,
           _this
       ): Nullish<T[]> {
-        if (input != null && context.coerce && !Array.isArray(input))
+        const coerce = options?.coerce || context.coerce;
+        if (input != null && coerce && !Array.isArray(input))
           input = [input];
         if (!Array.isArray(input)) {
-          context.fail(_this, `{{label}} must be an array`, input);
+          context.fail(_this, `"{{value}}" is not an array value`, input);
           return;
         }
         if (!itemValidator)

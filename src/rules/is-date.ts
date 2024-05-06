@@ -19,11 +19,12 @@ export function isDate(options?: isDate.Options) {
           context: Context,
           _this
       ): Nullish<Date> {
+        const coerce = options?.coerce || context.coerce;
         let d: Date | undefined;
         if (input instanceof Date)
           d = input;
-        else if (input != null && context.coerce) {
-          if (typeof input === 'string' && context.coerce) {
+        else if (input != null && coerce) {
+          if (typeof input === 'string' && coerce) {
             d = parseISO(input);
           } else if (typeof input === 'number')
             d = new Date(input);
@@ -41,7 +42,7 @@ export function isDate(options?: isDate.Options) {
             d.setHours(0, 0, 0, 0);
           return d;
         }
-        context.fail(_this, `{{label}} must be a Date instance or a date string`, input);
+        context.fail(_this, `"{{value}}" is not a valid date value`, input, {...options});
       }, options
   );
 }
@@ -66,6 +67,7 @@ export function isDateString(options?: IsDateStringOptions) {
           context: Context,
           _this
       ): Nullish<string> {
+        const coerce = options?.coerce || context.coerce;
         if (typeof input === 'string') {
           const m = DATE_PATTERN.exec(input);
           if (m) {
@@ -78,7 +80,7 @@ export function isDateString(options?: IsDateStringOptions) {
                   (precision === 'date' && m[2] && m[3]) ||
                   (precision === 'time' && m[2] && m[3] && m[4])
               ) {
-                if (!context.coerce)
+                if (!coerce)
                   return input;
                 let s = m[1];
                 if (m[2]) s += '-' + m[2]; else return s;
@@ -98,11 +100,7 @@ export function isDateString(options?: IsDateStringOptions) {
               : formatISO(input).substring(0, 19)
         }
 
-        context.fail(_this,
-            `{{label}} is not a valid date string`,
-            input,
-            {...options}
-        );
+        context.fail(_this, `"{{value}}" is not a valid date string`, input, {...options});
 
       }, options
   );

@@ -53,6 +53,14 @@ const isAscii = vg.isAscii();
 const isDecimal = vg.isDecimal();
 const isHexadecimal = vg.isHexadecimal();
 
+const toArray = vg.isArray(isAny, {coerce: true});
+const toBoolean = vg.isBoolean({coerce: true});
+const toDate = vg.isDate({coerce: true});
+const toDateString = vg.isDateString({coerce: true});
+const toInteger = vg.isInteger({coerce: true});
+const toNumber = vg.isNumber({coerce: true});
+const toString = vg.isString({coerce: true});
+
 export {
   vg,
   isAny,
@@ -102,5 +110,12 @@ export {
   isAlphanumeric,
   isAscii,
   isDecimal,
-  isHexadecimal
+  isHexadecimal,
+  toArray,
+  toBoolean,
+  toDate,
+  toDateString,
+  toInteger,
+  toNumber,
+  toString
 }

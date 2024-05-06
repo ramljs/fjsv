@@ -15,7 +15,8 @@ export function isBoolean(options?: ValidationOptions) {
           context: Context,
           _this
       ): Nullish<boolean> {
-        if (input != null && typeof input !== 'boolean' && context.coerce) {
+        const coerce = options?.coerce || context.coerce;
+        if (input != null && typeof input !== 'boolean' && coerce) {
           if (typeof input === 'string') {
             if (TRUE_PATTERN.test(input)) return true;
             if (FALSE_PATTERN.test(input)) return false;
@@ -26,7 +27,8 @@ export function isBoolean(options?: ValidationOptions) {
         }
         if (typeof input === 'boolean')
           return input;
-        context.fail(_this, `{{label}} must be a boolean`, input);
+        const t = typeof input === 'string' ? 'String ' : '';
+        context.fail(_this, `${t}"{{value}}" is not a valid boolean value`, input);
       }, options
   );
 }

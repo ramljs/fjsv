@@ -9,18 +9,22 @@ import { Context, ValidationOptions, validator } from '../core/index.js';
 export function isNumber(options?: ValidationOptions) {
   return validator<number, unknown>('isNumber',
       function (input: unknown, context: Context, _this): Nullish<number> {
-        if (input != null && typeof input !== 'number' && context.coerce) {
+        const coerce = options?.coerce || context.coerce;
+        if (input != null && typeof input !== 'number' && coerce) {
           if (typeof input === 'string')
             input = parseFloat(input);
           if (typeof input === 'bigint') {
             const v = Number(input);
             if (input === BigInt(v))
-              input = v;
+              return v;
           }
         }
+
         if (typeof input === 'number' && !isNaN(input))
           return input;
-        context.fail(_this, `{{label}} must be a number`, input);
+        const t = typeof input === 'bigint' ? 'BigInt ' :
+            (typeof input === 'string' ? 'String ' : '');
+        context.fail(_this, `${t}"{{value}}" is not a valid number value`, input);
       }, options
   );
 }

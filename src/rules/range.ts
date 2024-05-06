@@ -166,7 +166,7 @@ export function range<T extends RangeInput>(
         if (typeof minValue === 'string' && typeof maxValue === 'string' &&
             typeof input === 'string' && input >= minValue && input <= maxValue)
           return input as T;
-        context.fail(_this, `{{label}} must be between ${minValue} and ${maxValue}`, input);
+        context.fail(_this, `Value must be between ${minValue} and ${maxValue}`, input);
       }, options
   )
 }

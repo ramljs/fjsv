@@ -9,9 +9,10 @@ export function isNull(options?: ValidationOptions) {
       function (input: unknown, context: Context, _this) {
         if (input === null)
           return input;
-        if (context.coerce)
+        const coerce = options?.coerce || context.coerce;
+        if (coerce)
           return null;
-        context.fail(_this, `{{label}} must be null`, input);
+        context.fail(_this, `"{{value}}" is not null`, input);
       }, options
   );
 }
@@ -25,9 +26,10 @@ export function isNullish(options?: ValidationOptions) {
       function (input: unknown, context: Context, _this) {
         if (input == null)
           return input;
-        if (context.coerce)
+        const coerce = options?.coerce || context.coerce;
+        if (coerce)
           return null;
-        context.fail(_this, `{{label}} must be null or undefined`, input);
+        context.fail(_this, `"{{value}}" is not nullish`, input);
       }, options
   );
 }
@@ -42,7 +44,7 @@ export function isDefined(options?: ValidationOptions) {
       function (input: unknown, context: Context, _this) {
         if (input !== undefined)
           return input;
-        context.fail(_this, `{{label}} must be defined`, input);
+        context.fail(_this, `Is not defined`, input);
       }, options
   );
 }
@@ -55,7 +57,7 @@ export function isDefined(options?: ValidationOptions) {
 export function isUndefined(options?: ValidationOptions) {
   return validator<any, unknown>('isUndefined',
       function (input: unknown, context: Context, _this): Nullish<any> {
-        if (context.coerce)
+        if (options?.coerce || context.coerce)
           return undefined;
         if (input === undefined)
           return;

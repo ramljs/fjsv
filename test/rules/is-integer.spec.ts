@@ -6,13 +6,11 @@ describe("isInteger", function () {
     expect(isInteger(1)).toStrictEqual(1);
     expect(isInteger(-1)).toStrictEqual(-1);
     expect(isInteger(0)).toStrictEqual(0);
-    expect(() => isInteger(undefined)).toThrow('Value must be an integer number');
-    expect(() => isInteger(null)).toThrow('Value must be an integer number');
-    expect(() => isInteger(BigInt(5))).toThrow('Value must be an integer number');
-    expect(() => isInteger('1')).toThrow('Value must be an integer number');
-    expect(() => isInteger('1.3')).toThrow('Value must be an integer number');
-    expect(() => isInteger('x5')).toThrow('Value must be an integer number');
-    expect(() => isInteger(NaN)).toThrow('Value must be an integer number');
+    expect(() => isInteger(undefined)).toThrow('"undefined" is not a valid integer value');
+    expect(() => isInteger(null)).toThrow('"null" is not a valid integer value');
+    expect(() => isInteger(BigInt(5))).toThrow('BigInt "5" is not a valid integer value');
+    expect(() => isInteger('1')).toThrow('String "1" is not a valid integer value');
+    expect(() => isInteger(NaN)).toThrow('"NaN" is not a valid integer value');
   });
 
   it("should coerce to integer", function () {

@@ -1,4 +1,4 @@
-import { isInteger, isNumber, kOptions, kValidatorFn, ValidationOptions, validator } from 'valgen';
+import { isNumber, kOptions, kValidatorFn, ValidationOptions, validator } from 'valgen';
 
 describe("validator", function () {
 
@@ -32,13 +32,9 @@ describe("validator", function () {
       errors: [{
         rule: 'isNumber',
         value: 'x',
-        message: 'Value must be a number',
+        message: 'String "x" is not a valid number value',
       }]
     });
-  });
-
-  it("should set label", function () {
-    expect(() => isInteger(undefined, {label: 'Field1'})).toThrow('Field1 must be an integer number');
   });
 
 });

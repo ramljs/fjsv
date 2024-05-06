@@ -41,10 +41,11 @@ export function isTuple(
 ) {
   return validator<any>('isTuple',
       function (input: unknown, context: Context, _this) {
-        if (input != null && context.coerce && !Array.isArray(input))
+        const coerce = options?.coerce || context.coerce;
+        if (input != null && coerce && !Array.isArray(input))
           input = [input];
         if (!Array.isArray(input)) {
-          context.fail(_this, `{{label}} must be a tuple`, input);
+          context.fail(_this, `"{{value}}" is not a valid tuple`, input);
           return;
         }
         const location = context.location || '';

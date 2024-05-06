@@ -33,7 +33,7 @@ export function union<T, I>(
         delete (context as any).fail;
         if (passed)
           return v;
-        context.fail(_this, `{{location}} didn't match any of required format`, input)
+        context.fail(_this, `Value didn't match any on union rules`, input)
       }
   )
 }
