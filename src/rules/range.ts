@@ -121,7 +121,7 @@ export function isLte(maxValue: string, options?: ValidationOptions & {
   caseInsensitive?: boolean
 }): Validator<string, string>
 export function isLte(maxValue: any, options?: ValidationOptions & { caseInsensitive?: boolean }): Validator {
-  return validator<RangeInput, RangeInput>('isLt',
+  return validator<RangeInput, RangeInput>('isLte',
       function (input: unknown, context: Context, _this): Nullish<RangeInput> {
         if ((typeof maxValue === 'number' || typeof maxValue === 'bigint') &&
             (typeof input === 'number' || typeof input === 'bigint') &&
