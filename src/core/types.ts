@@ -14,8 +14,11 @@ export interface ErrorIssue {
   [key: string]: any;
 }
 
-export type OnFailFunction =
-    (issue: ErrorIssue, context: Context, _super?: OnFailFunction) => string | Omit<ErrorIssue, 'id' | 'input'>;
+export type OnFailFunction = (
+  issue: ErrorIssue,
+  context: Context,
+  _super?: OnFailFunction,
+) => string | Omit<ErrorIssue, 'id' | 'input'>;
 
 export interface ValidationOptions {
   onFail?: OnFailFunction;

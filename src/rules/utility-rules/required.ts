@@ -1,0 +1,20 @@
+import { Nullish } from 'ts-gems';
+import { Context, ValidationOptions, Validator, validator } from '../../core/index.js';
+
+/**
+ * Makes sub-rule required
+ * @validator required
+ */
+export function required<T, I>(nested: Validator<T, I>, options?: ValidationOptions) {
+  return validator<Nullish<T>, I>(
+    'required',
+    function (input: I, context: Context, _this): Nullish<T> {
+      if (input == null) {
+        context.fail(_this, `{{label}} is required`, input);
+        return;
+      }
+      return nested(input, context) as T;
+    },
+    options,
+  );
+}

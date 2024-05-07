@@ -2,7 +2,7 @@ import * as vg from './rules/index.js';
 
 export * from './constants.js';
 export * from './core/index.js';
-export { IsObject } from './rules/is-object.js';
+export { IsObject } from './rules/type-rules/is-object.js';
 
 const isAny = vg.isAny();
 const isArray = vg.isArray();
@@ -35,7 +35,7 @@ const isMACAddress = vg.isMACAddress();
 const isPort = vg.isPort();
 const isURL = vg.isURL();
 const isBase64 = vg.isBase64();
-const isBIC = vg.isBIC();
+const isSWIFT = vg.isSWIFT();
 const isCreditCard = vg.isCreditCard();
 const isIBAN = vg.isIBAN();
 const isEAN = vg.isEAN();
@@ -51,15 +51,15 @@ const isAlpha = vg.isAlpha();
 const isAlphanumeric = vg.isAlphanumeric();
 const isAscii = vg.isAscii();
 const isDecimal = vg.isDecimal();
-const isHexadecimal = vg.isHexadecimal();
+const isHex = vg.isHex();
 
-const toArray = vg.isArray(isAny, {coerce: true});
-const toBoolean = vg.isBoolean({coerce: true});
-const toDate = vg.isDate({coerce: true});
-const toDateString = vg.isDateString({coerce: true});
-const toInteger = vg.isInteger({coerce: true});
-const toNumber = vg.isNumber({coerce: true});
-const toString = vg.isString({coerce: true});
+const toArray = vg.isArray(isAny, { coerce: true });
+const toBoolean = vg.isBoolean({ coerce: true });
+const toDate = vg.isDate({ coerce: true });
+const toDateString = vg.isDateString({ coerce: true });
+const toInteger = vg.isInteger({ coerce: true });
+const toNumber = vg.isNumber({ coerce: true });
+const toString = vg.isString({ coerce: true });
 
 export {
   vg,
@@ -94,7 +94,7 @@ export {
   isPort,
   isURL,
   isBase64,
-  isBIC,
+  isSWIFT,
   isCreditCard,
   isIBAN,
   isEAN,
@@ -110,12 +110,12 @@ export {
   isAlphanumeric,
   isAscii,
   isDecimal,
-  isHexadecimal,
+  isHex,
   toArray,
   toBoolean,
   toDate,
   toDateString,
   toInteger,
   toNumber,
-  toString
-}
+  toString,
+};
