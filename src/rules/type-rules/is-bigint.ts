@@ -1,5 +1,5 @@
 import { Nullish } from 'ts-gems';
-import { Context, ValidationOptions, validator } from '../../core';
+import { Context, ValidationOptions, validator } from '../../core/index.js';
 
 /**
  * Validates if value is "BigInt".

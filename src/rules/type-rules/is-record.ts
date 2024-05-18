@@ -1,4 +1,4 @@
-import { Context, Nullish, ValidationOptions, Validator, validator } from '../../core';
+import { Context, Nullish, ValidationOptions, Validator, validator } from '../../core/index.js';
 
 /**
  * Validates record object according to given "key" and "value" rules

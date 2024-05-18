@@ -1,4 +1,4 @@
-import { Context, Nullish, ValidationOptions, validator } from '../../core';
+import { Context, Nullish, ValidationOptions, validator } from '../../core/index.js';
 
 /**
  * Validates if value is "integer".

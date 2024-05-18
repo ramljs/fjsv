@@ -1,4 +1,4 @@
-import { Context, Nullish, ValidationOptions, Validator, validator } from '../../core';
+import { Context, Nullish, ValidationOptions, Validator, validator } from '../../core/index.js';
 
 /**
  * Validates if value is "array" and applies validation for each item.

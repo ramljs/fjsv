@@ -1,9 +1,10 @@
 import { formatISO, parseISO } from 'date-fns';
 import { Nullish } from 'ts-gems';
-import { Context, ValidationOptions, validator } from '../../core';
+import { Context, ValidationOptions, validator } from '../../core/index.js';
 
 /* eslint-disable-next-line max-len */ // noinspection RegExpUnnecessaryNonCapturingGroup
 const DATE_PATTERN =
+  // eslint-disable-next-line max-len
   /^(\d{4})(?:-(0[0-9]|1[0-2]))?(?:-([0-2][0-9]|3[0-1]))?(?:[T ](([0-1][0-9]|2[0-4]):([0-5][0-9])(?::([0-5][0-9]))?(?:\.(\d{0,3}))?)?((?:[+-](0[0-9]|1[0-2])(?::(\d{2}))?)|Z)?)?$/;
 
 /**

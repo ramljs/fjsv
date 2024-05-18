@@ -1,4 +1,4 @@
-import { Context, Nullish, Validator, validator } from '../../core';
+import { Context, Nullish, Validator, validator } from '../../core/index.js';
 
 /**
  *

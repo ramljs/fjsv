@@ -1,4 +1,4 @@
-import { validator } from '../../core';
+import { validator } from '../../core/index.js';
 
 /**
  * Does nothing, just returns original input value.

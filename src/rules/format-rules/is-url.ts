@@ -13,7 +13,7 @@ export function isURL(options?: IsURLOptions) {
     'isURL',
     function (input: unknown, context: Context, _this): Nullish<string> {
       if (input != null && typeof input === 'string' && validatorJS.isURL(input, options)) return input;
-      context.fail(_this, `{{label}} is not a valid URL`, input);
+      context.fail(_this, `{{value}} is not a valid URL`, input);
     },
     options,
   );

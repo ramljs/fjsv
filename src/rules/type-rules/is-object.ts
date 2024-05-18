@@ -1,6 +1,14 @@
 import { RequiredSome } from 'ts-gems';
-import { postValidation, preValidation } from '../../constants';
-import { Context, isValidator, Nullish, Type, ValidationOptions, Validator as Validator_, validator } from '../../core';
+import { postValidation, preValidation } from '../../constants.js';
+import {
+  Context,
+  isValidator,
+  Nullish,
+  Type,
+  ValidationOptions,
+  Validator as Validator_,
+  validator,
+} from '../../core/index.js';
 
 export namespace IsObject {
   export interface Validator<T extends object = object, I = object> extends Validator_<T, I> {
