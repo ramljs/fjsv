@@ -56,6 +56,7 @@ const isHex = vg.isHex();
 const toArray = vg.isArray(isAny, { coerce: true });
 const toBoolean = vg.isBoolean({ coerce: true });
 const toDate = vg.isDate({ coerce: true });
+const toBigint = vg.isBigint({ coerce: true });
 const toDateString = vg.isDateString({ coerce: true });
 const toInteger = vg.isInteger({ coerce: true });
 const toNumber = vg.isNumber({ coerce: true });
@@ -113,6 +114,7 @@ export {
   isHex,
   toArray,
   toBoolean,
+  toBigint,
   toDate,
   toDateString,
   toInteger,
