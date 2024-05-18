@@ -13,17 +13,17 @@
     "url": "https://github.com/panates/valgen.git"
   },
   "dependencies": {
-    "@types/validator": "^13.11.9",
+    "@types/validator": "^13.11.10",
     "date-fns": "^3.6.0",
     "ts-gems": "^3.4.0",
-    "validator": "^13.11.0"
+    "validator": "^13.12.0"
   },
   "devDependencies": {
     "@babel/eslint-parser": "^7.24.5",
     "@types/jest": "^29.5.12",
-    "@types/node": "^20.12.8",
-    "@typescript-eslint/eslint-plugin": "^7.8.0",
-    "@typescript-eslint/parser": "^7.8.0",
+    "@types/node": "^20.12.12",
+    "@typescript-eslint/eslint-plugin": "^7.9.0",
+    "@typescript-eslint/parser": "^7.9.0",
     "auto-changelog": "^2.4.0",
     "eslint": "^8.57.0",
     "eslint-config-prettier": "^9.1.0",
