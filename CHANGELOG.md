@@ -1,3 +1,11 @@
+# v5.3.2
+[2024-05-18]
+
+### Changes
+
+* Updated dependencies ([`9e618ab`](https://github.com/panates/valgen/commit/9e618ab5062b106a7321ef50beac0cd0ccf7e56c))
+* Fixed coveralls token ([`ede2734`](https://github.com/panates/valgen/commit/ede27343a163ef6649866fedb141598518d6e1c3))
+
 # v5.3.1
 [2024-05-18]
 
