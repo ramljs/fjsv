@@ -1,15 +1,32 @@
 # This config is equivalent to both the '.circleci/extended/orb-free.yml' and the base '.circleci/config.yml'
 version: 2.1
 orbs:
-  coveralls: coveralls/coveralls@1.0.6
+  coveralls: coveralls/coveralls@2.2.1
 
 workflows:
   main:
     jobs:
       - test:
-          version: '16.17.0'
+          version: '16.20'
+          filters:
+            branches:
+              only:
+                - master
+                - dev
       - test:
-          version: '18.9.0'
+          version: '18.17'
+          filters:
+            branches:
+              only:
+                - master
+                - dev
+      - test:
+          version: '20.5'
+          filters:
+            branches:
+              only:
+                - master
+                - dev
 
 jobs:
   test:
@@ -29,10 +46,10 @@ jobs:
           key: v1-deps-{{ checksum "package-lock.json" }}
           paths:
             - node_modules
-      - run: sudo npm install npm -g
+      - run: sudo npm install -g npm@^9
       - run: npm install
       - run: npm run lint
       - run: npm run citest
       - run: npm install coveralls --no-save
       - coveralls/upload:
-          path_to_lcov: ./coverage/lcov.info
+          coverage_file: ./coverage/lcov.info
