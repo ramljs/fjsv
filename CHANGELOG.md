@@ -1,3 +1,10 @@
+# v5.4.1
+[2024-05-18]
+
+### Changes
+
+* Exposed toBigint ([`50ad810`](https://github.com/panates/valgen/commit/50ad8101d58619c92d134059564a4cbaa575f5de))
+
 # v5.4.0
 [2024-05-18]
 
