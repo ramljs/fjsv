@@ -1,7 +1,7 @@
 {
   "name": "valgen",
   "description": "Fast runtime type validator, converter and io (encoding/decoding) library",
-  "version": "5.3.0",
+  "version": "5.3.1",
   "author": "Panates",
   "private": true,
   "contributors": [

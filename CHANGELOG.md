@@ -1,3 +1,12 @@
+# v5.3.1
+[2024-05-18]
+
+### Changes
+
+* Reorganized many rules ([`e470fe7`](https://github.com/panates/valgen/commit/e470fe7b99dc23378253c6e549d1df7c219fbbc9))
+* Updated code documentation ([`81e7ccf`](https://github.com/panates/valgen/commit/81e7ccf145075a0649cb7281062f422cd989dfa3))
+* Fixed rule name ([`73d90d1`](https://github.com/panates/valgen/commit/73d90d14314d6d98d089c60134f05d651a2e4b0f))
+
 # v5.3.0
 [2024-05-06]
 
