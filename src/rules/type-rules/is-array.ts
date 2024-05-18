@@ -10,21 +10,22 @@ export function isArray<T, I>(itemValidator?: Validator<T, I>, options?: Validat
     'isArray',
     function (input: unknown, context: Context, _this): Nullish<T[]> {
       const coerce = options?.coerce || context.coerce;
-      if (input != null && coerce && !Array.isArray(input)) input = [input];
-      if (!Array.isArray(input)) {
+      let output: any = input;
+      if (output != null && coerce && !Array.isArray(output)) output = [output];
+      if (!Array.isArray(output)) {
         context.fail(_this, `"{{value}}" is not an array value`, input);
         return;
       }
-      if (!itemValidator) return input as T[];
+      if (!itemValidator) return output as T[];
       // const location = context.location || '';
       const itemContext = context.extend();
       let i: number;
       let v: any;
-      const l = input.length;
+      const l = output.length;
       const out: any[] = [];
       for (i = 0; i < l; i++) {
-        v = input[i];
-        itemContext.scope = input;
+        v = output[i];
+        itemContext.scope = output;
         // itemContext.location = location + '[' + i + ']';
         itemContext.location = context.location ? context.location + `[${i}]` : `<Array>[${i}]`;
         itemContext.index = i;

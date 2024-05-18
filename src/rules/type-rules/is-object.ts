@@ -61,17 +61,18 @@ export function isObject<T extends object = object, I = object | string>(
   const _rule = validator<T, object>(
     'isObject',
     function (input: any, context: Context & { circMap?: Map<object, object> }, _this): Nullish<T> {
-      if (ctor && ctor[preValidation]) input = ctor[preValidation](input, context, _this);
+      let output: any = input;
+      if (ctor && ctor[preValidation]) output = ctor[preValidation](output, context, _this);
 
       const coerce = options?.coerce || context.coerce;
-      if (typeof input === 'string' && coerce) input = JSON.parse(input);
+      if (typeof output === 'string' && coerce) output = JSON.parse(output);
 
-      if (!(input && typeof input === 'object')) {
+      if (!(output && typeof output === 'object')) {
         context.fail(_this, `{{label}} must be an object`, input);
         return;
       }
 
-      const keys = [...Object.keys(input), ...schemaKeys];
+      const keys = [...Object.keys(output), ...schemaKeys];
       const l = keys.length;
       let i = 0;
       let inputKey: string;
@@ -83,8 +84,8 @@ export function isObject<T extends object = object, I = object | string>(
       if (ctor) Object.setPrototypeOf(out, ctor.prototype);
       if (detectCircular) {
         context.circMap = context.circMap || new Map<object, object>();
-        if (context.circMap.has(input)) return context.circMap.get(input) as any;
-        context.circMap.set(input, out);
+        if (context.circMap.has(output)) return context.circMap.get(output) as any;
+        context.circMap.set(output, out);
       }
 
       if (context.root == null) context.root = context.root || ctorName || '';
@@ -94,14 +95,14 @@ export function isObject<T extends object = object, I = object | string>(
       for (i = 0; i < l; i++) {
         inputKey = keys[i];
         schemaKey = caseInSensitive ? inputKey.toLowerCase() : inputKey;
-        v = input[inputKey];
+        v = output[inputKey];
 
         _propRule = propertyRules[schemaKey] || (isValidator(additionalFields) ? additionalFields : undefined);
         if (_propRule) {
           if (processedSchemaKeys[schemaKey]) continue;
           processedSchemaKeys[schemaKey] = true;
           const subCtx = context.extend();
-          subCtx.scope = input;
+          subCtx.scope = output;
           subCtx.context = ctorName;
           subCtx.location = location + (location ? '.' : '') + schemaKey;
           subCtx.property = schemaKey;

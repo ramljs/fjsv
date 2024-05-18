@@ -213,25 +213,25 @@ export function isLte(maxValue: any, options?: ValidationOptions & { caseInsensi
  * @validator lengthMin
  */
 export const lengthMin = (minValue: number) =>
-  allOf(
-    pipe(
+  allOf([
+    pipe([
       getLength(),
       isGte(minValue, {
         onFail: () => `The length of {{label}} must be at least ${minValue}`,
       }),
-    ),
-  );
+    ]),
+  ]);
 
 /**
  * Checks if the length is at most "maxValue"
  * @validator lengthMax
  */
 export const lengthMax = (maxValue: number) =>
-  allOf(
-    pipe(
+  allOf([
+    pipe([
       getLength(),
       isLte(maxValue, {
         onFail: () => `The length of {{label}} must be at most ${maxValue}`,
       }),
-    ),
-  );
+    ]),
+  ]);

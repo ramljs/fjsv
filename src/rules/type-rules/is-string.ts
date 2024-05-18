@@ -10,14 +10,15 @@ export function isString(options?: ValidationOptions) {
     'isString',
     function (input: any, context: Context, _this): Nullish<string> {
       const coerce = options?.coerce || context.coerce;
-      if (input != null && typeof input !== 'string' && coerce) {
-        if (typeof input === 'object') {
-          if (typeof input.toJSON === 'function') input = input.toJSON();
-          else input = JSON.stringify(input);
-        } else input = String(input);
+      let output: any = input;
+      if (output != null && typeof output !== 'string' && coerce) {
+        if (typeof output === 'object') {
+          if (typeof output.toJSON === 'function') output = output.toJSON();
+          else output = JSON.stringify(output);
+        } else output = String(output);
       }
-      if (typeof input === 'string') return input;
-      context.fail(_this, `{{label}} must be a string`, input);
+      if (typeof output === 'string') return output;
+      context.fail(_this, `"{{value}}" is not a string`, input);
     },
     options,
   );

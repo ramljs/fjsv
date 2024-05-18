@@ -43,7 +43,8 @@ export function isTuple(items: Validator[], options?: ValidationOptions) {
     'isTuple',
     function (input: unknown, context: Context, _this) {
       const coerce = options?.coerce || context.coerce;
-      if (input != null && coerce && !Array.isArray(input)) input = [input];
+      let output: any = input;
+      if (output != null && coerce && !Array.isArray(output)) output = [output];
       if (!Array.isArray(input)) {
         context.fail(_this, `"{{value}}" is not a valid tuple`, input);
         return;
@@ -52,18 +53,18 @@ export function isTuple(items: Validator[], options?: ValidationOptions) {
       let itemRule: Validator<any>;
       let i: number;
       let v: any;
-      const l = input.length;
+      const l = output.length;
       const out: any[] = [];
       const nl = items.length;
       const itemContext = context.extend();
       for (i = 0; i < l && i < nl; i++) {
         itemRule = items[i];
-        itemContext.scope = input;
+        itemContext.scope = output;
         itemContext.label = context.label ? context.label + `[${i}]` : undefined;
         itemContext.index = i;
         itemContext.location = location + '[' + i + ']';
         itemContext.label = (itemContext.label || itemContext.property || 'Value at ') + `[${i}]`;
-        v = itemRule(input[i], itemContext);
+        v = itemRule(output[i], itemContext);
         out.push(v);
       }
       return context.errors.length ? undefined : out;

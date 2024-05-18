@@ -11,15 +11,16 @@ export function isNumber(options?: ValidationOptions) {
     'isNumber',
     function (input: unknown, context: Context, _this): Nullish<number> {
       const coerce = options?.coerce || context.coerce;
-      if (input != null && typeof input !== 'number' && coerce) {
-        if (typeof input === 'string') input = parseFloat(input);
-        if (typeof input === 'bigint') {
-          const v = Number(input);
-          if (input === BigInt(v)) return v;
+      let output: any = input;
+      if (output != null && typeof output !== 'number' && coerce) {
+        if (typeof input === 'string') output = parseFloat(input);
+        else if (typeof input === 'bigint') {
+          output = Number(input);
+          if (input === BigInt(output)) return output;
         }
       }
 
-      if (typeof input === 'number' && !isNaN(input)) return input;
+      if (typeof output === 'number' && !isNaN(output)) return output;
       const t = typeof input === 'bigint' ? 'BigInt ' : typeof input === 'string' ? 'String ' : '';
       context.fail(_this, `${t}"{{value}}" is not a valid number value`, input);
     },
