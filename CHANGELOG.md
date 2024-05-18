@@ -1,3 +1,11 @@
+# v5.4.0
+[2024-05-18]
+
+### Changes
+
+* Added returnIndex to pipe() ([`87458ad`](https://github.com/panates/valgen/commit/87458adb3eb6a4465c8198f942df1fbb333738ff))
+* Updated circleci config ([`101361c`](https://github.com/panates/valgen/commit/101361c20f1b78a75392b9e796bc9075b492cb3e))
+
 # v5.3.2
 [2024-05-18]
 
