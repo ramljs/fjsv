@@ -9,8 +9,6 @@ export function isNull(options?: ValidationOptions) {
     'isNull',
     function (input: unknown, context: Context, _this) {
       if (input === null) return input;
-      const coerce = options?.coerce || context.coerce;
-      if (coerce) return null;
       context.fail(_this, `"{{value}}" is not null`, input);
     },
     options,
@@ -26,8 +24,6 @@ export function isNullish(options?: ValidationOptions) {
     'isNullish',
     function (input: unknown, context: Context, _this) {
       if (input == null) return input;
-      const coerce = options?.coerce || context.coerce;
-      if (coerce) return null;
       context.fail(_this, `"{{value}}" is not nullish`, input);
     },
     options,
