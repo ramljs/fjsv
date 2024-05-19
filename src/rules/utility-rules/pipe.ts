@@ -17,7 +17,7 @@ export function pipe<T>(rules: Validator[], options?: PipeOptions): Validator<T>
       let i: number;
       let c: Validator;
       let v = input;
-      let returnValue: any;
+      let returnValue: any = input;
       for (i = 0; i < l; i++) {
         c = rules[i];
         v = c(v, context);
