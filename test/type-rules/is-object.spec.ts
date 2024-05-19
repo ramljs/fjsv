@@ -26,9 +26,9 @@ describe('isObject', function () {
   it('should validate value is an object', function () {
     const objValidate = vg.isObject({ a: isString });
     expect(objValidate({ a: '1' })).toStrictEqual({ a: '1' });
-    expect(() => objValidate(null)).toThrow('Value must be an object');
-    expect(() => objValidate(undefined)).toThrow('Value must be an object');
-    expect(() => objValidate(NaN as any)).toThrow('Value must be an object');
+    expect(() => objValidate(null)).toThrow('"null" is not an object');
+    expect(() => objValidate(undefined)).toThrow('"undefined" is not an object');
+    expect(() => objValidate(NaN as any)).toThrow('"NaN" is not an object');
   });
 
   it('should parse json if coerce=true', function () {

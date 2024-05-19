@@ -68,7 +68,7 @@ export function isObject<T extends object = object, I = object | string>(
       if (typeof output === 'string' && coerce) output = JSON.parse(output);
 
       if (!(output && typeof output === 'object')) {
-        context.fail(_this, `{{label}} must be an object`, input);
+        context.fail(_this, `"{{value}}" is not an object`, input);
         return;
       }
 
