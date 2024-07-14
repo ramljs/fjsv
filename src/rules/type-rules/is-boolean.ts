@@ -1,4 +1,9 @@
-import { Context, Nullish, ValidationOptions, validator } from '../../core/index.js';
+import {
+  Context,
+  Nullish,
+  ValidationOptions,
+  validator,
+} from '../../core/index.js';
 
 const TRUE_PATTERN = /^true|t|1|yes|y$/i;
 const FALSE_PATTERN = /^false|f|0|no|n$/i;
@@ -11,7 +16,7 @@ const FALSE_PATTERN = /^false|f|0|no|n$/i;
 export function isBoolean(options?: ValidationOptions) {
   return validator<boolean | undefined, unknown>(
     'isBoolean',
-    function (input: unknown, context: Context, _this): Nullish<boolean> {
+    (input: unknown, context: Context, _this): Nullish<boolean> => {
       const coerce = options?.coerce || context.coerce;
       let output: any = input;
       if (output != null && typeof output !== 'boolean' && coerce) {
@@ -24,7 +29,11 @@ export function isBoolean(options?: ValidationOptions) {
       }
       if (typeof output === 'boolean') return output;
       const t = typeof input === 'string' ? 'String ' : '';
-      context.fail(_this, `${t}"{{value}}" is not a valid boolean value`, input);
+      context.fail(
+        _this,
+        `${t}"{{value}}" is not a valid boolean value`,
+        input,
+      );
     },
     options,
   );

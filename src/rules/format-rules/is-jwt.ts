@@ -9,7 +9,7 @@ import { Context, ValidationOptions, validator } from '../../core/index.js';
 export function isJWT(options?: ValidationOptions) {
   return validator<string, string>(
     'isJWT',
-    function (input: unknown, context: Context, _this): Nullish<string> {
+    (input: unknown, context: Context, _this): Nullish<string> => {
       if (typeof input === 'string' && validatorJS.isJWT(input)) return input;
       context.fail(_this, `Value is not a valid JWT token`, input);
     },

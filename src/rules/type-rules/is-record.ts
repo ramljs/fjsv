@@ -1,4 +1,10 @@
-import { Context, Nullish, ValidationOptions, Validator, validator } from '../../core/index.js';
+import {
+  Context,
+  Nullish,
+  ValidationOptions,
+  Validator,
+  validator,
+} from '../../core/index.js';
 
 /**
  * Validates record object according to given "key" and "value" rules
@@ -12,7 +18,11 @@ export function isRecord<TKeys extends string | number | symbol, TValues>(
 ) {
   return validator<Record<TKeys, TValues>>(
     'isRecord',
-    function (input: object | undefined, context: Context, _this): Nullish<Record<TKeys, TValues>> {
+    (
+      input: object | undefined,
+      context: Context,
+      _this,
+    ): Nullish<Record<TKeys, TValues>> => {
       if (!(input && typeof input === 'object')) {
         context.fail(_this, `{{label}} must be an object`, input);
         return;

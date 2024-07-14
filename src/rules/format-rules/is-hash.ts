@@ -11,8 +11,10 @@ export type HashAlgorithm = validatorJS.HashAlgorithm;
 export function isHash(algorithm: HashAlgorithm, options?: ValidationOptions) {
   return validator<string, string>(
     'isHash',
-    function (input: unknown, context: Context, _this): Nullish<string> {
-      if (typeof input === 'string' && validatorJS.isHash(input, algorithm)) return input;
+    (input: unknown, context: Context, _this): Nullish<string> => {
+      if (typeof input === 'string' && validatorJS.isHash(input, algorithm)) {
+        return input;
+      }
       context.fail(_this, `Value is not a valid ${algorithm} hash`, input);
     },
     options,

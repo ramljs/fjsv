@@ -9,9 +9,19 @@ import { Context, ValidationOptions, validator } from '../../core/index.js';
 export function isIP(version?: 4 | 6, options?: ValidationOptions) {
   return validator<string, string>(
     'isIP',
-    function (input: unknown, context: Context, _this): Nullish<string> {
-      if (input != null && typeof input === 'string' && validatorJS.isIP(input, version)) return input;
-      context.fail(_this, `"{{value}}" is not a valid IP${version ? ' v' + version : ''}`, input);
+    (input: unknown, context: Context, _this): Nullish<string> => {
+      if (
+        input != null &&
+        typeof input === 'string' &&
+        validatorJS.isIP(input, version)
+      ) {
+        return input;
+      }
+      context.fail(
+        _this,
+        `"{{value}}" is not a valid IP${version ? ' v' + version : ''}`,
+        input,
+      );
     },
     options,
   );
@@ -24,9 +34,19 @@ export function isIP(version?: 4 | 6, options?: ValidationOptions) {
 export function isIPRange(version?: 4 | 6, options?: ValidationOptions) {
   return validator<string, string>(
     'isIPRange',
-    function (input: unknown, context: Context, _this): Nullish<string> {
-      if (input != null && typeof input === 'string' && validatorJS.isIPRange(input, version)) return input;
-      context.fail(_this, `"{{value}}" is not a valid IP${version ? ' v' + version : ''} range`, input);
+    (input: unknown, context: Context, _this): Nullish<string> => {
+      if (
+        input != null &&
+        typeof input === 'string' &&
+        validatorJS.isIPRange(input, version)
+      ) {
+        return input;
+      }
+      context.fail(
+        _this,
+        `"{{value}}" is not a valid IP${version ? ' v' + version : ''} range`,
+        input,
+      );
     },
     options,
   );

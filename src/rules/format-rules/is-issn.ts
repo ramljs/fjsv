@@ -22,8 +22,10 @@ export function isISSN(options?: IsISSNOptions) {
   };
   return validator<string, string>(
     'isISSN',
-    function (input: unknown, context: Context, _this): Nullish<string> {
-      if (typeof input === 'string' && validatorJS.isISSN(input, opts)) return input;
+    (input: unknown, context: Context, _this): Nullish<string> => {
+      if (typeof input === 'string' && validatorJS.isISSN(input, opts)) {
+        return input;
+      }
       context.fail(_this, `"{{value}}" is not a valid ISSN`, input);
     },
     options,

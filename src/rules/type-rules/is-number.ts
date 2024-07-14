@@ -9,7 +9,7 @@ import { Context, ValidationOptions, validator } from '../../core/index.js';
 export function isNumber(options?: ValidationOptions) {
   return validator<number, unknown>(
     'isNumber',
-    function (input: unknown, context: Context, _this): Nullish<number> {
+    (input: unknown, context: Context, _this): Nullish<number> => {
       const coerce = options?.coerce || context.coerce;
       let output: any = input;
       if (output != null && typeof output !== 'number' && coerce) {
@@ -21,7 +21,12 @@ export function isNumber(options?: ValidationOptions) {
       }
 
       if (typeof output === 'number' && !isNaN(output)) return output;
-      const t = typeof input === 'bigint' ? 'BigInt ' : typeof input === 'string' ? 'String ' : '';
+      const t =
+        typeof input === 'bigint'
+          ? 'BigInt '
+          : typeof input === 'string'
+            ? 'String '
+            : '';
       context.fail(_this, `${t}"{{value}}" is not a valid number value`, input);
     },
     options,

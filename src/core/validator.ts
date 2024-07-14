@@ -5,32 +5,50 @@ import { Context } from './context.js';
 import { ErrorIssue, ExecutionOptions, ValidationOptions } from './types.js';
 import { ValidationError } from './validation-error.js';
 
-export type ValidateFunction<T, I = T, R extends Validator<T, I> = Validator<T, I>> = (
-  input: I,
-  context: Context,
-  _this: R,
-) => Nullish<T>;
+export type ValidateFunction<
+  T,
+  I = T,
+  R extends Validator<T, I> = Validator<T, I>,
+> = (input: I, context: Context, _this: R) => Nullish<T>;
 
-export interface Validator<T = any, I = any, O extends ExecutionOptions = ExecutionOptions> {
+export interface Validator<
+  T = any,
+  I = any,
+  O extends ExecutionOptions = ExecutionOptions,
+> {
   (input: I, options?: O, context?: Context): T;
 
-  silent(input: I, options?: O, context?: Context): { value?: T; errors?: ErrorIssue[] };
+  silent(
+    input: I,
+    options?: O,
+    context?: Context,
+  ): { value?: T; errors?: ErrorIssue[] };
 
   id: string;
   args?: Record<string, any>;
   [kValidatorFn]: ValidateFunction<T, I>;
 }
 
-export function validator<T, I = T, O extends ExecutionOptions = ExecutionOptions>(
+let unnamedValidatorIndex = 0;
+
+export function validator<
+  T,
+  I = T,
+  O extends ExecutionOptions = ExecutionOptions,
+>(
   fn: ValidateFunction<T, I>,
   validatorOptions?: ValidationOptions,
 ): Validator<T, I, O>;
-export function validator<T, I = T, O extends ExecutionOptions = ExecutionOptions>(
+export function validator<
+  T,
+  I = T,
+  O extends ExecutionOptions = ExecutionOptions,
+>(
   id: string,
   fn: ValidateFunction<T, I>,
   validatorOptions?: ValidationOptions,
 ): Validator<T, I, O>;
-export function validator(arg0, arg1?, arg2?) {
+export function validator(arg0: any, arg1?: any, arg2?: any) {
   let id = '';
   let fn: ValidateFunction<any>;
   let validatorOptions: ValidationOptions | undefined;
@@ -42,15 +60,19 @@ export function validator(arg0, arg1?, arg2?) {
     fn = arg0;
     validatorOptions = arg1;
   }
-  if (typeof fn !== 'function') throw new TypeError('You must provide a rule function argument');
-  id = id || fn.name || 'unnamed-rule';
+  if (typeof fn !== 'function') {
+    throw new TypeError('You must provide a rule function argument');
+  }
+  id = id || fn.name || 'validator' + ++unnamedValidatorIndex;
   const name = fn.name || camelCase(id);
 
   const _rule = {
     [name](input: unknown, options?: ExecutionOptions | Context): any {
       const ctx = options instanceof Context ? options : undefined;
       const opts = ctx ? undefined : options;
-      const context = ctx || new Context(opts);
+      const context =
+        ctx?.extend({ ...validatorOptions, ...opts }) ||
+        new Context({ ...validatorOptions, ...opts });
       let value: any;
       try {
         value = fn(input, context, _rule as any);
@@ -58,7 +80,9 @@ export function validator(arg0, arg1?, arg2?) {
         if (e instanceof ValidationError) throw e;
         context.fail(_rule, e, input);
       }
-      if (!ctx && context.errors.length) throw new ValidationError(context.errors);
+      if (!ctx && context.errors.length) {
+        throw new ValidationError(context.errors);
+      }
       return value;
     },
   }[name] as Validator;
@@ -67,7 +91,11 @@ export function validator(arg0, arg1?, arg2?) {
   _rule[kValidatorFn] = fn;
   _rule[kOptions] = validatorOptions || {};
 
-  _rule.silent = (input: any, options?: ExecutionOptions, context?: Context) => {
+  _rule.silent = (
+    input: any,
+    options?: ExecutionOptions,
+    context?: Context,
+  ) => {
     try {
       const value = _rule(input, options, context);
       return { value };

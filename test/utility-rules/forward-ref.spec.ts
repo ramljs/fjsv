@@ -1,7 +1,7 @@
 import { forwardRef, isString } from 'valgen';
 
-describe('forwardRef', function () {
-  it('should forward reference', function () {
+describe('forwardRef', () => {
+  it('should forward reference', () => {
     expect(forwardRef(() => isString)(1, { coerce: true })).toStrictEqual('1');
   });
 });

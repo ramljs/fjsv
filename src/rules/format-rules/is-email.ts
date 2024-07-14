@@ -84,8 +84,11 @@ export function isEmail(options?: IsEmailOptions) {
   };
   return validator<string, string>(
     'isEmail',
-    function (input: unknown, context: Context, _this): Nullish<string> {
-      if (typeof input === 'string' && validatorJS.isEmail(input, emailOptions)) {
+    (input: unknown, context: Context, _this): Nullish<string> => {
+      if (
+        typeof input === 'string' &&
+        validatorJS.isEmail(input, emailOptions)
+      ) {
         if (options?.requireDisplayName) {
           if (
             !validatorJS.isEmail(input, {
@@ -94,7 +97,11 @@ export function isEmail(options?: IsEmailOptions) {
               require_display_name: true,
             })
           ) {
-            context.fail(_this, `Display name for the email is required. Etc. ( Name <me@tempuri.org> ) `, input);
+            context.fail(
+              _this,
+              `Display name for the email is required. Etc. ( Name <me@tempuri.org> ) `,
+              input,
+            );
             return;
           }
         } else if (
@@ -138,12 +145,20 @@ export function isEmail(options?: IsEmailOptions) {
             blacklisted_chars: options.blacklistedChars,
           })
         ) {
-          context.fail(_this, `Black listed characters (${options.blacklistedChars}) found in name part`, input);
+          context.fail(
+            _this,
+            `Black listed characters (${options.blacklistedChars}) found in name part`,
+            input,
+          );
           return;
         }
         return input;
       }
-      context.fail(_this, `"{{value}}" does not match required e-mail format`, input);
+      context.fail(
+        _this,
+        `"{{value}}" does not match required e-mail format`,
+        input,
+      );
     },
     options,
   );

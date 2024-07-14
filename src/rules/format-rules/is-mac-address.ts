@@ -31,8 +31,14 @@ export function isMACAddress(options?: IsMACAddressOptions) {
   };
   return validator<string, string>(
     'isMACAddress',
-    function (input: unknown, context: Context, _this): Nullish<string> {
-      if (input != null && typeof input === 'string' && validatorJS.isMACAddress(input, opts)) return input;
+    (input: unknown, context: Context, _this): Nullish<string> => {
+      if (
+        input != null &&
+        typeof input === 'string' &&
+        validatorJS.isMACAddress(input, opts)
+      ) {
+        return input;
+      }
       context.fail(_this, `{{label}} is not a valid MAC address`, input);
     },
     options,

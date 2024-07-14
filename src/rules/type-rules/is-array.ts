@@ -1,14 +1,23 @@
-import { Context, Nullish, ValidationOptions, Validator, validator } from '../../core/index.js';
+import {
+  Context,
+  Nullish,
+  ValidationOptions,
+  Validator,
+  validator,
+} from '../../core/index.js';
 
 /**
  * Validates if value is "array" and applies validation for each item.
  * Converts input value to array if coerce option is set to 'true'.
  * @validator isArray
  */
-export function isArray<T, I>(itemValidator?: Validator<T, I>, options?: ValidationOptions) {
+export function isArray<T, I>(
+  itemValidator?: Validator<T, I>,
+  options?: ValidationOptions,
+) {
   return validator<T[], I[] | I>(
     'isArray',
-    function (input: unknown, context: Context, _this): Nullish<T[]> {
+    (input: unknown, context: Context, _this): Nullish<T[]> => {
       const coerce = options?.coerce || context.coerce;
       let output: any = input;
       if (output != null && coerce && !Array.isArray(output)) output = [output];
@@ -27,7 +36,9 @@ export function isArray<T, I>(itemValidator?: Validator<T, I>, options?: Validat
         v = output[i];
         itemContext.scope = output;
         // itemContext.location = location + '[' + i + ']';
-        itemContext.location = context.location ? context.location + `[${i}]` : `<Array>[${i}]`;
+        itemContext.location = context.location
+          ? context.location + `[${i}]`
+          : `<Array>[${i}]`;
         itemContext.index = i;
         v = itemValidator(v, itemContext) as T;
         out.push(v);

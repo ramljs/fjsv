@@ -9,10 +9,15 @@ import { Context, ValidationOptions, validator } from '../../core/index.js';
 export function isBigint(options?: ValidationOptions) {
   return validator<bigint, unknown>(
     'isBigint',
-    function (input: unknown, context: Context, _this): Nullish<bigint> {
+    (input: unknown, context: Context, _this): Nullish<bigint> => {
       const coerce = options?.coerce || context.coerce;
       if (typeof input === 'bigint') return input;
-      if ((typeof input === 'number' && !isNaN(input)) || (typeof input === 'string' && coerce)) return BigInt(input);
+      if (
+        (typeof input === 'number' && !isNaN(input)) ||
+        (typeof input === 'string' && coerce)
+      ) {
+        return BigInt(input);
+      }
       const t = typeof input === 'string' ? 'String ' : '';
       context.fail(_this, `${t}"{{value}}" is not a valid BigInt value`, input);
     },

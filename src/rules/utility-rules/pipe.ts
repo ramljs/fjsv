@@ -1,4 +1,10 @@
-import { Context, Nullish, ValidationOptions, Validator, validator } from '../../core/index.js';
+import {
+  Context,
+  Nullish,
+  ValidationOptions,
+  Validator,
+  validator,
+} from '../../core/index.js';
 
 export interface PipeOptions extends ValidationOptions {
   returnIndex?: number;
@@ -8,12 +14,15 @@ export interface PipeOptions extends ValidationOptions {
  *
  * @validator pipe
  */
-export function pipe<T>(rules: Validator[], options?: PipeOptions): Validator<T> {
+export function pipe<T>(
+  rules: Validator[],
+  options?: PipeOptions,
+): Validator<T> {
   const l = rules.length;
   const returnIndex = options?.returnIndex;
   return validator<T, any>(
     'pipe',
-    function (input: unknown, context: Context): Nullish<T> {
+    (input: unknown, context: Context): Nullish<T> => {
       let i: number;
       let c: Validator;
       let v = input;
@@ -35,7 +44,7 @@ export function pipe<T>(rules: Validator[], options?: PipeOptions): Validator<T>
  * @validator allOf
  */
 export function allOf<T = any>(rules: Validator[]): Validator<T> {
-  return validator('allOf', function (input: any, context: Context): any {
+  return validator('allOf', (input: any, context: Context): any => {
     let i: number;
     let c: Validator;
     const l = rules.length;

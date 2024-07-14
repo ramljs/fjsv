@@ -1,4 +1,12 @@
-import { forwardRef, isNumber, IsObject, isString, postValidation, preValidation, vg } from 'valgen';
+import {
+  forwardRef,
+  isNumber,
+  IsObject,
+  isString,
+  postValidation,
+  preValidation,
+  vg,
+} from 'valgen';
 
 class Address {
   city?: string;
@@ -22,30 +30,39 @@ const personDef: IsObject.Schema = {
 };
 const personValidate = vg.isObject(personDef, { ctor: Person });
 
-describe('isObject', function () {
-  it('should validate value is an object', function () {
+describe('isObject', () => {
+  it('should validate value is an object', () => {
     const objValidate = vg.isObject({ a: isString });
     expect(objValidate({ a: '1' })).toStrictEqual({ a: '1' });
     expect(() => objValidate(null)).toThrow('"null" is not an object');
-    expect(() => objValidate(undefined)).toThrow('"undefined" is not an object');
+    expect(() => objValidate(undefined)).toThrow(
+      '"undefined" is not an object',
+    );
     expect(() => objValidate(NaN as any)).toThrow('"NaN" is not an object');
   });
 
-  it('should parse json if coerce=true', function () {
-    expect(personValidate('{"name": "John", "age": "22"}', { coerce: true })).toEqual({ fullName: 'John', age: 22 });
+  it('should parse json if coerce=true', () => {
+    expect(
+      personValidate('{"name": "John", "age": "22"}', { coerce: true }),
+    ).toEqual({ fullName: 'John', age: 22 });
   });
 
-  it('should coerce properties', function () {
-    expect(personValidate({ name: 'John', age: '22' }, { coerce: true })).toEqual({ fullName: 'John', age: 22 });
+  it('should coerce properties', () => {
+    expect(
+      personValidate({ name: 'John', age: '22' }, { coerce: true }),
+    ).toEqual({ fullName: 'John', age: 22 });
   });
 
-  it('should set prototype', function () {
-    const x = personValidate({ name: 'John', age: '22', address: { country: 'Italy' } }, { coerce: true });
+  it('should set prototype', () => {
+    const x = personValidate(
+      { name: 'John', age: '22', address: { country: 'Italy' } },
+      { coerce: true },
+    );
     expect(x).toBeInstanceOf(Person);
     expect(x.address).toBeInstanceOf(Address);
   });
 
-  it('should check required properties', function () {
+  it('should check required properties', () => {
     expect(() => personValidate({ age: 22 })).toThrow('Full Name is required');
     expect(personValidate.silent({ age: 22 })).toMatchObject({
       errors: [
@@ -58,8 +75,12 @@ describe('isObject', function () {
         },
       ],
     });
-    expect(() => personValidate({ name: 'John', address: { city: 'New York' } })).toThrow('Country is required');
-    expect(personValidate.silent({ name: 'John', address: { city: 'New York' } })).toMatchObject({
+    expect(() =>
+      personValidate({ name: 'John', address: { city: 'New York' } }),
+    ).toThrow('Country is required');
+    expect(
+      personValidate.silent({ name: 'John', address: { city: 'New York' } }),
+    ).toMatchObject({
       errors: [
         {
           rule: 'required',
@@ -83,7 +104,7 @@ describe('isObject', function () {
     });
   });
 
-  it('should detect circular dependencies', function () {
+  it('should detect circular dependencies', () => {
     const circularCodec = vg.isObject(
       {
         id: isNumber,
@@ -103,19 +124,25 @@ describe('isObject', function () {
     expect(circularCodec(obj)).toEqual(obj);
   });
 
-  it('should call [preValidation] function', function () {
+  it('should call [preValidation] function', () => {
     Person[preValidation] = function (input) {
       return { ...input, age: input.age + 1 };
     };
-    expect(personValidate({ name: 'julia', age: 18 })).toEqual({ fullName: 'julia', age: 19 });
+    expect(personValidate({ name: 'julia', age: 18 })).toEqual({
+      fullName: 'julia',
+      age: 19,
+    });
     Person[preValidation] = undefined;
   });
 
-  it('should call [postValidation] function', function () {
+  it('should call [postValidation] function', () => {
     Person[postValidation] = function (input: Person) {
       input.age = input.age + 2;
     };
-    expect(personValidate({ name: 'julia', age: 18 })).toEqual({ fullName: 'julia', age: 20 });
+    expect(personValidate({ name: 'julia', age: 18 })).toEqual({
+      fullName: 'julia',
+      age: 20,
+    });
     Person[postValidation] = undefined;
   });
 });

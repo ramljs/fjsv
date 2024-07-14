@@ -10,8 +10,10 @@ import { Context, ValidationOptions, validator } from '../../core/index.js';
 export function isDecimal(options?: ValidationOptions) {
   return validator<string, string>(
     'isDecimal',
-    function (input: unknown, context: Context, _this): Nullish<string> {
-      if (typeof input === 'string' && validatorJS.isDecimal(input)) return input;
+    (input: unknown, context: Context, _this): Nullish<string> => {
+      if (typeof input === 'string' && validatorJS.isDecimal(input)) {
+        return input;
+      }
       context.fail(_this, `"{{value}}" is not an decimal number string`, input);
     },
     options,

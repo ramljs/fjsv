@@ -11,12 +11,16 @@ import {
 } from '../../core/index.js';
 
 export namespace IsObject {
-  export interface Validator<T extends object = object, I = object> extends Validator_<T, I> {
+  export interface Validator<T extends object = object, I = object>
+    extends Validator_<T, I> {
     schema: Schema;
   }
 
   export type PropertyOptions = { label?: string; as?: string };
-  export type Schema = Record<string | number, Validator_ | [Validator_, PropertyOptions]>;
+  export type Schema = Record<
+    string | number,
+    Validator_ | [Validator_, PropertyOptions]
+  >;
 
   export interface Options<T> extends ValidationOptions {
     name?: string;
@@ -42,27 +46,42 @@ export function isObject<T extends object = object, I = object | string>(
   const caseInSensitive = !!options?.caseInSensitive;
   const detectCircular = !!options?.detectCircular;
   const propertyRules: Record<any, Validator_> = {};
-  const propertyOptions: Record<any, RequiredSome<IsObject.PropertyOptions, 'as'>> = {};
+  const propertyOptions: Record<
+    any,
+    RequiredSome<IsObject.PropertyOptions, 'as'>
+  > = {};
   schema = schema || {};
   const schemaKeys = Object.keys(schema);
   for (const k of schemaKeys) {
     const n = schema[k];
     const key = caseInSensitive ? k.toLowerCase() : k;
     if (Array.isArray(n)) {
-      if (!isValidator(n[0])) throw new TypeError(`Invalid tuple definition in validation schema (${k})`);
+      if (!isValidator(n[0])) {
+        throw new TypeError(
+          `Invalid tuple definition in validation schema (${k})`,
+        );
+      }
       propertyRules[key] = n[0];
       propertyOptions[key] = { as: k, ...n[1] };
     } else if (isValidator(n)) {
       propertyRules[key] = n;
       propertyOptions[key] = { as: k };
-    } else throw new TypeError(`Invalid definition in validation schema (${k})`);
+    } else {
+      throw new TypeError(`Invalid definition in validation schema (${k})`);
+    }
   }
 
   const _rule = validator<T, object>(
     'isObject',
-    function (input: any, context: Context & { circMap?: Map<object, object> }, _this): Nullish<T> {
+    (
+      input: any,
+      context: Context & { circMap?: Map<object, object> },
+      _this,
+    ): Nullish<T> => {
       let output: any = input;
-      if (ctor && ctor[preValidation]) output = ctor[preValidation](output, context, _this);
+      if (ctor && ctor[preValidation]) {
+        output = ctor[preValidation](output, context, _this);
+      }
 
       const coerce = options?.coerce || context.coerce;
       if (typeof output === 'string' && coerce) output = JSON.parse(output);
@@ -84,7 +103,9 @@ export function isObject<T extends object = object, I = object | string>(
       if (ctor) Object.setPrototypeOf(out, ctor.prototype);
       if (detectCircular) {
         context.circMap = context.circMap || new Map<object, object>();
-        if (context.circMap.has(output)) return context.circMap.get(output) as any;
+        if (context.circMap.has(output)) {
+          return context.circMap.get(output) as any;
+        }
         context.circMap.set(output, out);
       }
 
@@ -97,7 +118,9 @@ export function isObject<T extends object = object, I = object | string>(
         schemaKey = caseInSensitive ? inputKey.toLowerCase() : inputKey;
         v = output[inputKey];
 
-        _propRule = propertyRules[schemaKey] || (isValidator(additionalFields) ? additionalFields : undefined);
+        _propRule =
+          propertyRules[schemaKey] ||
+          (isValidator(additionalFields) ? additionalFields : undefined);
         if (_propRule) {
           if (processedSchemaKeys[schemaKey]) continue;
           processedSchemaKeys[schemaKey] = true;
@@ -106,19 +129,24 @@ export function isObject<T extends object = object, I = object | string>(
           subCtx.context = ctorName;
           subCtx.location = location + (location ? '.' : '') + schemaKey;
           subCtx.property = schemaKey;
-          if (propertyOptions[schemaKey]?.label) subCtx.label = propertyOptions[schemaKey]?.label;
+          if (propertyOptions[schemaKey]?.label) {
+            subCtx.label = propertyOptions[schemaKey]?.label;
+          }
           v = _propRule(v, subCtx);
         } else if (v !== undefined) {
           if (!additionalFields) continue;
-          if (additionalFields === 'error')
+          if (additionalFields === 'error') {
             context.fail(
               _propRule,
               `${ctorName || 'Object'} has no field '${inputKey}' and does not accept additional fields`,
               v,
             );
+          }
         }
 
-        if (v !== undefined) out[propertyOptions[schemaKey]?.as || schemaKey] = v;
+        if (v !== undefined) {
+          out[propertyOptions[schemaKey]?.as || schemaKey] = v;
+        }
       }
       if (context.errors.length) return undefined;
 

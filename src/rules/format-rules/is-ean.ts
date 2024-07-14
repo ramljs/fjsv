@@ -9,9 +9,13 @@ import { Context, ValidationOptions, validator } from '../../core/index.js';
 export function isEAN(options?: ValidationOptions) {
   return validator<string, string>(
     'isEAN',
-    function (input: unknown, context: Context, _this): Nullish<string> {
+    (input: unknown, context: Context, _this): Nullish<string> => {
       if (typeof input === 'string' && validatorJS.isEAN(input)) return input;
-      context.fail(_this, `"{{value}}" is not a valid EAN (European Article Number)`, input);
+      context.fail(
+        _this,
+        `"{{value}}" is not a valid EAN (European Article Number)`,
+        input,
+      );
     },
     options,
   );

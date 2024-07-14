@@ -1,18 +1,26 @@
 import { isBoolean } from 'valgen';
 
-describe('isBoolean', function () {
-  it('should validate value is a boolean', function () {
+describe('isBoolean', () => {
+  it('should validate value is a boolean', () => {
     expect(isBoolean(true)).toStrictEqual(true);
     expect(isBoolean(false)).toStrictEqual(false);
-    expect(() => isBoolean(undefined)).toThrow('"undefined" is not a valid boolean value');
-    expect(() => isBoolean(null)).toThrow('"null" is not a valid boolean value');
+    expect(() => isBoolean(undefined)).toThrow(
+      '"undefined" is not a valid boolean value',
+    );
+    expect(() => isBoolean(null)).toThrow(
+      '"null" is not a valid boolean value',
+    );
     expect(() => isBoolean(1)).toThrow('"1" is not a valid boolean value');
-    expect(() => isBoolean('true')).toThrow('String "true" is not a valid boolean value');
+    expect(() => isBoolean('true')).toThrow(
+      'String "true" is not a valid boolean value',
+    );
     expect(() => isBoolean(NaN)).toThrow('"NaN" is not a valid boolean value');
-    expect(() => isBoolean(5 as any)).toThrow('"5" is not a valid boolean value');
+    expect(() => isBoolean(5 as any)).toThrow(
+      '"5" is not a valid boolean value',
+    );
   });
 
-  it('should coerce to boolean', function () {
+  it('should coerce to boolean', () => {
     expect(isBoolean(true, { coerce: true })).toStrictEqual(true);
     expect(isBoolean(false, { coerce: true })).toStrictEqual(false);
     expect(isBoolean(1, { coerce: true })).toStrictEqual(true);

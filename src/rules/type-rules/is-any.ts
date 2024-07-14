@@ -5,6 +5,4 @@ import { validator } from '../../core/index.js';
  * @validator isAny
  */
 export const isAny = () =>
-  validator<any, any>('is-any', function (input: unknown): any {
-    return input;
-  });
+  validator<any, any>('is-any', (input: unknown): any => input);

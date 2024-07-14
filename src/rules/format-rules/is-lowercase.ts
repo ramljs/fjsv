@@ -9,8 +9,10 @@ import { Context, ValidationOptions, validator } from '../../core/index.js';
 export function isLowercase(options?: ValidationOptions) {
   return validator<string, string>(
     'isLowercase',
-    function (input: unknown, context: Context, _this): Nullish<string> {
-      if (typeof input === 'string' && validatorJS.isLowercase(input)) return input;
+    (input: unknown, context: Context, _this): Nullish<string> => {
+      if (typeof input === 'string' && validatorJS.isLowercase(input)) {
+        return input;
+      }
       context.fail(_this, `"{{value}}" is not a lowercase string`, input);
     },
     options,
@@ -24,8 +26,10 @@ export function isLowercase(options?: ValidationOptions) {
 export function isUppercase(options?: ValidationOptions) {
   return validator<string, string>(
     'isUppercase',
-    function (input: unknown, context: Context, _this): Nullish<string> {
-      if (typeof input === 'string' && validatorJS.isUppercase(input)) return input;
+    (input: unknown, context: Context, _this): Nullish<string> => {
+      if (typeof input === 'string' && validatorJS.isUppercase(input)) {
+        return input;
+      }
       context.fail(_this, `"{{value}}" is not an uppercase string`, input);
     },
     options,

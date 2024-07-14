@@ -7,7 +7,7 @@ import { Context, ValidationOptions, validator } from '../../core/index.js';
 export function isNull(options?: ValidationOptions) {
   return validator<null, unknown>(
     'isNull',
-    function (input: unknown, context: Context, _this) {
+    (input: unknown, context: Context, _this) => {
       if (input === null) return input;
       context.fail(_this, `"{{value}}" is not null`, input);
     },
@@ -22,7 +22,7 @@ export function isNull(options?: ValidationOptions) {
 export function isNullish(options?: ValidationOptions) {
   return validator<null, unknown>(
     'isNullish',
-    function (input: unknown, context: Context, _this) {
+    (input: unknown, context: Context, _this) => {
       if (input == null) return input;
       context.fail(_this, `"{{value}}" is not nullish`, input);
     },

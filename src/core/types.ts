@@ -17,7 +17,6 @@ export interface ErrorIssue {
 export type OnFailFunction = (
   issue: ErrorIssue,
   context: Context,
-  _super?: OnFailFunction,
 ) => string | Omit<ErrorIssue, 'id' | 'input'>;
 
 export interface ValidationOptions {

@@ -2,7 +2,9 @@ import { Nullish } from 'ts-gems';
 import * as validatorJS from 'validator';
 import { Context, ValidationOptions, validator } from '../../core/index.js';
 
-export interface IsURLOptions extends ValidationOptions, validatorJS.IsURLOptions {}
+export interface IsURLOptions
+  extends ValidationOptions,
+    validatorJS.IsURLOptions {}
 
 /**
  * Validates if value is an URL
@@ -11,8 +13,14 @@ export interface IsURLOptions extends ValidationOptions, validatorJS.IsURLOption
 export function isURL(options?: IsURLOptions) {
   return validator<string, string>(
     'isURL',
-    function (input: unknown, context: Context, _this): Nullish<string> {
-      if (input != null && typeof input === 'string' && validatorJS.isURL(input, options)) return input;
+    (input: unknown, context: Context, _this): Nullish<string> => {
+      if (
+        input != null &&
+        typeof input === 'string' &&
+        validatorJS.isURL(input, options)
+      ) {
+        return input;
+      }
       context.fail(_this, `{{value}} is not a valid URL`, input);
     },
     options,

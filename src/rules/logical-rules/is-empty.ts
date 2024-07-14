@@ -9,7 +9,7 @@ type IsEmptyInput = string | any[] | object | Set<any> | Map<any, any>;
 export function isEmpty(options?: ValidationOptions) {
   return validator<IsEmptyInput, IsEmptyInput>(
     'isEmpty',
-    function (input: unknown, context: Context, _this) {
+    (input: unknown, context: Context, _this) => {
       if (input == null) return input;
       if (typeof input === 'string') {
         if (!input) return input;
@@ -40,7 +40,7 @@ export function isEmpty(options?: ValidationOptions) {
 export function isNotEmpty(options?: ValidationOptions) {
   return validator<IsEmptyInput, IsEmptyInput>(
     'isNotEmpty',
-    function (input: unknown, context: Context, _this) {
+    (input: unknown, context: Context, _this) => {
       if (input != null) {
         if (typeof input === 'string') {
           if (input) return input;

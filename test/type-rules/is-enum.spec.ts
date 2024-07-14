@@ -1,7 +1,7 @@
 import { vg } from 'valgen';
 
-describe('isEnum', function () {
-  it('should validate value', function () {
+describe('isEnum', () => {
+  it('should validate value', () => {
     expect(vg.isEnum('a')('a')).toStrictEqual('a');
     expect(vg.isEnum(['a', 'b'])('a')).toStrictEqual('a');
     expect(vg.isEnum(['a', 'b'])('b')).toStrictEqual('b');

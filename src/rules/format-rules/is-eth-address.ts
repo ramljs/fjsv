@@ -9,9 +9,15 @@ import { Context, ValidationOptions, validator } from '../../core/index.js';
 export function isETHAddress(options?: ValidationOptions) {
   return validator<string, string>(
     'isETHAddress',
-    function (input: unknown, context: Context, _this): Nullish<string> {
-      if (typeof input === 'string' && validatorJS.isEthereumAddress(input)) return input;
-      context.fail(_this, `Value is not a valid a ETH (Ethereum) address`, input);
+    (input: unknown, context: Context, _this): Nullish<string> => {
+      if (typeof input === 'string' && validatorJS.isEthereumAddress(input)) {
+        return input;
+      }
+      context.fail(
+        _this,
+        `Value is not a valid a ETH (Ethereum) address`,
+        input,
+      );
     },
     options,
   );

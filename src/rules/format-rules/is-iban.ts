@@ -9,9 +9,13 @@ import { Context, ValidationOptions, validator } from '../../core/index.js';
 export function isIBAN(options?: ValidationOptions) {
   return validator<string, string>(
     'isIBAN',
-    function (input: unknown, context: Context, _this): Nullish<string> {
+    (input: unknown, context: Context, _this): Nullish<string> => {
       if (typeof input === 'string' && validatorJS.isIBAN(input)) return input;
-      context.fail(_this, `{{label}} is not a valid IBAN (International Bank Account Number)`, input);
+      context.fail(
+        _this,
+        `{{label}} is not a valid IBAN (International Bank Account Number)`,
+        input,
+      );
     },
     options,
   );
@@ -24,9 +28,13 @@ export function isIBAN(options?: ValidationOptions) {
 export function isSWIFT(options?: ValidationOptions) {
   return validator<string, string>(
     'isSWIFT',
-    function (input: unknown, context: Context, _this): Nullish<string> {
+    (input: unknown, context: Context, _this): Nullish<string> => {
       if (typeof input === 'string' && validatorJS.isBIC(input)) return input;
-      context.fail(_this, `{{label}}is not a valid a BIC (Bank Identification Code) or SWIFT code`, input);
+      context.fail(
+        _this,
+        `{{label}}is not a valid a BIC (Bank Identification Code) or SWIFT code`,
+        input,
+      );
     },
     options,
   );

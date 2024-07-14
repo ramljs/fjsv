@@ -14,7 +14,10 @@ export interface IsMobilePhoneOptions extends ValidationOptions {
    * Locale or locales of the mobile phone
    * @default 'any'
    */
-  locale?: 'any' | validatorJS.MobilePhoneLocale | validatorJS.MobilePhoneLocale[];
+  locale?:
+    | 'any'
+    | validatorJS.MobilePhoneLocale
+    | validatorJS.MobilePhoneLocale[];
 }
 
 /**
@@ -27,9 +30,18 @@ export function isMobilePhone(options?: IsMobilePhoneOptions) {
   };
   return validator<string, string>(
     'isMobilePhone',
-    function (input: unknown, context: Context, _this): Nullish<string> {
-      if (typeof input === 'string' && validatorJS.isMobilePhone(input, options?.locale, opts)) return input;
-      context.fail(_this, `"{{value}}" is not a valid a Mobile Phone Number`, input);
+    (input: unknown, context: Context, _this): Nullish<string> => {
+      if (
+        typeof input === 'string' &&
+        validatorJS.isMobilePhone(input, options?.locale, opts)
+      ) {
+        return input;
+      }
+      context.fail(
+        _this,
+        `"{{value}}" is not a valid a Mobile Phone Number`,
+        input,
+      );
     },
     options,
   );

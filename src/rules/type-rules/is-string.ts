@@ -1,4 +1,9 @@
-import { Context, Nullish, ValidationOptions, validator } from '../../core/index.js';
+import {
+  Context,
+  Nullish,
+  ValidationOptions,
+  validator,
+} from '../../core/index.js';
 
 /**
  * Validates if value is "string".
@@ -8,7 +13,7 @@ import { Context, Nullish, ValidationOptions, validator } from '../../core/index
 export function isString(options?: ValidationOptions) {
   return validator<string, unknown>(
     'isString',
-    function (input: any, context: Context, _this): Nullish<string> {
+    (input: any, context: Context, _this): Nullish<string> => {
       const coerce = options?.coerce || context.coerce;
       let output: any = input;
       if (output != null && typeof output !== 'string' && coerce) {
@@ -28,21 +33,37 @@ export function isString(options?: ValidationOptions) {
  * Process "String.replace" method
  * @validator stringReplace
  */
-export function stringReplace(searchValue: string | RegExp, replaceValue: string);
-export function stringReplace(searchValue: string | RegExp, replacer: (subsring: string, ...args: any[]) => string);
 export function stringReplace(
-  searchValue: { [Symbol.replace](string: string, replaceValue: string): string },
+  searchValue: string | RegExp,
   replaceValue: string,
 );
 export function stringReplace(
-  searchValue: { [Symbol.replace](string: string, replacer: (substring: string, ...args: any[]) => string): string },
+  searchValue: string | RegExp,
+  replacer: (subsring: string, ...args: any[]) => string,
+);
+export function stringReplace(
+  searchValue: {
+    [Symbol.replace](string: string, replaceValue: string): string;
+  },
+  replaceValue: string,
+);
+export function stringReplace(
+  searchValue: {
+    [Symbol.replace](
+      string: string,
+      replacer: (substring: string, ...args: any[]) => string,
+    ): string;
+  },
   replacer: (substring: string, ...args: any[]) => string,
 );
 export function stringReplace(searchValue: any, replacer: any) {
-  return validator<string>('stringReplace', function (input: unknown): Nullish<string> {
-    if (input == null) return input;
-    return String(input).replace(searchValue, replacer);
-  });
+  return validator<string>(
+    'stringReplace',
+    (input: unknown): Nullish<string> => {
+      if (input == null) return input;
+      return String(input).replace(searchValue, replacer);
+    },
+  );
 }
 
 /**
@@ -50,9 +71,12 @@ export function stringReplace(searchValue: any, replacer: any) {
  * @validator split
  */
 export function stringSplit(separator: string | RegExp, limit?: number);
-export function stringSplit(splitter: { [Symbol.split](string: string, limit?: number): string[] }, limit?: number);
+export function stringSplit(
+  splitter: { [Symbol.split](string: string, limit?: number): string[] },
+  limit?: number,
+);
 export function stringSplit(splitter: any, limit: any) {
-  return validator<string[], string>('stringSplit', function (input: unknown) {
+  return validator<string[], string>('stringSplit', (input: unknown) => {
     if (input == null) return input;
     return String(input).split(splitter, limit);
   });
@@ -63,7 +87,7 @@ export function stringSplit(splitter: any, limit: any) {
  * @validator trim
  */
 export function trim() {
-  return validator<string, string>('trim', function (input: unknown) {
+  return validator<string, string>('trim', (input: unknown) => {
     if (input == null) return input;
     return String(input).trim();
   });
@@ -77,10 +101,13 @@ export function trim() {
  */
 export const trimEnd = () => trimEndRule;
 
-const trimEndRule = validator<string, string>('trimEnd', function (input: unknown): Nullish<string> {
-  if (input == null) return input;
-  return String(input).trimEnd();
-});
+const trimEndRule = validator<string, string>(
+  'trimEnd',
+  (input: unknown): Nullish<string> => {
+    if (input == null) return input;
+    return String(input).trimEnd();
+  },
+);
 
 // *************************************************************
 
@@ -90,7 +117,10 @@ const trimEndRule = validator<string, string>('trimEnd', function (input: unknow
  */
 export const trimStart = () => trimStartRule;
 
-const trimStartRule = validator<string, string>('trimStart', function (input: unknown): Nullish<string> {
-  if (input == null) return input;
-  return String(input).trimStart();
-});
+const trimStartRule = validator<string, string>(
+  'trimStart',
+  (input: unknown): Nullish<string> => {
+    if (input == null) return input;
+    return String(input).trimStart();
+  },
+);

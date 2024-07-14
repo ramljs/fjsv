@@ -9,8 +9,10 @@ import { Context, ValidationOptions, validator } from '../../core/index.js';
 export function isBtcAddress(options?: ValidationOptions) {
   return validator<string, string>(
     'isBtcAddress',
-    function (input: unknown, context: Context, _this): Nullish<string> {
-      if (typeof input === 'string' && validatorJS.isBtcAddress(input)) return input;
+    (input: unknown, context: Context, _this): Nullish<string> => {
+      if (typeof input === 'string' && validatorJS.isBtcAddress(input)) {
+        return input;
+      }
       context.fail(_this, `Value is not a valid a BTC address`, input);
     },
     options,

@@ -1,5 +1,4 @@
 import { omitUndefined } from '../helpers/omit-undefined.js';
-import { kOptions } from './constants.js';
 import type { ErrorIssue, ExecutionOptions, OnFailFunction } from './types';
 import { ValidationError } from './validation-error.js';
 import type { Validator } from './validator.js';
@@ -26,7 +25,12 @@ export class Context implements ExecutionOptions {
     Object.assign(this, options);
   }
 
-  fail(rule: Validator, message: string | Error, value: any, details?: Record<string, any>): void {
+  fail(
+    rule: Validator,
+    message: string | Error,
+    value: any,
+    details?: Record<string, any>,
+  ): void {
     const issue = omitUndefined<ErrorIssue>({
       message: message instanceof Error ? message.message : String(message),
       rule: rule.id,
@@ -41,38 +45,46 @@ export class Context implements ExecutionOptions {
     });
     issue.value = value;
 
-    const onFail = this.onFail || rule[kOptions].onFail;
-    if (onFail) {
-      const proto = Object.getPrototypeOf(this);
-      const superOnFail = proto.onFail !== onFail ? proto.onFail : undefined;
-      const x = onFail(issue, this, superOnFail);
+    if (this.onFail) {
+      const x = this.onFail(issue, this);
       if (!x) return;
       if (typeof x === 'object') Object.assign(issue, x);
       else issue.message = String(x);
     }
-    issue.message = ('' + issue.message).replace(VARIABLE_REPLACE_PATTERN, (x, g: string) => {
-      const m = OPTIONAL_VAR_PATTERN.exec(g);
-      if (!m) return x;
-      const k = m[1];
-      let v = issue[k];
-      if (k === 'value') {
-        const s = String(issue.value);
-        return s.length < 30 ? s : s.substring(0, 30) + '..';
-      }
-      if (!v && k === 'label' && (this.location || this.property)) v = '`' + (this.location || this.property) + '`';
-      if (v != null) return v;
-      if (m[2]) return m[2];
-      return m[1] === 'label' ? 'Value' : x;
-    });
+    issue.message = ('' + issue.message).replace(
+      VARIABLE_REPLACE_PATTERN,
+      (x, g: string) => {
+        const m = OPTIONAL_VAR_PATTERN.exec(g);
+        if (!m) return x;
+        const k = m[1];
+        let v = issue[k];
+        if (k === 'value') {
+          const s = String(issue.value);
+          return s.length < 30 ? s : s.substring(0, 30) + '..';
+        }
+        if (!v && k === 'label' && (this.location || this.property)) {
+          v = '`' + (this.location || this.property) + '`';
+        }
+        if (v != null) return v;
+        if (m[2]) return m[2];
+        return m[1] === 'label' ? 'Value' : x;
+      },
+    );
 
     this.errors.push(issue);
-    if (this.errors.length >= (this.maxErrors ?? Infinity)) throw new ValidationError(this.errors);
+    if (this.errors.length >= (this.maxErrors ?? Infinity)) {
+      throw new ValidationError(this.errors);
+    }
   }
 
   extend(options?: ExecutionOptions): Context {
-    const extended = new Context({ onFail: undefined, ...options });
+    const extended = {} as Context;
+    if (options) {
+      for (const [k, v] of Object.entries(options)) {
+        if (v !== undefined) extended[k] = v;
+      }
+    }
     Object.setPrototypeOf(extended, this);
-    delete (extended as any).errors;
     return extended;
   }
 }

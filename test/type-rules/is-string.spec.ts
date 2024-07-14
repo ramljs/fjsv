@@ -3,8 +3,8 @@ import { isString, vg } from 'valgen';
 /*
  *
  */
-describe('isString', function () {
-  it('should validate value is a string', function () {
+describe('isString', () => {
+  it('should validate value is a string', () => {
     expect(isString('1')).toStrictEqual('1');
     expect(isString('')).toStrictEqual('');
     expect(() => isString(undefined)).toThrow('"undefined" is not a string');
@@ -14,12 +14,14 @@ describe('isString', function () {
     expect(() => isString(NaN)).toThrow('"NaN" is not a string');
   });
 
-  it('should coerce to string', function () {
+  it('should coerce to string', () => {
     expect(isString(1, { coerce: true })).toStrictEqual('1');
     expect(isString(0, { coerce: true })).toStrictEqual('0');
     expect(isString('1', { coerce: true })).toStrictEqual('1');
     expect(isString('0', { coerce: true })).toStrictEqual('0');
-    expect(isString({ toJSON: () => 'test' }, { coerce: true })).toStrictEqual('test');
+    expect(isString({ toJSON: () => 'test' }, { coerce: true })).toStrictEqual(
+      'test',
+    );
     expect(isString({ x: 1 }, { coerce: true })).toStrictEqual('{"x":1}');
   });
 });
@@ -27,8 +29,8 @@ describe('isString', function () {
 /*
  *
  */
-describe('stringReplace', function () {
-  it('should process String.replace', function () {
+describe('stringReplace', () => {
+  it('should process String.replace', () => {
     expect(vg.stringReplace(/-/g, '_')('a-b')).toStrictEqual('a_b');
     expect(vg.stringReplace('-', '_')('a-b')).toStrictEqual('a_b');
   });
@@ -37,8 +39,8 @@ describe('stringReplace', function () {
 /*
  *
  */
-describe('stringTrim', function () {
-  it('should trim string value', function () {
+describe('stringTrim', () => {
+  it('should trim string value', () => {
     expect(vg.trim()(' a ')).toStrictEqual('a');
     expect(vg.trim()(' a')).toStrictEqual('a');
     expect(vg.trim()('a ')).toStrictEqual('a');
@@ -48,8 +50,8 @@ describe('stringTrim', function () {
 /*
  *
  */
-describe('stringTrim', function () {
-  it('should trim string value', function () {
+describe('stringTrim', () => {
+  it('should trim string value', () => {
     expect(vg.trimStart()(' a ')).toStrictEqual('a ');
     expect(vg.trimStart()(' a')).toStrictEqual('a');
   });
@@ -58,8 +60,8 @@ describe('stringTrim', function () {
 /*
  *
  */
-describe('stringTrim', function () {
-  it('should trim string value', function () {
+describe('stringTrim', () => {
+  it('should trim string value', () => {
     expect(vg.trimEnd()(' a ')).toStrictEqual(' a');
     expect(vg.trimEnd()('a ')).toStrictEqual('a');
   });
@@ -68,8 +70,8 @@ describe('stringTrim', function () {
 /*
  *
  */
-describe('stringSplit', function () {
-  it('should process String.replace', function () {
+describe('stringSplit', () => {
+  it('should process String.replace', () => {
     expect(vg.stringSplit(',')('a,b')).toStrictEqual(['a', 'b']);
   });
 });

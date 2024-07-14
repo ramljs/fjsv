@@ -1,7 +1,7 @@
 import { isNull, isNullish } from 'valgen';
 
-describe('isNull', function () {
-  it('should validate value is null', function () {
+describe('isNull', () => {
+  it('should validate value is null', () => {
     expect(isNull(null)).toStrictEqual(null);
     expect(() => isNull(undefined)).toThrow('"undefined" is not null');
     expect(() => isNull('' as any)).toThrow('"" is not null');
@@ -10,8 +10,8 @@ describe('isNull', function () {
   });
 });
 
-describe('isNullish', function () {
-  it('should validate value is null', function () {
+describe('isNullish', () => {
+  it('should validate value is null', () => {
     expect(isNullish(null)).toStrictEqual(null);
     expect(isNullish(undefined)).toStrictEqual(undefined);
     expect(() => isNullish('' as any)).toThrow('"" is not nullish');

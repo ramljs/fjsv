@@ -1,4 +1,9 @@
-import { Context, Nullish, ValidationOptions, validator } from '../../core/index.js';
+import {
+  Context,
+  Nullish,
+  ValidationOptions,
+  validator,
+} from '../../core/index.js';
 
 export interface IsRegExpOptions extends ValidationOptions {
   formatName?: string;
@@ -13,13 +18,18 @@ export function matches(format: string | RegExp, options?: IsRegExpOptions) {
   const formatName = options?.formatName;
   return validator<string, string>(
     'matches',
-    function (input: unknown, context: Context, _this): Nullish<string> {
+    (input: unknown, context: Context, _this): Nullish<string> => {
       if (input == null) return;
       if (typeof input === 'string' && regExp.test(input)) return input;
-      context.fail(_this, `"{{value}}" does not match ${formatName || 'requested'} format`, input, {
-        format,
-        formatName,
-      });
+      context.fail(
+        _this,
+        `"{{value}}" does not match ${formatName || 'requested'} format`,
+        input,
+        {
+          format,
+          formatName,
+        },
+      );
     },
     options,
   );

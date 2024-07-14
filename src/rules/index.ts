@@ -1,17 +1,3 @@
-export * from './type-rules/is-any.js';
-export * from './type-rules/is-array.js';
-export * from './type-rules/is-bigint.js';
-export * from './type-rules/is-boolean.js';
-export * from './type-rules/is-date.js';
-export * from './type-rules/is-enum.js';
-export * from './type-rules/is-integer.js';
-export * from './type-rules/is-null.js';
-export * from './type-rules/is-number.js';
-export * from './type-rules/is-object.js';
-export * from './type-rules/is-record.js';
-export * from './type-rules/is-string.js';
-export * from './type-rules/is-tuple.js';
-
 export * from './format-rules/is-alpha.js';
 export * from './format-rules/is-ascii.js';
 export * from './format-rules/is-base64.js';
@@ -39,11 +25,23 @@ export * from './format-rules/is-url.js';
 export * from './format-rules/is-uuid.js';
 export * from './format-rules/is-vat-number.js';
 export * from './format-rules/matches.js';
-
 export * from './logical-rules/is-defined.js';
 export * from './logical-rules/is-empty.js';
 export * from './logical-rules/range.js';
-
+export * from './type-rules/is-any.js';
+export * from './type-rules/is-array.js';
+export * from './type-rules/is-bigint.js';
+export * from './type-rules/is-boolean.js';
+export * from './type-rules/is-date.js';
+export * from './type-rules/is-enum.js';
+export * from './type-rules/is-integer.js';
+export * from './type-rules/is-null.js';
+export * from './type-rules/is-number.js';
+export * from './type-rules/is-object.js';
+export * from './type-rules/is-record.js';
+export * from './type-rules/is-string.js';
+export * from './type-rules/is-tuple.js';
+export * from './type-rules/is-undefined.js';
 export * from './utility-rules/exists.js';
 export * from './utility-rules/get-length.js';
 export * from './utility-rules/optional.js';

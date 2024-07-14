@@ -9,7 +9,7 @@ import { Context, ValidationOptions, validator } from '../../core/index.js';
 export function isAlpha(options?: ValidationOptions) {
   return validator<string, string>(
     'isLowercase',
-    function (input: unknown, context: Context, _this): Nullish<string> {
+    (input: unknown, context: Context, _this): Nullish<string> => {
       if (typeof input === 'string' && validatorJS.isAlpha(input)) return input;
       context.fail(_this, `"{{value}}" is not an alpha string`, input);
     },
@@ -24,8 +24,10 @@ export function isAlpha(options?: ValidationOptions) {
 export function isAlphanumeric(options?: ValidationOptions) {
   return validator<string, string>(
     'isAlphanumeric',
-    function (input: unknown, context: Context, _this): Nullish<string> {
-      if (typeof input === 'string' && validatorJS.isAlphanumeric(input)) return input;
+    (input: unknown, context: Context, _this): Nullish<string> => {
+      if (typeof input === 'string' && validatorJS.isAlphanumeric(input)) {
+        return input;
+      }
       context.fail(_this, `"{{value}}" is not an alphanumeric string`, input);
     },
     options,

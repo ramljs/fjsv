@@ -16,7 +16,7 @@ export function isDate(options?: isDate.Options) {
   const precision = options?.precision;
   return validator<Date, Date | number | string>(
     'isDate',
-    function (input: unknown, context: Context, _this): Nullish<Date> {
+    (input: unknown, context: Context, _this): Nullish<Date> => {
       const coerce = options?.coerce || context.coerce;
       let d: Date | undefined;
       if (input instanceof Date) d = input;
@@ -37,7 +37,9 @@ export function isDate(options?: isDate.Options) {
         if (precision === 'date') d.setHours(0, 0, 0, 0);
         return d;
       }
-      context.fail(_this, `"{{value}}" is not a valid date value`, input, { ...options });
+      context.fail(_this, `"{{value}}" is not a valid date value`, input, {
+        ...options,
+      });
     },
     options,
   );
@@ -58,7 +60,7 @@ export function isDateString(options?: IsDateStringOptions) {
   const trim = options?.trim;
   return validator<string, Date | number | string>(
     'isDateString',
-    function (input: any, context: Context, _this): Nullish<string> {
+    (input: any, context: Context, _this): Nullish<string> => {
       const coerce = options?.coerce || context.coerce;
       if (typeof input === 'string') {
         const m = DATE_PATTERN.exec(input);
@@ -87,10 +89,14 @@ export function isDateString(options?: IsDateStringOptions) {
           }
         }
       } else if (input instanceof Date) {
-        return trim === 'date' ? formatISO(input, { representation: 'date' }) : formatISO(input).substring(0, 19);
+        return trim === 'date'
+          ? formatISO(input, { representation: 'date' })
+          : formatISO(input).substring(0, 19);
       }
 
-      context.fail(_this, `"{{value}}" is not a valid date string`, input, { ...options });
+      context.fail(_this, `"{{value}}" is not a valid date string`, input, {
+        ...options,
+      });
     },
     options,
   );
