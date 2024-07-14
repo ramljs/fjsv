@@ -1,3 +1,11 @@
+# v5.6.0
+[2024-07-14]
+
+### Changes
+
+* Added isNotNull and isNotNullish rules ([`19902a5`](https://github.com/panates/valgen/commit/19902a5e2a12f1958952671ffce6e2eab77457a5))
+* Added isNotNull and isNotNullish rules ([`ff881d6`](https://github.com/panates/valgen/commit/ff881d6be81068c70e020109485b91854c355598))
+
 # v5.5.0
 [2024-07-14]
 
