@@ -9,7 +9,22 @@ export function isNull(options?: ValidationOptions) {
     'isNull',
     (input: unknown, context: Context, _this) => {
       if (input === null) return input;
-      context.fail(_this, `"{{value}}" is not null`, input);
+      context.fail(_this, `{{label}} is not null`, input);
+    },
+    options,
+  );
+}
+
+/**
+ * Validates if value is not "null".
+ * @validator isNotNull
+ */
+export function isNotNull(options?: ValidationOptions) {
+  return validator(
+    'isNotNull',
+    (input: unknown, context: Context, _this) => {
+      if (input !== null) return input;
+      context.fail(_this, `{{label}} is null`, input);
     },
     options,
   );
@@ -17,14 +32,30 @@ export function isNull(options?: ValidationOptions) {
 
 /**
  * Validates if value is "null" or "undefined".
- * @validator isNull
+ * @validator isNullish
  */
 export function isNullish(options?: ValidationOptions) {
   return validator<null, unknown>(
     'isNullish',
     (input: unknown, context: Context, _this) => {
       if (input == null) return input;
-      context.fail(_this, `"{{value}}" is not nullish`, input);
+      context.fail(_this, `{{label}} is not nullish`, input);
+    },
+    options,
+  );
+}
+
+/**
+ * Validates if value is not "null" nor "undefined".
+ * @validator isNotNullish
+ */
+export function isNotNullish(options?: ValidationOptions) {
+  return validator(
+    'isNotNullish',
+    (input: unknown, context: Context, _this) => {
+      if (input != null) return input;
+      if (input === null) context.fail(_this, `{{label}} is null`, input);
+      else context.fail(_this, `{{label}} is undefined`, input);
     },
     options,
   );

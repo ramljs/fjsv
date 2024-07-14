@@ -14,7 +14,9 @@ const isEmpty = vg.isEmpty();
 const isNotEmpty = vg.isNotEmpty();
 const isInteger = vg.isInteger();
 const isNull = vg.isNull();
+const isNotNull = vg.isNotNull();
 const isNullish = vg.isNullish();
+const isNotNullish = vg.isNotNullish();
 const isDefined = vg.isDefined();
 const isUndefined = vg.isUndefined();
 const isNumber = vg.isNumber();
@@ -95,7 +97,9 @@ export {
   isMobilePhone,
   isNotEmpty,
   isNull,
+  isNotNull,
   isNullish,
+  isNotNullish,
   isNumber,
   isObject,
   isObjectId,
