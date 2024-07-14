@@ -1,3 +1,13 @@
+# v5.5.0
+[2024-07-14]
+
+### Changes
+
+* Moved eslint config to @panates/eslint-config ([`c2f3e2d`](https://github.com/panates/valgen/commit/c2f3e2dfec484fe891de3b519b7f26779c451b43))
+* Changed error message ([`3edf948`](https://github.com/panates/valgen/commit/3edf948a674d11a4ff5efcb97ca255b0723a11ca))
+* Removed coercing of isNull and isNullish rules ([`4337d0a`](https://github.com/panates/valgen/commit/4337d0a4bd148718f33f744257b13afdd5c3ac50))
+* Now pipe can return original input value when returnIndex = -1 ([`baf698c`](https://github.com/panates/valgen/commit/baf698c289254743d70ef815188f2300d7230f00))
+
 # v5.4.1
 [2024-05-18]
 
