@@ -1,3 +1,10 @@
+# v5.7.0
+[2024-08-09]
+
+### Changes
+
+* Made ready for Node16 moduleResolution ([`fc45964`](https://github.com/panates/valgen/commit/fc459640c49c4125e5e5047a60a83ae8ab05db23))
+
 # v5.6.0
 [2024-07-14]
 
