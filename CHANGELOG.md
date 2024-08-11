@@ -1,3 +1,10 @@
+# v5.8.0
+[2024-08-11]
+
+### Changes
+
+* Rollback to ES2020 ([`bb198c6`](https://github.com/panates/valgen/commit/bb198c61aa1b30d83e561d24ebfa4fdb2be1559e))
+
 # v5.7.0
 [2024-08-09]
 
