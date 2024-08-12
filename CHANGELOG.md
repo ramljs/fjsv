@@ -1,3 +1,10 @@
+# v5.8.2
+[2024-08-12]
+
+### Changes
+
+* Applied publint to check package.json ([`cbb7553`](https://github.com/panates/valgen/commit/cbb7553eb841f43f333ebbe6ba39977009148e6e))
+
 # v5.8.1
 [2024-08-12]
 
