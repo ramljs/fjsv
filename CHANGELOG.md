@@ -1,5 +1,12 @@
+# v5.8.1
+[2024-08-12]
+
+### Changes
+
+* Applied publint to check package.json ([`cf051f4`](https://github.com/panates/valgen/commit/cf051f4fe5944698fda111fdf6efa059eba11309))
+
 # v5.8.0
-[2024-08-11]
+[2024-08-12]
 
 ### Changes
 
