@@ -1,5 +1,5 @@
 import { omitUndefined } from '../helpers/omit-undefined.js';
-import type { ErrorIssue, ExecutionOptions, OnFailFunction } from './types';
+import type { ErrorIssue, ExecutionOptions, OnFailFunction } from './types.js';
 import { ValidationError } from './validation-error.js';
 import type { Validator } from './validator.js';
 

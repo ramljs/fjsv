@@ -1,4 +1,4 @@
-import type { Context } from './context';
+import type { Context } from './context.js';
 
 export interface ErrorIssue {
   message: string;
