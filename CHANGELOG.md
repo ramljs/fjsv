@@ -1,3 +1,10 @@
+# v5.9.0
+[2024-08-20]
+
+### Changes
+
+* Fixed compatibility for "Node16" and "NodeNext" moduleResolution options ([`9985ad6`](https://github.com/panates/valgen/commit/9985ad68ded7ddd62a630fbb54fd4f25a405cb62))
+
 # v5.8.2
 [2024-08-12]
 
