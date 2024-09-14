@@ -1,7 +1,7 @@
 import {
-  Context,
-  Nullish,
-  ValidationOptions,
+  type Context,
+  type Nullish,
+  type ValidationOptions,
   validator,
 } from '../../core/index.js';
 

@@ -1,5 +1,9 @@
-import { Nullish } from 'ts-gems';
-import { Context, ValidationOptions, validator } from '../../core/index.js';
+import type { Nullish } from 'ts-gems';
+import {
+  type Context,
+  type ValidationOptions,
+  validator,
+} from '../../core/index.js';
 
 /**
  * Validates if value is "number".

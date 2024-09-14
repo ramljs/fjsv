@@ -1,10 +1,6 @@
-import {
-  Context,
-  isValidator,
-  Nullish,
-  Validator,
-  validator,
-} from './index.js';
+import type { Nullish } from 'ts-gems';
+import type { Context } from './context.js';
+import { isValidator, type Validator, validator } from './validator.js';
 
 /**
  * Forwards codec process to a sub codec. Useful for circular checks

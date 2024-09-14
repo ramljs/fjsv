@@ -1,6 +1,10 @@
-import { Nullish } from 'ts-gems';
+import { type Nullish } from 'ts-gems';
 import * as validatorJS from 'validator';
-import { Context, ValidationOptions, validator } from '../../core/index.js';
+import {
+  type Context,
+  type ValidationOptions,
+  validator,
+} from '../../core/index.js';
 
 /**
  * Validates if value is a port number

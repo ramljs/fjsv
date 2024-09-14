@@ -1,12 +1,12 @@
-import { RequiredSome } from 'ts-gems';
+import type { RequiredSome } from 'ts-gems';
 import { postValidation, preValidation } from '../../constants.js';
 import {
-  Context,
+  type Context,
   isValidator,
-  Nullish,
-  Type,
-  ValidationOptions,
-  Validator as Validator_,
+  type Nullish,
+  type Type,
+  type ValidationOptions,
+  type Validator as Validator_,
   validator,
 } from '../../core/index.js';
 

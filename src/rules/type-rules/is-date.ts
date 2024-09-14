@@ -1,6 +1,10 @@
 import { formatISO, parseISO } from 'date-fns';
-import { Nullish } from 'ts-gems';
-import { Context, ValidationOptions, validator } from '../../core/index.js';
+import { type Nullish } from 'ts-gems';
+import {
+  type Context,
+  type ValidationOptions,
+  validator,
+} from '../../core/index.js';
 
 /* eslint-disable-next-line max-len */ // noinspection RegExpUnnecessaryNonCapturingGroup
 const DATE_PATTERN =

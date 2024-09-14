@@ -1,4 +1,8 @@
-import { Context, ValidationOptions, validator } from '../../core/index.js';
+import {
+  type Context,
+  type ValidationOptions,
+  validator,
+} from '../../core/index.js';
 
 type IsEmptyInput = string | any[] | object | Set<any> | Map<any, any>;
 

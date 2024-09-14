@@ -1,4 +1,8 @@
-import { Context, ValidationOptions, validator } from '../../core/index.js';
+import {
+  type Context,
+  type ValidationOptions,
+  validator,
+} from '../../core/index.js';
 
 /**
  * Validates if value is not "undefined" nor "null"

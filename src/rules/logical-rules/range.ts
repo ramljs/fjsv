@@ -1,8 +1,8 @@
 import {
-  Context,
-  Nullish,
-  ValidationOptions,
-  Validator,
+  type Context,
+  type Nullish,
+  type ValidationOptions,
+  type Validator,
   validator,
 } from '../../core/index.js';
 import { getLength } from '../utility-rules/get-length.js';

@@ -1,8 +1,12 @@
-import { Nullish } from 'ts-gems';
+import type { Nullish } from 'ts-gems';
 import { camelCase } from '../helpers/string.utils.js';
 import { kOptions, kValidatorFn } from './constants.js';
 import { Context } from './context.js';
-import { ErrorIssue, ExecutionOptions, ValidationOptions } from './types.js';
+import type {
+  ErrorIssue,
+  ExecutionOptions,
+  ValidationOptions,
+} from './types.js';
 import { ValidationError } from './validation-error.js';
 
 export type ValidateFunction<

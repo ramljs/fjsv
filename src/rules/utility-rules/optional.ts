@@ -1,8 +1,8 @@
-import { Nullish } from 'ts-gems';
+import type { Nullish } from 'ts-gems';
 import {
-  Context,
-  ValidationOptions,
-  Validator,
+  type Context,
+  type ValidationOptions,
+  type Validator,
   validator,
 } from '../../core/index.js';
 

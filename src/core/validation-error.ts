@@ -1,4 +1,4 @@
-import { ErrorIssue } from './types.js';
+import { type ErrorIssue } from './types.js';
 
 export class ValidationError extends Error {
   issues: ErrorIssue[] = [];

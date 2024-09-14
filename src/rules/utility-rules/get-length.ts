@@ -1,4 +1,4 @@
-import { Context, Nullish, validator } from '../../core/index.js';
+import { type Context, type Nullish, validator } from '../../core/index.js';
 
 type ExtractLengthInput =
   | string
