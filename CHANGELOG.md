@@ -1,3 +1,11 @@
+# v5.10.0
+[2024-09-14]
+
+### Changes
+
+* chore: Moved from circleci to github actions ([`179e630`](https://github.com/panates/valgen/commit/179e630a1b1327acf995decb88ed86b015a48c6a))
+* fixed: Circular imports ([`f2a83b9`](https://github.com/panates/valgen/commit/f2a83b9f466f1bc5acaabef3ac78f6c567ed7b54))
+
 # v5.9.0
 [2024-08-20]
 
