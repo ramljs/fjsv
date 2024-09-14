@@ -2,7 +2,7 @@
 
 [![NPM Version][npm-image]][npm-url]
 [![NPM Downloads][downloads-image]][downloads-url]
-[![CircleCI][circleci-image]][circleci-url]
+[![CI Tests][ci-test-image]][ci-test-url]
 [![Test Coverage][coveralls-image]][coveralls-url]
 
 Fast runtime type validator, converter and io (encoding/decoding) library.
@@ -20,8 +20,8 @@ Fast runtime type validator, converter and io (encoding/decoding) library.
 
 [npm-image]: https://img.shields.io/npm/v/valgen.svg
 [npm-url]: https://npmjs.org/package/valgen
-[circleci-image]: https://circleci.com/gh/panates/valgen/tree/master.svg?style=shield
-[circleci-url]: https://circleci.com/gh/panates/valgen/tree/master
+[ci-test-image]: https://github.com/panates/valgen/actions/workflows/test.yml/badge.svg
+[ci-test-url]: https://github.com/panates/valgen/actions/workflows/test.yml
 [coveralls-image]: https://img.shields.io/coveralls/panates/valgen/master.svg
 [coveralls-url]: https://coveralls.io/r/panates/valgen
 [downloads-image]: https://img.shields.io/npm/dm/valgen.svg
