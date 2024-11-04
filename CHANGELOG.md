@@ -1,3 +1,10 @@
+# v5.11.0
+[2024-11-04]
+
+### Changes
+
+* nit: Updated dependencies ([`f348c6c`](https://github.com/panates/valgen/commit/f348c6c52cb8efa9716e36d96e233fdbda605cec))
+
 # v5.10.0
 [2024-09-14]
 
