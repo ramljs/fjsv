@@ -1,5 +1,5 @@
 import type { Nullish } from 'ts-gems';
-import * as validatorJS from 'validator';
+import validatorJS from 'validator';
 import {
   type Context,
   type ValidationOptions,

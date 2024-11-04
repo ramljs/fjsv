@@ -1,5 +1,5 @@
 import { type Nullish } from 'ts-gems';
-import * as validatorJS from 'validator';
+import validatorJS from 'validator';
 import {
   type Context,
   type ValidationOptions,
@@ -11,15 +11,16 @@ import {
  * @validator isPort
  */
 export function isPort(options?: ValidationOptions) {
-  return validator<string, string>(
+  return validator<number, string | number>(
     'isPort',
-    (input: unknown, context: Context, _this): Nullish<string> => {
+    (input: unknown, context: Context, _this): Nullish<number> => {
+      if (typeof input === 'number') input = String(input);
       if (
         input != null &&
         typeof input === 'string' &&
         validatorJS.isPort(input)
       ) {
-        return input;
+        return parseInt(input, 10);
       }
       context.fail(_this, `{{label}} is not a valid port number`, input);
     },
