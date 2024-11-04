@@ -1,3 +1,10 @@
+# v5.12.0
+[2024-11-04]
+
+### Changes
+
+* refactor: Move from 'validator' library to "@browsery/validator" for ESM compatibility ([`5a0d1bd`](https://github.com/panates/valgen/commit/5a0d1bd499581c80033b063942247fe550930dec))
+
 # v5.11.0
 [2024-11-04]
 
