@@ -1,4 +1,4 @@
-import validatorJS from 'validator';
+import validatorJS from '@browsery/validator';
 import {
   type Context,
   type Nullish,

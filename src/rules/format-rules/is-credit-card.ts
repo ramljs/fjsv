@@ -1,5 +1,5 @@
+import validatorJS from '@browsery/validator';
 import type { Nullish } from 'ts-gems';
-import validatorJS from 'validator';
 import {
   type Context,
   type ValidationOptions,
